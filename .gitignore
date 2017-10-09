@@ -1,2 +1,3 @@
 .vscode
 pygate.egg-info/
+*.pyc

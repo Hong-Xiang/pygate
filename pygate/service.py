@@ -13,7 +13,7 @@ def copy_mac(source, target, mac_name):
 
 
 def copy_dir(source, target):
-    filters = ['*.mac', '*.sh', '*.C', '*.pat', '*.db']
+    filters = ['*.mac', '*.sh', '*.C', '*.pat', '*.db', '*']
     with OSFS(source) as s:
         with OSFS(target) as t:
             for f in s.filterdir('.', files=filters, exclude_dirs=['*']):
