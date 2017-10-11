@@ -8,5 +8,5 @@ setup(name='pygate',
       author_email='hx.hongxiang@gmail.com',
       license='MIT',
       packages=[],
-      install_requires=['fs', 'click'],
+      install_requires=['fs', 'click', 'ruamel.yaml'],
       zip_safe=False)

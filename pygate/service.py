@@ -5,55 +5,88 @@ from fs.osfs import OSFS
 from fs.copy import copy_file, copy_fs
 from fs import path
 import requests
+from . import methods
+from .shell import ShellScript
 
 
-def copy_mac(source, target, mac_name):
-    with OSFS(source), OSFS(target) as s, t:
-        copy_file(s, mac_name, t, mac_name)
+def copy_file(source, target, name):
+    """
+    Inputs:
+        source: directory, str or fs.baseFS
+        target: directory, str or fs.baseFS
+        name: filename, str
+    Raises:
+        None
+    Returns:
+        None
+    """
+    source_need_close = False
+    target_need_close = False
+    if isinstance(source, str):
+        fss = OSFS(source)
+        source_need_close = True
+    if isinstance(target, str):
+        fst = OSFS(target)
+        target_need_close = True
+
+    copy_file(fss, name, fst, name)
+
+    if source_need_close:
+        fss.close()
+    if target_need_close:
+        fst.close()
 
 
-def copy_dir(source, target):
-    filters = ['*.mac', '*.sh', '*.C', '*.pat', '*.db', '*']
-    with OSFS(source) as s:
-        with OSFS(target) as t:
-            for f in s.filterdir('.', files=filters, exclude_dirs=['*']):
-                copy_file(s, f.name, t, f.name)
+def copy_dir(source, target, filters=None):
+    source_need_close = False
+    target_need_close = False
+    if isinstance(source, str):
+        fss = OSFS(source)
+        source_need_close = True
+    if isinstance(target, str):
+        fst = OSFS(target)
+        target_need_close = True
+    if filters is None:
+        filters = ['*.mac', '*.sh', '*.C', '*.pat', '*.db', '*']
+
+    (methods.files(fss, filters)
+        .subscribe(lambda f: copy_file(fss, f, fst, f)))
+
+    if source_need_close:
+        fss.close()
+    if target_need_close:
+        fst.close()
 
 
 def copy_group(source, target, group_name):
-    with OSFS(source) as s:
+    with OSFS(source), with OSFS(target) as s, t:
         with s.opendir(group_name) as sd:
-            with OSFS(target) as t:
-                copy_dir(sd.getsyspath('.'), t.getsyspath('.'))
+            copy_dir(sd, t)
 
 
-def make_run_sh(target, file_name, main_mac, analysis_c):
-    with OSFS(target) as t:
-        with t.open(file_name, 'w') as fout:
-            c = ("#!/bin/bash\n"
-                 + "#SBATCH -o %J.out\n"
-                 + "#SBATCH -e %J.err\n"
-                 + "source ~/.zshrc\n"
-                 + "date\n"
-                 + "Gate {mac}\n".format(mac=main_mac)
-                 + "root -q -b {cfile}\n".format(cfile=analysis_c)
-                 #  + "echo datadata > result.txt\n"
-                 #  + "sleep 600\n"
-                 #  + "echo datadata > result.txt\n"
-                 + "date\n")
-            print(c, file=fout)
+class ShellMaker:
+    @classmethod
+    def run(target, output, main_mac):
+        with OSFS(target) as t:
+            with t.open(file_name, 'w') as fout:
+                s = ShellScript(fout, shell, tasks)
+                s.dump()
+
+    @classmethod
+    def post(target, output, analysic_c, )
 
 
 def make_post_sh(target, file_name):
     with OSFS(target) as t:
         with t.open(file_name, 'w') as fout:
-            c = ("#!/bin/bash\n"
+            c = ("#!/usr/bin/zsh\n"
                  + "#SBATCH -o %j.out\n"
                  + "#SBATCH -e %j.err\n"
                  + "source ~/.zshrc\n"
+                 + "hostname\n"
                  + "date\n"
-                 + "pygate merge\n"
-                 + "pygate clear_subdirs\n"
+                 #  + "pygate merge\n"
+                 #  + "pygate clear_subdirs\n"
                  + "date\n")
             print(c, file=fout)
 
@@ -92,7 +125,7 @@ def submit_service_direct(run_infos, post_infos):
             print(p.stdout.read().decode())
 
 
-def submit_service_hqlf(run_infos, post_infos):    
+def submit_service_hqlf(run_infos, post_infos):
     from dxpy.task.representation import creators
     from dxpy.task import interface
     tasks = []
