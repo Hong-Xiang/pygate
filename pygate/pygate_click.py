@@ -7,36 +7,19 @@ import subprocess
 import sys
 from pygate import service
 
+DEFAULT_CONFIG_FILE = service.ConfigMaker.DEFAULT_CONFIG_FILENAME
+
 
 @click.group()
 def gate():
     pass
 
 
-DEFAULT_CONFIGS = {
-    'template_source_directory': os.environ.get('PATH_MACS_TEMPLATES',
-                                                '/hqlf/hongxwing/macs_template'),
-    'target': '.',
-    'group_name': 'Ecat',
-    'main_mac': 'PET_Ecat.mac',
-    'analysis_c': 'PET_Analyse.C',
-    'nb_split': 10,
-    'merge_file': 'polyEcat.txt',
-    'no_action': False,
-    'run_sh': 'run.sh',
-    'post_sh': 'post.sh'
-}
-
-DEFAULT_CONFIG_FILE = 'config.yml'
-
-
 @gate.command()
 @click.option('--target', '-t', type=str, default='.', help='target directory')
 @click.option('--config', '-c', type=str, default=DEFAULT_CONFIG_FILE, help='config file name')
-def generate_config(target, config):
-    with OSFS(target) as t:
-        with t.open(config, 'w') as fout:
-            yaml.dump(DEFAULT_CONFIGS, fout, default_flow_style=False)
+def make_config(target, config):
+    service.ConfigMaker.make(target, config)
 
 
 def load_config(config):
@@ -46,26 +29,29 @@ def load_config(config):
 
 @gate.command()
 @click.option('--config', '-c', type=str, default=DEFAULT_CONFIG_FILE, help='config YAML file name')
-@click.option('--templates', '-t', 'content', flag_value='templates')
-@click.option('--shell', '-s', 'content', flag_value='shell')
-@click.option('--dirs', '-d', 'content', flag_value='dirs')
+@click.option('--templates', '-t', 'content', flag_value='templates', help='copy files from template directory')
+@click.option('--shell', '-s', 'content', flag_value='shell', help='generate shell files')
+@click.option('--dirs', '-d', 'content', flag_value='dirs', help='generate and copy files to sub directories')
 @click.option('--all', '-a', 'content', flag_value='all',
-              default=True)
+              default=True, help='All tasks above')
 def init(config, content):
+    """
+    Initialize working directory
+    """
     c = load_config(config)
     make_all = False
     if content == 'all':
         make_all = True
     if content == 'templates' or make_all:
-        service.copy_group(c['template_source_directory'],
-                           c['target'],
-                           c['group_name'])
+        service.Initializer.templates(c)
     if content == 'shell' or make_all:
-        service.make_run_sh(c['target'], c['run_sh'],
-                            c['main_mac'], c['analysis_c'])
-        service.make_post_sh(c['target'], c['post_sh'])
+        service.ShellMaker.run(c)
+        service.ShellMaker.post(c)
+        # service.make_run_sh(c['target'], c['run_sh'],
+        #                     c['main_mac'], c['analysis_c'])
+        # service.make_post_sh(c['target'], c['post_sh'])
     if content == 'dirs' or make_all:
-        service.make_subs(c['target'], c['nb_split'])
+        service.SubDirectoryMaker.make_subs(c)
 
 
 @click.command()
@@ -77,28 +63,17 @@ def run(config):
 
 @gate.command()
 @click.option('--config', '-c', type=str, default=DEFAULT_CONFIG_FILE, help='config YAML file name')
-@click.option('--print', '-p', 'worker', flag_value='print', default=True)
-@click.option('--slurm', '-s', 'worker', flag_value='slurm')
-@click.option('--hqlf', '-h', 'worker', flag_value='hqlf')
-def submit(config, worker):
+def submit(config):
     # TODO: add submit service
     c = load_config(config)
-    if worker == 'print':
-        service.submit(c['target'], c['run_sh'], c['post_sh'],
-                       service.submit_service_print)
-    elif worker == 'direct':
-        service.submit(c['target'], c['run_sh'], c['post_sh'],
-                       service.submit_service_direct)
-    elif worker == 'hqlf':
-        service.submit(c['target'], c['run_sh'], c['post_sh'],
-                       service.submit_service_hqlf)
+    service.Submitter.submit(c)
 
 
 @gate.command()
 @click.option('--config', '-c', type=str, default=DEFAULT_CONFIG_FILE, help='config YAML file name')
 def merge(config):
     c = load_config(config)
-    service.merge(c['target'], c['merge_file'])
+    service.Merger.merge(c)
 
 
 @gate.command()
@@ -109,9 +84,9 @@ def merge(config):
 def clear(config, content, dryrun):
     c = load_config(config)
     if content == 'dirs':
-        service.clear_subdirs(c['target'], dryrun)
+        service.Cleaner.subs(c, dryrun)
     elif content == 'all':
-        service.clear_all(c['target'], config, dryrun)
+        service.Cleaner.all(c, dryrun)
 
 
 if __name__ == "__main__":

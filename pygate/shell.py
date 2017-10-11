@@ -28,11 +28,12 @@ class Snippets:
             'GATE': cls.add_gate,
             'ROOT': cls.add_root,
             'HADD': cls.add_hadd,
-            'CLEARSUB': cls.add_clear_sub}
+            'CLEARSUB': cls.add_clear_sub,
+            'MERGE': cls.add_merge}
         return TASK_MAPPING.get(key.upper())
 
     @classmethod
-    def add_shell(cls, scripts, name):
+    def add_shell(cls, scripts, name):        
         name = name.lower()
         if not name in cls.SHELL:
             fmt = 'Unknown shell name {0}, use {1} instead.'
@@ -69,6 +70,10 @@ class Snippets:
         scripts.append('hadd {0} '.format(target) + ' '.join(filenames))
 
     @classmethod
+    def add_merge(cls, scripts):
+        scripts.append('pygate merge')
+
+    @classmethod
     def add_clear_sub(cls, scripts):
         scripts.append('pygate clear --dirs')
 
@@ -79,6 +84,7 @@ class Snippets:
             fmt = 'Unknown task name {0}, skipped.'
             warnings.warn(fmt.format(task_name), RuntimeWarning)
             return
+        payloads = payloads or {}
         add_func(scripts, **payloads)
 
 

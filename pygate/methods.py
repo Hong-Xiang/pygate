@@ -4,15 +4,17 @@ from fs import path as fp
 from fs import copy as fc
 
 
-def files(fs, filters=None, walk=False):
+def files(fs, filters=None, walk=False, exclude_files=None):
     if filters is None:
         filters = []
+    if exclude_files is None:
+        exclude_files = []
     if walk:
         return (rx.Observable
                 .from_(fs.walk.files('.', filter=filters))
                 .map(lambda p: fp.relativefrom(fs.getsyspath('.'), p)))
     else:
-        return rx.Observable.from_(fs.filterdir('.', files=filters, exclude_dirs=['*'])).map(lambda info: info.name)
+        return rx.Observable.from_(fs.filterdir('.', files=filters, exclude_files=exclude_files, exclude_dirs=['*'])).map(lambda info: info.name)
 
 
 def dirs(fs, filters=None, walk=False):

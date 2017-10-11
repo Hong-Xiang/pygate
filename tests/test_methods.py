@@ -28,6 +28,12 @@ class TestMethods(unittest.TestCase):
         methods.files(self.fs).subscribe(result.add)
         self.assertEqual(result, expected)
 
+    def test_files_exclude(self):
+        expected = {'test{}.mac'.format(i) for i in range(3)}
+        result = set()
+        methods.files(self.fs, exclude_files=['result*']).subscribe(result.add)
+        self.assertEqual(result, expected)
+
     def test_subdirs(self):
         expected = {'sub.{}'.format(i) for i in range(5)}
         result = set()
