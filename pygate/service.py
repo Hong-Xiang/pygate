@@ -55,7 +55,7 @@ def copy_group(source, target, group_name):
             copy_dir(sd, fst)
 
 class MacMaker:
-    
+    pass    
 
 class ConfigMaker:
     DEFAULT_CONFIGS = """#configs file of pygate

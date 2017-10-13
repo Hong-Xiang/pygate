@@ -8,5 +8,5 @@ setup(name='pygate',
       author_email='hx.hongxiang@gmail.com',
       license='MIT',
       packages=[],
-      install_requires=['fs', 'click', 'pyyaml'],
+      install_requires=['fs', 'click', 'pyyaml', 'rx'],
       zip_safe=False)
