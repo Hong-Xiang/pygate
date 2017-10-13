@@ -54,6 +54,8 @@ def copy_group(source, target, group_name):
         with fss.opendir(group_name) as sd:
             copy_dir(sd, fst)
 
+class MacMaker:
+    
 
 class ConfigMaker:
     DEFAULT_CONFIGS = """#configs file of pygate

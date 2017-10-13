@@ -1,3 +1,5 @@
 .vscode
 pygate.egg-info/
 *.pyc
+pygate/template/SimuMacs
+pygate/template/ymls
