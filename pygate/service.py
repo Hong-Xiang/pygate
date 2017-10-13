@@ -167,8 +167,8 @@ class Merger:
             with subprocess.Popen(call_args,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE) as p:
-                stdouts.write(p.stdout.read().decode())
-                stderrs.write(p.stderr.read().decode())
+                sys.stdout.write(p.stdout.read().decode())
+                sys.stderr.write(p.stderr.read().decode())
 
     @classmethod
     def direct(cls, fs, target, filenames):
