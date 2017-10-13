@@ -8,6 +8,7 @@ from fs import path as fp
 import requests
 from . import methods
 from .shell import ShellScript
+from .template.service import MacMaker
 
 
 class EnsureFS:
@@ -54,8 +55,6 @@ def copy_group(source, target, group_name):
         with fss.opendir(group_name) as sd:
             copy_dir(sd, fst)
 
-class MacMaker:
-    pass    
 
 class ConfigMaker:
     DEFAULT_CONFIGS = """#configs file of pygate
@@ -67,8 +66,7 @@ shell:
   run: run.sh
   post: post.sh
 clear:
-  keep:
-    - pygate.yml
+  keep: [pygate.yml, experiment.yml]
 submit: hqlf
 merge: 
   method: hadd
@@ -86,6 +84,8 @@ tasks:
     group: post
     payloads:
       filename: some_analysis.C
+template:
+    files: ['experiment.yml']
 verbose: 0
 dryrun: false
 
@@ -101,6 +101,7 @@ dryrun: false
         with fs(target) as t:
             with t.open(config_filename, 'w') as fout:
                 print(cls.DEFAULT_CONFIGS, file=fout)
+        MacMaker.make_yml('experiment')
 
 
 class Initializer:
@@ -115,6 +116,10 @@ class Initializer:
     @classmethod
     def shell(cls, c):
         ShellMaker.run(c['shell']['run'])
+
+    @classmethod
+    def mac(cls, c):
+        MacMaker.make_mac(c['template']['files'])
 
 
 class ShellMaker:
@@ -270,6 +275,7 @@ class Cleaner:
     @classmethod
     def all(cls, c, is_dryrun):
         exclude = (c.get('clear') or {}).get('keep') or []
+        cls.subs(c, is_dryrun)
         with OSFS(c['target']) as fs:
             (methods.files(fs, exclude_files=exclude)
              .do_action(lambda d: cls.msg(fs, d, c.get('verbose')))

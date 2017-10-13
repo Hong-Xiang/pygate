@@ -32,6 +32,7 @@ def load_config(config):
 @click.option('--templates', '-t', 'content', flag_value='templates', help='copy files from template directory')
 @click.option('--shell', '-s', 'content', flag_value='shell', help='generate shell files')
 @click.option('--dirs', '-d', 'content', flag_value='dirs', help='generate and copy files to sub directories')
+@click.option('--macss', '-m', 'content', flag_value='macs', help='generate mac files')
 @click.option('--all', '-a', 'content', flag_value='all',
               default=True, help='All tasks above')
 def init(config, content):
@@ -42,6 +43,8 @@ def init(config, content):
     make_all = False
     if content == 'all':
         make_all = True
+    if content == 'macs' or make_all:
+        service.Initializer.mac(c)
     if content == 'templates' or make_all:
         service.Initializer.templates(c)
     if content == 'shell' or make_all:

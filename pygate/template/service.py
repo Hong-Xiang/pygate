@@ -116,128 +116,134 @@ class SimuApp:
 
     def generateMacs(self):
         # currPath = os.getcwd()
-        if(os.path.exists("SimuMacs")):
-            with OSFS('.') as fs:
-                fs.removetree('SimuMacs')
+        # if(os.path.exists("SimuMacs")):
+        #     with OSFS('.') as fs:
+        #         fs.removetree('SimuMacs')
                 # os.rmdir('SimuMacs')
         # else:
-        os.mkdir('SimuMacs')
-        with open(os.getcwd() + '/SimuMacs/camera.mac', 'w') as file_object:
-            file_object.write(self.cam.getMacStr())
+        # if(not os.path.exists("SimuMacs")):
+        #     os.mkdir('SimuMacs')
+        # with open(os.getcwd() + '/SimuMacs/camera.mac', 'w') as file_object:
+        #     file_object.write(self.cam.getMacStr())
         # file_object.close()
-
-        file_object = open(os.getcwd() + '/SimuMacs/phantom.mac', 'w')
+        subroot = ''
+        # subroot = '/SimuMacs'
+        file_object = open(os.getcwd() + subroot + '/phantom.mac', 'w')
         file_object.write(self.cam.getMacStr())
         file_object.close()
 
-        file_object = open(os.getcwd() + '/SimuMacs/physics.mac', 'w')
+        file_object = open(os.getcwd() + subroot + '/physics.mac', 'w')
         file_object.write(self.phy.getMacStr())
         file_object.close()
 
-        file_object = open(os.getcwd() + '/SimuMacs/digitizer.mac', 'w')
+        file_object = open(os.getcwd() + subroot + '/digitizer.mac', 'w')
         file_object.write(self.digi.getMacStr())
         file_object.close()
 
-        file_object = open(os.getcwd() + '/SimuMacs/source.mac', 'w')
+        file_object = open(os.getcwd() + subroot + '/source.mac', 'w')
         file_object.write(self.src.getMacStr())
         file_object.close()
 
-        file_object = open(os.getcwd() + '/SimuMacs/main.mac', 'w')
+        file_object = open(os.getcwd() + subroot + '/main.mac', 'w')
         file_object.write(self.getMacStr())
         file_object.close()
 
 
 # if __name__ == '__main__':
-def make_yml(yml_filename):
-    # Camera
-    c1 = geometry.Cylinder(name='ecat', Rmax=82, Rmin=56, Height=5)
-    # print (b1.getMacStr())
-    b1 = geometry.Box(name='block', position=geometry.Vec3(
-        66.5, 0.0, 0.0), size=geometry.Vec3(20, 44, 5))
-    b2 = geometry.Box(name='crystal', size=geometry.Vec3(20, 2, 2))
-    c1.addChild(b1)
-    b1.addChild(b2)
-    cbr1 = geometry.CubicRepeater(volume=b2.name, scale=geometry.Vec3(
-        1, 20, 1), repeatVector=geometry.Vec3(0, 2.2, 0))
-    sys = camera.Ecat()
-    sys.attachSystem(itemList=[b1.name, b2.name])
-
-    # create the camera and construt it
-    camera1 = camera.Camera(name='cam1', system=sys)
-    camera1.addGeo(c1)
-    camera1.addGeo(cbr1)
-    camera1.addCrystalSD(b2.name)
-    ############################################################
-
-    # phantom
-    c1 = geometry.Cylinder(
-        mother='world', name='NEMACylinder', Rmax=82, Rmin=56, Height=5)
-    # print (b1.getMacStr())
-    # b1 = geometry.Box(mother=c1.name, name='', position=geometry.Vec3(
-    #     66.5, 0.0, 0.0), size=geometry.Vec3(20, 44, 5))
-    # c1.addChild(b1)
-
-    phantom = phantomModule.Phantom(name='phantom1')
-    phantom.addGeo(c1)
-    phantom.addPhantomSD(b1)
-    ##################################################
-
-    # source
-    src1 = source.SrcItem(name='src1')
-    src1.addSrcModule(source.Particle(paticleType='gamma'))
-    src1.addSrcModule(source.Angular(ang=[90, 90, 0, 360]))
-    # src1.addSrcModule(Rectangle(halfSize = [10,20]))
-    src1.addSrcModule(source.Cylinder(dimension='Volume', halfz=10, radius=10))
-    src1.addSrcModule(source.Placement(placement=geometry.Vec3(10, 10, 10)))
-
-    src = source.Source()
-    src.addSourceItem(src1)
-    ##################################################
-
-    # digitizer
-    sc = digitizer.SingleChain()
-    a = digitizer.Adder()
-    r = digitizer.Readout()
-    sc.addModule(a)
-    sc.addModule(r)
-    sc.addModule(digitizer.Blurring())
-    sc.addModule(digitizer.CrystalBlurring())
-    sc.addModule(digitizer.ThresHolder())
-    sc.addModule(digitizer.UpHolder())
-    sc.addModule(digitizer.TimeResolution())
-    sc.addModule(digitizer.SpBlurring())
-    sc.addModule(digitizer.DeadTime(dtVolume = 'crystal'))
-    coin1 = digitizer.CoinSorter(window=20)
-    coin2 = digitizer.CoinSorter(name='LowCoin', window=10)
-    conichain1 = digitizer.CoinChain(name='finalcoin', inputList=['coin1', 'coin2'])
-    conichain1.addModule(digitizer.DeadTime(dtVolume = 'crystal'))
-    conichain1.addModule(digitizer.Buffer())
-    digi = digitizer.Digitizer()
-    digi.addModule(sc)
-    digi.addModule(coin1)
-    digi.addModule(coin2)
-    digi.addModule(conichain1)
-    #####################################################
-
-    # physics
-    phy = physics.Physics()
-    phy.addCutPair(physics.CutPair(region='crystal', cutValue=10))
-    phy.addCutPair(physics.CutPair(region=c1.name, cutValue=10))
-
-    simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom, src=src1, digi=digi, phy=phy, randEngine=RandomEngine(),
-                   dataOut=Root(fileName='test'))
-    # print(simu.getMacStr())
-    # simu.generateMacs()
-    simu.generateYaml()
-# if __name__ == "__main__":
-
-#     f = open('simu1.yml', 'r')
-#     simu = yaml.load(f)
-#     simu.generateMacs()
 
 
+class MacMaker:
+    @classmethod
+    def make_mac(cls, config):
+        if not isinstance(config, (list, tuple)):
+            config = [config]
+        for f in config:
+            with open(f) as fin:
+                simu = yaml.load(fin)
+                simu.generateMacs()
 
-def make_mac(config):
-    with open(config) as fin:
-        simu = yaml.load(fin)
-        simu.generateMacs()
+    @classmethod
+    def make_yml(cls, yml_filename):
+        # Camera
+        c1 = geometry.Cylinder(name='ecat', Rmax=82, Rmin=56, Height=5)
+        # print (b1.getMacStr())
+        b1 = geometry.Box(name='block', position=geometry.Vec3(
+            66.5, 0.0, 0.0), size=geometry.Vec3(20, 44, 5))
+        b2 = geometry.Box(name='crystal', size=geometry.Vec3(20, 2, 2))
+        c1.addChild(b1)
+        b1.addChild(b2)
+        cbr1 = geometry.CubicRepeater(volume=b2.name, scale=geometry.Vec3(
+            1, 20, 1), repeatVector=geometry.Vec3(0, 2.2, 0))
+        sys = camera.Ecat()
+        sys.attachSystem(itemList=[b1.name, b2.name])
+
+        # create the camera and construt it
+        camera1 = camera.Camera(name='cam1', system=sys)
+        camera1.addGeo(c1)
+        camera1.addGeo(cbr1)
+        camera1.addCrystalSD(b2.name)
+        ############################################################
+
+        # phantom
+        c1 = geometry.Cylinder(
+            mother='world', name='NEMACylinder', Rmax=82, Rmin=56, Height=5)
+        # print (b1.getMacStr())
+        # b1 = geometry.Box(mother=c1.name, name='', position=geometry.Vec3(
+        #     66.5, 0.0, 0.0), size=geometry.Vec3(20, 44, 5))
+        # c1.addChild(b1)
+
+        phantom = phantomModule.Phantom(name='phantom1')
+        phantom.addGeo(c1)
+        phantom.addPhantomSD(b1)
+        ##################################################
+
+        # source
+        src1 = source.SrcItem(name='src1')
+        src1.addSrcModule(source.Particle(paticleType='gamma'))
+        src1.addSrcModule(source.Angular(ang=[90, 90, 0, 360]))
+        # src1.addSrcModule(Rectangle(halfSize = [10,20]))
+        src1.addSrcModule(source.Cylinder(
+            dimension='Volume', halfz=10, radius=10))
+        src1.addSrcModule(source.Placement(
+            placement=geometry.Vec3(10, 10, 10)))
+
+        src = source.Source()
+        src.addSourceItem(src1)
+        ##################################################
+
+        # digitizer
+        sc = digitizer.SingleChain()
+        a = digitizer.Adder()
+        r = digitizer.Readout()
+        sc.addModule(a)
+        sc.addModule(r)
+        sc.addModule(digitizer.Blurring())
+        sc.addModule(digitizer.CrystalBlurring())
+        sc.addModule(digitizer.ThresHolder())
+        sc.addModule(digitizer.UpHolder())
+        sc.addModule(digitizer.TimeResolution())
+        sc.addModule(digitizer.SpBlurring())
+        sc.addModule(digitizer.DeadTime(dtVolume='crystal'))
+        coin1 = digitizer.CoinSorter(window=20)
+        coin2 = digitizer.CoinSorter(name='LowCoin', window=10)
+        conichain1 = digitizer.CoinChain(
+            name='finalcoin', inputList=['coin1', 'coin2'])
+        conichain1.addModule(digitizer.DeadTime(dtVolume='crystal'))
+        conichain1.addModule(digitizer.Buffer())
+        digi = digitizer.Digitizer()
+        digi.addModule(sc)
+        digi.addModule(coin1)
+        digi.addModule(coin2)
+        digi.addModule(conichain1)
+        #####################################################
+
+        # physics
+        phy = physics.Physics()
+        phy.addCutPair(physics.CutPair(region='crystal', cutValue=10))
+        phy.addCutPair(physics.CutPair(region=c1.name, cutValue=10))
+
+        simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom, src=src1, digi=digi, phy=phy, randEngine=RandomEngine(),
+                       dataOut=Root(fileName='test'))
+        # print(simu.getMacStr())
+        # simu.generateMacs()
+        simu.generateYaml()
