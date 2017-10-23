@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='pygate',
+setup(name='dxl-pygate',
       version='0.2',
       description='A simplified python interface for Gate.',
       url='https://github.com/Hong-Xiang/pygate',
