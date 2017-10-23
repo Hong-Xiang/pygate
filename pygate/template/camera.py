@@ -49,7 +49,7 @@ class Systems:
 
     def getMacStr(self):
         mac = ""
-        fmt = r"/gate/systems/{0}/{1}/attach/{2}" + "\n"
+        fmt = r"/gate/systems/{0}/{1}/attach {2}" + "\n"
         # for i in range(len(self.attachList)):
         for l, a in zip(self.levelList, self.attachList):
             # mac += fmt.format(self.name, self.levelList[i], self.attachList[i])

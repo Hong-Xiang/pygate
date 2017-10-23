@@ -2,6 +2,7 @@ from .digitizer import AttrPair
 from .geometry import Vec3
 import yaml
 
+
 class SrcModule:
     def __init__(self, srcName=None):
         self.srcName = srcName
@@ -24,7 +25,7 @@ class SrcModule:
 
 class Particle(SrcModule):
     def __init__(self, srcName=None, paticleType='positron'):
-        super(Particle, self).__init__(srcName = srcName)
+        super(Particle, self).__init__(srcName=srcName)
         self.particleType = paticleType
 
     def makeAttrList(self):
@@ -37,9 +38,9 @@ class Particle(SrcModule):
         elif self.particleType == 'gamma':
             fmt = (r"/gate/source/{0}/setType backtoback" + "\n" +
                    r"/gate/source/{0}/gps/particle gamma " + "\n" +
-                   r"/gate/source/{0}/gps/monoerengy 511 keV" + "\n" +
+                   r"/gate/source/{0}/gps/monoenergy 511 keV" + "\n" +
                    r"/gate/source/{0}/setForcedUnstableFlag true" + "\n" +
-                   r"/gate/source/{0}/setForcedHalfLife 6586 s" + "\n")
+                   r"/gate/source/{0}/setForcedHalfLife 6586.2 s" + "\n")
             self.addAttr(AttrPair(self.particleType, fmt.format(self.srcName)))
         else:
             print("invalid particle type in Particle:makeAttrList() \n")
@@ -62,7 +63,7 @@ class Angular(SrcModule):
         self.ang = ang
 
     def makeAttrList(self):
-        fmt = (r"/gate/source/{0}/angtype iso" + "\n" +
+        fmt = (r"/gate/source/{0}/gps/angtype iso" + "\n" +
                r"/gate/source/{0}/gps/mintheta {1} deg " + "\n" +
                r"/gate/source/{0}/gps/maxtheta {2} deg" + "\n" +
                r"/gate/source/{0}/gps/minphi   {3} deg" + "\n" +
@@ -71,9 +72,29 @@ class Angular(SrcModule):
             self.srcName, self.ang[0], self.ang[1], self.ang[2], self.ang[3])))
 
 
+class Voxelized(SrcModule):
+    def __init__(self, readtable, readfile, shape='Voxelized', reader='interfile', translator='range', srcName=None, position=None):
+        super(Voxelized, self).__init__(srcName=srcName)
+        self.shape = shape
+        self.reader = reader
+        self.translator = translator
+        self.readtable = readtable
+        self.readfile = readfile
+        self.position = position
+
+    def makeAttrList(self):
+        fmt = (r"/gate/source/{0}/reader/insert {1}" + "\n" +
+               r"/gate/source/{0}/{1}Reader/translator/insert {2} " + "\n" +
+               r"/gate/source/{0}/{1}Reader/{2}Translator/readTable {3}" + "\n" +
+               r"/gate/source/{0}/{1}Reader/readFile  {4}" + "\n" +
+               r"/gate/source/{0}/setPosition  {5}  mm" + "\n")
+        self.addAttr(AttrPair(self.shape, fmt.format(self.srcName, self.reader,
+                                                     self.translator, self.readtable, self.readfile, self.position.getMacStr())))
+
+
 class Shape(SrcModule):
     PlaneList = ['Circle', 'Annulus', 'Ellpsoid', 'Square', 'Rectangle']
-    VSList = ['Sphere', 'Ellipsoid', 'Cylinder', 'Para']
+    VolumeList = ['Sphere', 'Ellipsoid', 'Cylinder', 'Para']
 
     def __init__(self, dimension, shape, srcName=None):
         super(Shape, self).__init__(srcName=srcName)
@@ -82,7 +103,7 @@ class Shape(SrcModule):
                 self.dimension = dimension
                 self.shape = shape
         elif ((dimension is 'Surface') or (dimension is 'Volume')):
-            if shape in Shape.VSList:
+            if shape in Shape.VolumeList:
                 self.dimension = dimension
                 self.shape = shape
         else:
@@ -100,7 +121,7 @@ class Shape(SrcModule):
 class Cylinder(Shape):
     def __init__(self, radius, halfz, dimension, srcName=None):
         super(Cylinder, self).__init__(
-            dimension = dimension, shape='Cylinder', srcName=srcName)
+            dimension=dimension, shape='Cylinder', srcName=srcName)
         self.radius = radius
         self.halfz = halfz
 
@@ -112,8 +133,6 @@ class Cylinder(Shape):
             AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
         self.addAttr(
             AttrPair(self.halfz, fmt2.format(self.srcName, self.halfz)))
-
-
 
 
 class Sphere(Shape):
@@ -143,28 +162,36 @@ class Ellipsoid(Shape):
         self.addAttr(AttrPair(self.halfSize, fmt1.format(
             self.srcName, self.halfSize[0], self.halfSize[1], self.halfSize[2])))
 
+
 class Circle(Shape):
     def __init__(self, radius, srcName=None):
         super(Circle, self).__init__(
-            dimension = 'Plane', shape='Circle', srcName=srcName)
+            dimension='Plane', shape='Circle', srcName=srcName)
         self.radius = radius
+
     def makeAttrList(self):
         super(Circle, self).makeAttrList()
         fmt1 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
-        self.addAttr(AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))    
+        self.addAttr(
+            AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
+
 
 class Annulus(Shape):
     def __init__(self, radius0, radius, srcName=None):
         super(Annulus, self).__init__(
-            dimension = 'Plane', shape='Annulus', srcName=srcName)
+            dimension='Plane', shape='Annulus', srcName=srcName)
         self.radius = radius
         self.radius0 = radius0
+
     def makeAttrList(self):
         super(Annulus, self).makeAttrList()
         fmt1 = (r"/gate/source/{0}/gps/radius0 {1} mm" + "\n")
         fmt2 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
-        self.addAttr(AttrPair(self.radius0, fmt1.format(self.srcName, self.radius0)))
-        self.addAttr(AttrPair(self.radius, fmt2.format(self.srcName, self.radius)))
+        self.addAttr(
+            AttrPair(self.radius0, fmt1.format(self.srcName, self.radius0)))
+        self.addAttr(
+            AttrPair(self.radius, fmt2.format(self.srcName, self.radius)))
+
 
 class Ellipse(Shape):
     def __init__(self, halfSize, srcName=None):
@@ -178,6 +205,8 @@ class Ellipse(Shape):
                 r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
         self.addAttr(AttrPair(self.halfSize, fmt1.format(
             self.srcName, self.halfSize[0], self.halfSize[1])))
+
+
 class Rectangle(Shape):
     def __init__(self, halfSize, srcName=None):
         super(Rectangle, self).__init__(
@@ -215,6 +244,24 @@ class SrcItem:
     def getMacStr(self):
         mac = ""
         fmt = r"/gate/source/addSource {0}" + "\n"
+        mac += fmt.format(self.name)
+        for item in self.srcModuleList:
+            mac += item.getMacStr()
+        return mac
+
+
+class VoxelizedSrcItem:
+    def __init__(self, name):
+        self.srcModuleList = []
+        self.name = name
+
+    def addSrcModule(self, item):
+        item.srcName = self.name
+        self.srcModuleList.append(item)
+
+    def getMacStr(self):
+        mac = ""
+        fmt = r"/gate/source/addSource {0} voxel" + "\n"
         mac += fmt.format(self.name)
         for item in self.srcModuleList:
             mac += item.getMacStr()

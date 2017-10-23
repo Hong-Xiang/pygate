@@ -2,6 +2,7 @@ import yaml
 import sys
 import subprocess
 import warnings
+from dxpy.filesystem import Path
 from fs.osfs import OSFS
 from fs import copy as fc
 from fs import path as fp
@@ -95,6 +96,8 @@ dryrun: false
 
     @classmethod
     def make(cls, target, config_filename=None, fs=None):
+        import pygate
+        # with open(Path(pygate.__file__).father)
         if fs is None:
             fs = OSFS
         config_filename = config_filename or cls.DEFAULT_CONFIG_FILENAME

@@ -1,0 +1,5 @@
+#!/home/hongxwing/anaconda3/bin/python
+from pygate.pygate_click import gate
+
+if __name__ == "__main__":
+    gate()

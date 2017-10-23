@@ -72,7 +72,7 @@ class Readout(DigiModule):
 
 
 class Blurring(DigiModule):
-    def __init__(self, chainName=None, law='inverseSquare', res=0.15, eor=511, slope=None):
+    def __init__(self, chainName=None, law = None, res=0.15, eor=511, slope=None):
         super(Blurring, self).__init__(
             moduleType='blurring', chainName=chainName)
         self.law = law
@@ -83,16 +83,16 @@ class Blurring(DigiModule):
     def makeAttrList(self):
         super(Blurring, self).makeAttrList()
         fmt1 = self.getMeStr() + r"/setLaw {0}" + "\n"
-        fmt2 = self.getMeStr() + r"/{0}/serReolution {1}" + "\n"
-        fmt3 = self.getMeStr() + r"/{0}/setEnergyOfReference {1} keV" + " \n"
-        fmt4 = self.getMeStr() + r"/{0}/setSlope {1}  1/keV" + "\n"
+        fmt2 = self.getMeStr() + r"/setResolution {0}" + "\n"
+        fmt3 = self.getMeStr() + r"/setEnergyOfReference {0} keV" + " \n"
+        fmt4 = self.getMeStr() + r"/setSlope {0}  1/keV" + "\n"
         self.attrList.append(AttrPair(self.law, fmt1.format(self.law)))
         self.attrList.append(
-            AttrPair(self.resolution, fmt2.format(self.law, self.resolution)))
+            AttrPair(self.resolution, fmt2.format( self.resolution)))
         self.attrList.append(
-            AttrPair(self.eor, fmt3.format(self.law, self.eor)))
+            AttrPair(self.eor, fmt3.format( self.eor)))
         self.attrList.append(
-            AttrPair(self.slope, fmt4.format(self.law, self.slope)))
+            AttrPair(self.slope, fmt4.format( self.slope)))
 
 
 class CrystalBlurring(DigiModule):
@@ -237,7 +237,7 @@ class SingleChain:
 
     def getMacStr(self):
         mac = ""
-        if self.name is 'Singles':
+        if self.name == 'Singles':
             pass
         else:
             fmt1 = r"/gate/digitizer/name {0}" + "\n"
@@ -255,7 +255,7 @@ class SingleChain:
 
 class CoinSorter:
     def __init__(self, name = None, inputName = None, window = None, minSectorDifference = None,
-                 Offset = None, depth = None, allPulsesOpenCoincGate = None, multipolicy = None):
+                 offset = None, depth = None, allPulsesOpenCoincGate = None, multipolicy = None):
         if name is None:
             self.name = 'Coincidences'
         else:
@@ -263,18 +263,20 @@ class CoinSorter:
         self.inputName = inputName
         self.window = window
         self.minSectorDifference = minSectorDifference
-        self.Offset = Offset
+        self.offset = offset
         self.depth = depth
         self.allPulsesOpenCoincGate = allPulsesOpenCoincGate
         self.multipolicy = multipolicy
         self.attrList = []
    
     def makeAttrList(self):
-        if self.name is not 'Coincidences':            
+        if self.name == 'Coincidences':
+            pass
+        else:            
             nameFmt = r"/gate/digitizer/name {0}" + "\n"
-            insertFmt = r"/gate/digitizer/{0}/insert coincidenceSorter " + "\n"
-            self.addAttr(AttrPair(self.name, nameFmt.format(self.name)+insertFmt.format(self.name)))
-        fmt0 = self.getMeStr()+r"/setInputName {0}"
+            insertFmt = r"/gate/digitizer/insert coincidenceSorter " + "\n"
+            self.addAttr(AttrPair(self.name, nameFmt.format(self.name)+insertFmt.format()))
+        fmt0 = self.getMeStr()+r"/addInputName {0}"
         fmt1 = self.getMeStr()+r"/setWindow {0}  ns" +"\n"
         fmt2 = self.getMeStr()+r"/minSectorDifference {0}" +"\n"
         fmt3 = self.getMeStr()+r"/setOffset {0}  ns" +"\n"
@@ -285,7 +287,7 @@ class CoinSorter:
         self.addAttr(AttrPair(self.inputName,fmt0.format(self.name,self.inputName)))
         self.addAttr(AttrPair(self.window,fmt1.format(self.window)))
         self.addAttr(AttrPair(self.minSectorDifference,fmt2.format(self.minSectorDifference)))
-        self.addAttr(AttrPair(self.Offset,fmt3.format(self.Offset)))
+        self.addAttr(AttrPair(self.offset,fmt3.format(self.offset)))
         self.addAttr(AttrPair(self.depth,fmt4.format(self.depth)))
         self.addAttr(AttrPair(self.allPulsesOpenCoincGate,fmt5.format(self.allPulsesOpenCoincGate)))
         self.addAttr(AttrPair(self.multipolicy,fmt6.format(self.multipolicy)))        
@@ -307,7 +309,7 @@ class CoinSorter:
 
 
 class CoinChain:
-    def __init__(self, name = None, inputList = None):
+    def __init__(self, name = None, inputList = None, usePriority = None):
         if name is None:
             print("No CoinChain name! CoinChain:__init__() \n")
         else:
@@ -317,18 +319,14 @@ class CoinChain:
         else:
             self.inputList = inputList
         self.moduleList = []
-
+        self.usePriority = usePriority
     def addInput(self, item):
-        if item is None:
-            pass
-        else:
+        if item is not None:
             self.inputList.append(item)
    
 
     def addModule(self, item=None):
-        if item is None:
-            pass
-        else:
+        if item is not None:
             item.chainName = self.name
             self.moduleList.append(item)
 
@@ -338,13 +336,16 @@ class CoinChain:
             pass
         else:
             fmt1 = r"/gate/digitizer/name {0}" + "\n"
-            fmt2 = r"/gate/digitizer/insert conincidenceChain" + "\n"
+            fmt2 = r"/gate/digitizer/insert coincidenceChain" + "\n"
             mac += fmt1.format(self.name) + fmt2.format()
-        fmt3 = r"/gate/digitizer/{0}/setInputName {1}" + "\n"
+        fmt3 = r"/gate/digitizer/{0}/addInputName {1}" + "\n"
         for item in self.inputList:
             mac += fmt3.format(self.name,item)     
         for item in self.moduleList:
             mac += item.getMacStr()
+        if self.usePriority is not None:
+            fmt4 = r"/gate/digitizer/{0}/usePriority true"
+            mac += fmt4.format(self.name)
         return mac
 
 
