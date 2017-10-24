@@ -279,7 +279,7 @@ class Source():
         mac = ""
         for item in self.srcItemList:
             mac += item.getMacStr()
-        mac += r"/gate/source/list"
+        mac += r"/gate/source/list" + "\n"
         return mac
 
 

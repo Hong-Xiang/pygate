@@ -20,7 +20,7 @@ class Physics():
                 +r"/gate/physics/addProcess Compton" + "\n" 
                 +r"/gate/physics/processes/Compton/setModel StandardModel" + "\n" 
                 +r"/gate/physics/addProcess RayleighScattering" + "\n" 
-                +r"/gate/physics/processes/RayleighScattering/setModel LivermoreModel" + "\n" 
+                +r"/gate/physics/processes/RayleighScattering/setModel PenelopeModel" + "\n" 
                 +r"/gate/physics/addProcess ElectronIonisation" + "\n" 
                 +r"/gate/physics/processes/ElectronIonisation/setModel StandardModel e-" + "\n" 
                 +r"/gate/physics/processes/ElectronIonisation/setModel StandardModel e+" + "\n" 
@@ -28,11 +28,13 @@ class Physics():
                 +r"/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-" + "\n" 
                 +r"/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+" + "\n" 
                 +r"/gate/physics/addProcess PositronAnnihilation" + "\n" 
-                +r"/gate/physics/addProcess eMultipleScattering" + "\n" 
-                +r"/gate/physics/processes/eMultipleScattering/setGeometricalStepLimiterType e- distanceToBoundary" + "\n" 
-                +r"/gate/physics/processes/eMultipleScattering/setGeometricalStepLimiterType e+ distanceToBoundary" + "\n" 
-                +r"/gate/physics/addProcess RadioactiveDecay" + "\n" 
-                +r"/gate/physics/addAtomDeexcitation" + "\n" 
+                +r"/gate/physics/addProcess MultipleScattering e+"+"\n"
+                +r"/gate/physics/addProcess MultipleScattering e-"+"\n"
+               # +r"/gate/physics/addProcess eMultipleScattering" + "\n" 
+               # +r"/gate/physics/processes/eMultipleScattering/setGeometricalStepLimiterType e- distanceToBoundary" + "\n" 
+               # +r"/gate/physics/processes/eMultipleScattering/setGeometricalStepLimiterType e+ distanceToBoundary" + "\n" 
+               # +r"/gate/physics/addProcess RadioactiveDecay" + "\n" 
+               # +r"/gate/physics/addAtomDeexcitation" + "\n" 
                 +r"/gate/physics/processList Enabled" + "\n" 
                 +r"/gate/physics/processList Initialized" + "\n" )
 
@@ -53,7 +55,7 @@ class Physics():
         fmt2 = r"/gate/physics/Electron/SetCutInRegion {0}  {1}"+" mm\n"
         fmt3 = r"/gate/physics/Positron/SetCutInRegion {0}  {1}"+" mm\n"
 
-        fmt4 = r"/gate/physics/SetMaxStepInRegion {0} {1}" +"mm\n"
+        fmt4 = r"/gate/physics/SetMaxStepSizeInRegion {0} {1}" +" mm\n"
         Str = ""
         for item in self.cutPairList:
             Str += fmt1.format(item.region,item.cutValue)
