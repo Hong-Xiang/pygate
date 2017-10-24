@@ -8,6 +8,6 @@ setup(name='dxl-pygate',
       author_email='hx.hongxiang@gmail.com',
       license='MIT',
       packages=['pygate'],
-      install_requires=['fs', 'click', 'pyyaml', 'rx'],
+      install_requires=['fs', 'click', 'pyyaml', 'rx', 'dxl-dxpy>0.2'],
       scripts=['bin/pygate'],
       zip_safe=False)
