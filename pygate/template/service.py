@@ -213,7 +213,7 @@ class MacMaker:
         b1 = geometry.Box(name='block', position=geometry.Vec3(
             69.0, 0.0, 0.0), size=geometry.Vec3(20, 30, 3), material='Air')
         b2 = geometry.Box(name='crystal', size=geometry.Vec3(
-            20, 2, 2), material='LYSO')
+            20, 1, 1), material='LYSO')
         c1.addChild(b1)
         b1.addChild(b2)
         cbr1 = geometry.RingRepeater(volume=b1.name, number=10)
@@ -225,8 +225,8 @@ class MacMaker:
         # create the camera and construt it
         camera1 = camera.Camera(name='cam1', system=sys)
         camera1.addGeo(c1)
-        camera1.addGeo(cbr1)
         camera1.addGeo(cbr2)
+        camera1.addGeo(cbr1)
         camera1.addCrystalSD(b2.name)
         ############################################################
 
@@ -251,7 +251,7 @@ class MacMaker:
         ##################################################
 
         # source
-        src1 = source.VoxelizedSrcItem(name = 'src1')
+        src1 = source.VoxelizedSrcItem(name = 'voxel_heart')
         src1.addSrcModule(source.Voxelized(readtable = 'activity_range_brain.dat',readfile = 'heart_act_phantom.h33',position=geometry.Vec3(-38.4, -38.4,-0.15)))
         #src1 = source.SrcItem(name='src1')
         src1.addSrcModule(source.Particle(paticleType='gamma'))
@@ -278,7 +278,7 @@ class MacMaker:
         sc.addModule(digitizer.UpHolder(holdvalue=750))
         # sc.addModule(digitizer.TimeResolution())
         # sc.addModule(digitizer.SpBlurring())
-        sc.addModule(digitizer.DeadTime(dtVolume='block'))
+        sc.addModule(digitizer.DeadTime(dtVolume='block',deadtime= 3000))
         coin1 = digitizer.CoinSorter(window=10,offset = 0)
         coin2 = digitizer.CoinSorter(name='delay', window=10,offset = 500)
         conichain1 = digitizer.CoinChain(
@@ -296,10 +296,10 @@ class MacMaker:
         phy = physics.Physics()
         phy.addCutPair(physics.CutPair(region='crystal', cutValue = 0.1))
         phy.addCutPair(physics.CutPair(region=pv1.name, cutValue = 0.1))
-        # phy.addMaxStep(physics.MaxStep(region=pv1.name, maxstepsize = 0.01 ))
+        phy.addMaxStep(physics.MaxStep(region=pv1.name, maxstepsize = 0.01 ))
 
 
-        simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom, src=src1, digi=digi, phy=phy, randEngine=RandomEngine())
+        simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom, src=src, digi=digi, phy=phy, randEngine=RandomEngine())
         
         dataout1 = Root(fileName = 'testroot')
         dataout2 = Sino(fileName = 'testsino',inputDataName = 'finalcoin')

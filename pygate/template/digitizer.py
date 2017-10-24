@@ -184,10 +184,10 @@ class Buffer(DigiModule):
         self.attrList.append(AttrPair(self.mode,fmt3.format(self.mode)))
 
 class DeadTime(DigiModule):
-    def __init__(self, dtVolume, chainName=None, dt=100000, deadMode=None,  bufferSize=None, bufferMode=None):
+    def __init__(self, dtVolume,deadtime, chainName=None, deadMode=None,  bufferSize=None, bufferMode=None):
         super(DeadTime, self).__init__(
             moduleType='deadtime', chainName=chainName)
-        self.deadtime = dt
+        self.deadtime = deadtime
         self.deadMode = deadMode
         # if dtVolume is None:
         #     print("DeadTime: no Dead time volume")
