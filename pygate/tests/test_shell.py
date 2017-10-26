@@ -1,43 +1,18 @@
 import unittest
 from ruamel.yaml import YAML
 from fs.memoryfs import MemoryFS
-yaml = YAML()
+from fs.osfs import OSFS
+from dxpy.filesystem import Path
+import jinja2
 from pygate import shell
 
 
 class TestShellScript(unittest.TestCase):
-    def test_shell_run(self):
-        s = """#Config of tasks:
-- name: Gate
-  payloads:
-    filename: some.mac
-- name: root
-  payloads:
-    filename: some_analysis.C
-- name: hadd
-  payloads:
-    target: result.root
-    filenames:
-        - sub0/result.root
-        - sub1/result.root
-"""
-        expected = """#!/usr/bin/zsh
-#SBATCH -o %J.out
-#SBATCH -e %J.err
-source ~/.zshrc
-hostname
-date
-Gate some.mac
-root -q -b some_analysis.C
-hadd result.root sub0/result.root sub1/result.root
-date
+    def test_shell_bash(self):
+        from fs.osfs import OSFS
+        result = shell.make(OSFS('/tmp'), '/sub.1', 'map', [{'method':'Gate', 'filename': 'main.mac'}], shell='bash')
+        from pygate.utils import load_script
+        expect = load_script('map_bash_sample.sh')
+        self.assertEqual(result, expect)
+        
 
-"""
-        tasks = yaml.load(s)
-        with MemoryFS() as fs:
-            with fs.open('run.sh', 'w') as fout:
-                s = shell.ShellScript(fout, tasks=tasks)
-                s.dump()
-            with fs.open('run.sh') as fin:
-                result = fin.read()
-        self.assertEqual(result, expected)

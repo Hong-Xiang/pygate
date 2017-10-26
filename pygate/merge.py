@@ -1,3 +1,4 @@
+from dxpy import batch
 class Merger:
     def __init__(self, config, root_fs):
         """

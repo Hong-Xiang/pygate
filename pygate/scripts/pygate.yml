@@ -1,0 +1,30 @@
+#configs file of pygate
+target: '.'
+init:
+  source:
+    directory: '/hqlf/hongxwing/macs_template/SPECT'
+  generate:
+    config: ['experiment.yml']
+  shell:
+    shell: 'zsh'
+split:
+  nb_split: 10
+shell:
+  type: zsh
+  run: run.sh
+  post: post.sh
+clear:
+  depth: 1
+  keep: [pygate.yml, experiment.yml, result.root]
+submit:
+  worker: hqlf
+map:
+  - method: Gate    
+    filename: main.mac     
+  - method: root    
+    filename: some_analysis.C
+merge:
+  - method: hadd
+    filename: result.root
+verbose: 0
+dryrun: false

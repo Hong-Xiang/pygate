@@ -241,7 +241,7 @@ class Submitter:
 
     @classmethod
     def hqlf(cls, run_infos, post_infos):
-        from dxpy.task.representation import creators
+        from dxpy.task.model import creators
         from dxpy.task import interface
         tasks = []
         for i, t in enumerate(run_infos):

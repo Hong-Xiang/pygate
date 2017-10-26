@@ -33,7 +33,7 @@ class Snippets:
         return TASK_MAPPING.get(key.upper())
 
     @classmethod
-    def add_shell(cls, scripts, name):        
+    def add_shell(cls, scripts, name):
         name = name.lower()
         if not name in cls.SHELL:
             fmt = 'Unknown shell name {0}, use {1} instead.'
@@ -88,18 +88,69 @@ class Snippets:
         add_func(scripts, **payloads)
 
 
-class ShellScript:
-    def __init__(self, output, tasks=None, shell='zsh'):
-        self.output = output
-        self.scripts = []
-        self.shell = shell
-        self.tasks = tasks or []
-        self.make()
+def _load_shell_template(task_type, shell):
+    from .utils import load_script
+    import jinja2
+    task_type = task_type.lower()
+    if not task_type in ['map', 'merge']:
+        raise ValueError("Task type {} is not supported.".format(task_type))
+    shell = shell.lower()
+    if not shell in ['bash', 'zsh']:
+        raise ValueError("Shell {} is not supported.".format(task_type))
+    script_name = "{0}_{1}.sh".format(task_type, shell)
+    return jinja2.Template(load_script(script_name))
 
-    def make(self):
-        self.add_head()
-        self.add_tasks()
-        self.add_tail()
+
+def _get_workdir_on_local_and_server(path_workdir):
+    from dxpy.filesystem import Path
+    p_ser = Path(path_workdir).abs
+    p_loc = (Path('~/Slurm/') / Path(path_workdir).rel).rel
+    return p_ser, p_loc
+
+
+def _add_gate(commands, task):
+    if task.get('method') == 'Gate':
+        commands.append("Gate {}".format(task['filename']))
+
+
+def _add_root(commands, task):
+    if task['method'] == 'root':
+        commands.append("root -q -b {}".format(task['filename']))
+
+
+MAP_TASKS = [_add_gate, _add_root]
+
+
+def _make_commands(task_type, tasks):
+    commands = ['']
+    if task_type == 'map':
+        for t in tasks:
+            for add_cmd in MAP_TASKS:
+                add_cmd(commands, t)
+    commands.append('')
+    return "\n".join(commands)
+
+
+def make(fs, workdir: str, task_type: str, tasks=None, shell='zsh'):
+    scrpt_tpl = _load_shell_template(task_type, shell)
+    p_ser, p_loc = _get_workdir_on_local_and_server(fs.getsyspath(workdir))
+    return scrpt_tpl.render(local_work_directory=p_loc,
+                            server_work_directory=p_ser,
+                            commands=_make_commands(task_type, tasks))
+
+
+class ShellScript:
+    def __init__(self, workdir=None, task_type='map', tasks=None, shell='zsh'):
+        self.workdir = workdir
+        if not task_type.lower() in ['map', 'merge']:
+            raise ValueError(
+                "Task type {} is not supported.".format(task_type))
+        self.task_type = task_type.lower()
+        if not shell.lower() in ['bash', 'zsh']:
+            raise ValueError("Shell {} is not supported.".format(task_type))
+        self.shell = shell.lower()
+        self.tasks = tasks or []
+        self._make()
 
     def dump(self):
         if isinstance(self.output, str):
