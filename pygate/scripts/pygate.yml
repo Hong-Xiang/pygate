@@ -1,30 +1,39 @@
 #configs file of pygate
-target: '.'
 init:
   source:
     directory: '/hqlf/hongxwing/macs_template/SPECT'
+    filenames: ['GateMaterials.db']
   generate:
     config: ['experiment.yml']
-  shell:
-    shell: 'zsh'
 split:
   nb_split: 10
+  name: sub
 shell:
   type: zsh
-  run: run.sh
-  post: post.sh
-clear:
-  depth: 1
+  map: 
+    output: run.sh
+    tasks:
+      - method: Gate
+        filename: main.mac     
+      - method: root    
+        filename: some_analysis.C
+  merge:
+    output: post.sh
+    tasks:
+      - merge    
+      - clean
+clean:
   keep: [pygate.yml, experiment.yml, result.root]
+  sub_dirs: true
+  sources: false
+  dryrun: true
+  verbose: 1
 submit:
-  worker: hqlf
-map:
-  - method: Gate    
-    filename: main.mac     
-  - method: root    
-    filename: some_analysis.C
+  worker: slurm
 merge:
-  - method: hadd
-    filename: result.root
-verbose: 0
-dryrun: false
+  dryrun: false
+  tasks:
+    - method: hadd
+      filename: result.root
+
+

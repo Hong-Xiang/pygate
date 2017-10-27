@@ -8,7 +8,8 @@ class CLI(click.MultiCommand):
     commands = {'make_config': None,
                 'init': None,
                 'submit': None,
-                'merge': None}
+                'merge': None,
+                'clean': None}
 
     def __init__(self):
         super(__class__, self).__init__(name='pygate', help=__class__.__doc__)

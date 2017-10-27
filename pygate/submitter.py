@@ -1,38 +1,4 @@
 class Submitter:
-    """
-    Submit jobs.
-    """
-
-    def __init__(self, config, root_fs):
-        """
-        Inputs:
-            config: dict, consists of two script.                
-                pattern:
-                    sub directories pattern
-                map_script:
-                    scripts to run in each directories
-                merge_script: (only supported when using HQLF submitter)
-                    will run after all map tasks.
-                method:
-                    one of following methods:
-                        PRINT: print scirpts,
-                        SLURM: submit to slurm,
-                        HQLF: submit to hqlf system
-
-        """
-        self.c = config
-        self.fs = root_fs
-
-    @classmethod
-    def service(cls, name):
-        name = name.upper()
-        SERVICE = {
-            'PRINT': cls.sprint,
-            'DIRECT': cls.direct,
-            'HQLF': cls.hqlf,
-        }
-        return SERVICE.get(name)
-
     @classmethod
     def submit(cls, c):
         """
@@ -52,6 +18,16 @@ class Submitter:
             service = cls.service(c['submit'])
             if service is not None:
                 service(run_infos, post_infos)
+
+    @classmethod
+    def service(cls, name):
+        name = name.upper()
+        SERVICE = {
+            'PRINT': cls.sprint,
+            'DIRECT': cls.direct,
+            'HQLF': cls.hqlf,
+        }
+        return SERVICE.get(name)
 
     @classmethod
     def sprint(cls, run_infos, post_infos):
