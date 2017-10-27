@@ -17,7 +17,7 @@ def make_config():
 @click.command()
 @click.option('--config', '-c', type=str, default=c['pygate_config'], help='config YAML file name')
 @click.option('--pre', '-p', 'content', flag_value='pre', help='Initialize to pre make sub dirs.')
-@click.option('--sub', '-s', 'content', flag_value='sub', help='Make sub dirs')
+@click.option('--dir', '-d', 'content', flag_value='sub', help='Make sub dirs')
 @click.option('--all', '-a', 'content', flag_value='all',  default=True, help='All tasks above')
 def init(config, content):
     """
@@ -33,14 +33,14 @@ def init(config, content):
 def submit(config):
     # TODO: add submit service
     c = _load_config(config)
-    service.Submitter.submit(c)
+    service.submit(c)
 
 
 @click.command()
 @click.option('--config', '-c', type=str, default=c['pygate_config'], help='config YAML file name')
 def merge(config):
     c = _load_config(config)
-    service.Merger.merge(c)
+    service.merge(c)
 
 
 @click.command()

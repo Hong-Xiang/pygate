@@ -23,17 +23,19 @@ shell:
       - merge    
       - clean
 clean:
-  keep: [pygate.yml, experiment.yml, result.root]
+  keep: [pygate.yml, experiment.yml, pygate.out, result.root]
   sub_dirs: true
   sources: false
   dryrun: true
   verbose: 1
 submit:
   worker: slurm
+  output: pygate.out
 merge:
   dryrun: false
   tasks:
     - method: hadd
       filename: result.root
+  verbose: 1
 
 

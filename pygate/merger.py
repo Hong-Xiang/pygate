@@ -1,27 +1,30 @@
-from dxpy import batch
-
-
 class Merger:
     def __init__(self, fs, config):
-        self.fs = root_fs
+        from .utils import sub_dir_filters
+        self.fs = fs
         self.c = config['merge']
-        self.c.update({'split': config['split']})
+        self.sub_dirs = sub_dir_filters(config)
 
     def _path_of_file_in_sub_dirs(self, base_filename):
-        return batch.files_in_directories([base_filename],
-                                          [self.c['split'][name] + '*'])
+        from dxpy.batch import files_in_directories
+        return files_in_directories(self.fs, self.sub_dirs, [base_filename])
+
+    def msg(self, method, target, sources):
+        if self.c.get('verbose') is not None and self.c['verbose'] > 0:
+            print('MERGE.{md}.TARGET:'.format(md=method), target)
+            print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
 
     def _hadd(self, task):
         if not task['method'].lower() == 'hadd':
             return
         filename = task['filename']
         sub_filenames = self._path_of_file_in_sub_dirs(filename)
-        path_target = fs.getsyspath(target)
-        path_filenames = [fs.getsyspath(f) for f in filenames if fs.exists(f)]
+        path_target = self.fs.getsyspath(filename)
+        path_filenames = [self.fs.getsyspath(f)
+                          for f in sub_filenames if self.fs.exists(f)]
         call_args = ['hadd', path_target] + path_filenames
-        if self.c['dryrun']:
-            print(' '.join(call_args))
-        else:
+        self.msg('HADD', filename, sub_filenames)
+        if not self.c['dryrun']:
             with subprocess.Popen(call_args,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE) as p:
@@ -33,13 +36,11 @@ class Merger:
             return
         target = task['filename']
         sources = self._path_of_file_in_sub_dirs(target)
-        if self.c['dryrun']:
-            print('MERGE.CAT.TARGET:', target)
-            print('MERGE.CAT.SOURCE:\n', '\n'.join(sources))
-        else:
-            with fs.open(target, 'w') as fout:
+        self.msg()
+        if not self.c['dryrun']:
+            with self.fs.open(target, 'w') as fout:
                 for f in sources:
-                    with fs.open(f) as fin:
+                    with self.fs.open(f) as fin:
                         print(fin.read(), end='', file=fout)
 
     def merge(self):

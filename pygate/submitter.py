@@ -1,49 +1,40 @@
 class Submitter:
-    @classmethod
-    def submit(cls, c):
-        """
-        Inputs:
-        - target: path of work directory,        
-        - url: url of task manager,
-        - submit_service: a Slurm submit service with args: workdir, file_name
-        """
-        with OSFS(c['target']) as fs:
-            run_infos = []
-            run_sh = (c.get('shell') or {}).get('run') or 'run.sh'
-            (methods.Mapper(fs).dirs()
-             .map(fs.getsyspath)
-             .subscribe(lambda d: run_infos.append((d, run_sh))))
-            post_sh = (c.get('shell') or {}).get('post') or 'post.sh'
-            post_infos = (fs.getsyspath('.'), post_sh)
-            service = cls.service(c['submit'])
-            if service is not None:
-                service(run_infos, post_infos)
+    def __init__(self, fs, config):
+        from .utils import sub_dir_filters
+        self.fs = fs
+        self.c = config['submit']
+        self.sub_dirs = sub_dir_filters(config)
+        self.map_file = config['shell']['map']['output']
+        self.merge_file = config['shell']['merge']['output']
 
-    @classmethod
-    def service(cls, name):
-        name = name.upper()
-        SERVICE = {
-            'PRINT': cls.sprint,
-            'DIRECT': cls.direct,
-            'HQLF': cls.hqlf,
-        }
-        return SERVICE.get(name)
+    def _get_map_info(self):
+        from dxpy.batch import DirectoriesFilter
+        return [(self.fs.getsyspath(d), self.map_file) for d in DirectoriesFilter(self.sub_dirs).lst(self.fs)]
 
-    @classmethod
-    def sprint(cls, run_infos, post_infos):
-        for t in run_infos:
-            print('RUN: ', 'DIR: ', t[0], 'FILE: ', t[1])
-        print('POST: ', 'DIR: ', post_infos[0], 'FILE: ', post_infos[1])
+    def _get_merge_info(self):
+        return (self.fs.getsyspath('.'), self.merge_file)
 
-    @classmethod
-    def direct(cls, run_infos, post_infos):
-        for t in run_infos:
-            cmd = 'cd {dir} && sbatch {file}'.format(dir=t[0], file=t[1])
-            with subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE) as p:
-                print(p.stdout.read().decode())
+    def submit(self):
+        run_infos = self._get_map_info()
+        merge_infos = self._get_merge_info()
+        if self.c['worker'] == 'slurm':
+            self._slurm(run_infos)
+        elif self.c['worker'] == 'hqlf':
+            self._hqlf(run_infos, post_infos)
 
-    @classmethod
-    def hqlf(cls, run_infos, post_infos):
+    def _echo(self, info, fout):
+        msg = '\t'.join([str(e) for e in info])
+        print(msg)
+        print(msg, file=fout)
+
+    def _slurm(self, run_infos):
+        from dxpy.slurm import sbatch
+        with self.fs.open(self.c['output'], 'w') as fout:
+            for t in run_infos:
+                sid = sbatch(t[0], t[1])
+                self._echo(('MAP', sid, t[0], t[1]), fout)
+
+    def _hqlf(self, run_infos, post_infos):
         from dxpy.task.model import creators
         from dxpy.task import interface
         tasks = []
