@@ -15,6 +15,8 @@ class Merger:
             print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
 
     def _hadd(self, task):
+        import subprocess
+        import sys
         if not task['method'].lower() == 'hadd':
             return
         filename = task['filename']

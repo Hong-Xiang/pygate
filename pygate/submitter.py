@@ -20,7 +20,7 @@ class Submitter:
         if self.c['worker'] == 'slurm':
             self._slurm(run_infos)
         elif self.c['worker'] == 'hqlf':
-            self._hqlf(run_infos, post_infos)
+            self._hqlf(run_infos, merge_infos)
 
     def _echo(self, info, fout):
         msg = '\t'.join([str(e) for e in info])
@@ -51,3 +51,7 @@ class Submitter:
         # print('\n'.join([t.to_json() for t in tasks]))
         ids = interface.create_graph(g)
         print('Submitted to HQLF.Task with tids:', ids)
+        with self.fs.open(self.c['output'], 'w') as fout:
+            print('Submitted via HQLF, with tids:', file=fout)
+            print(ids, file=fout)
+
