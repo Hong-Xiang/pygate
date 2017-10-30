@@ -1,6 +1,7 @@
-.vscode
+/.vscode
 dxl_pygate.egg-info/
 *.pyc
 pygate/template/SimuMacs
 pygate/template/ymls
 /dist
+/.cache

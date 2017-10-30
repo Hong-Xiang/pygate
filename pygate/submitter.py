@@ -54,4 +54,3 @@ class Submitter:
         with self.fs.open(self.c['output'], 'w') as fout:
             print('Submitted via HQLF, with tids:', file=fout)
             print(ids, file=fout)
-
