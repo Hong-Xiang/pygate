@@ -1,14 +1,13 @@
 from . import camera
-from . import phantom as phantomModule
+from . import phantom 
 from . import source
 from . import digitizer
 from . import physics
 from . import geometry
 
-import yaml
 from fs.osfs import OSFS
 import os
-
+import yaml
 
 class RunTime:
     def __init__(self,  endTime=1, timeSlice=1, startTime=0):
@@ -58,9 +57,10 @@ class Root(DataOut):
             mac += fmt.format(item.name, item.value)
         return mac
 
+
 class Sino(DataOut):
-    def __init__(self, fileName,inputDataName, tangCrystalBlurring = 1.8, axialCrystalBlurring = 1.8,radialBins = None, rawFlag = 'true', delayFlag = 1, scatterFlag = 1):
-        super(Sino, self).__init__(outType='sinogram',fileName = fileName)
+    def __init__(self, fileName, inputDataName, tangCrystalBlurring=1.8, axialCrystalBlurring=1.8, radialBins=None, rawFlag='true', delayFlag=1, scatterFlag=1):
+        super(Sino, self).__init__(outType='sinogram', fileName=fileName)
         self.inputDataName = inputDataName
         self.tangCrystalBlurring = tangCrystalBlurring
         self.axialCrystalBlurring = axialCrystalBlurring
@@ -68,15 +68,16 @@ class Sino(DataOut):
         self.rawFlag = rawFlag
         self.delayFlag = delayFlag
         self.scatterFlag = scatterFlag
+
     def getMacStr(self):
         mac = ''
-        mac += super(Sino,self).getMacStr()
-        fmt1 = r"/gate/output/sinogram/setTangCrystalBlurring {0} mm" +"\n"
-        fmt2 = r"/gate/output/sinogram/setAxialCrystalBlurring {0} mm"+"\n"
-        fmt3 = r"/gate/output/sinogram/RawOutputEnable true" +"\n"
-        fmt4 = r"/gate/output/sinogram/StoreDelayeds"+"\n"
-        fmt5 = r"/gate/output/sinogram/StoreScatters"+"\n"
-        fmt6 = r"/gate/output/sinogram/setInputDataName {0}"+"\n"
+        mac += super(Sino, self).getMacStr()
+        fmt1 = r"/gate/output/sinogram/setTangCrystalBlurring {0} mm" + "\n"
+        fmt2 = r"/gate/output/sinogram/setAxialCrystalBlurring {0} mm" + "\n"
+        fmt3 = r"/gate/output/sinogram/RawOutputEnable true" + "\n"
+        fmt4 = r"/gate/output/sinogram/StoreDelayeds" + "\n"
+        fmt5 = r"/gate/output/sinogram/StoreScatters" + "\n"
+        fmt6 = r"/gate/output/sinogram/setInputDataName {0}" + "\n"
         if self.tangCrystalBlurring is not None:
             mac += fmt1.format(self.tangCrystalBlurring)
         if self.axialCrystalBlurring is not None:
@@ -105,7 +106,7 @@ class RandomEngine:
 
 class SimuApp:
     def __init__(self, name='simu1', cam=None, phan=None, src=None, digi=None, phy=None,
-                  runTime=RunTime(), worldSize=geometry.Vec3(100, 100, 100), randEngine=RandomEngine()):
+                 runTime=RunTime(), worldSize=geometry.Vec3(100, 100, 100), randEngine=RandomEngine()):
         self.name = name
         self.cam = cam
         self.phan = phan
@@ -117,10 +118,10 @@ class SimuApp:
         self.worldSize = worldSize
         self.randEngine = randEngine
 
-    def addDataout(self,item):
+    def addDataout(self, item):
         if item is not None:
-            self.dataOutList.append(item)    
-	
+            self.dataOutList.append(item)
+
     def getComMac(self):
         mac = ""
         camFmt = r"/control/execute camera.mac" + "\n"
@@ -207,27 +208,56 @@ class MacMaker:
     @classmethod
     def make_yml(cls, yml_filename):
         # Camera
-        c1 = geometry.Cylinder(name='ecat', Rmax=85,
-                               Rmin=59, Height=10, material = 'Air')
-        # print (b1.getMacStr())
-        b1 = geometry.Box(name='block', position=geometry.Vec3(
-            69.0, 0.0, 0.0), size=geometry.Vec3(20, 30, 3), material='Air')
-        b2 = geometry.Box(name='crystal', size=geometry.Vec3(
-            20, 1, 1), material='LYSO')
-        c1.addChild(b1)
-        b1.addChild(b2)
-        cbr1 = geometry.RingRepeater(volume=b1.name, number=10)
-        cbr2 = geometry.CubicRepeater(volume=b2.name, scale=geometry.Vec3(
-            1, 30, 3), repeatVector=geometry.Vec3(0, 1, 1))
-        sys = camera.Ecat()
-        sys.attachSystem(itemList=[b1.name, b2.name])
+        # c1 = geometry.Cylinder(name='ecat', Rmax=85,
+        #                        Rmin=59, Height=10, material='Air')
+        # # print (b1.getMacStr())
+        # b1 = geometry.Box(name='block', position=geometry.Vec3(
+        #     69.0, 0.0, 0.0), size=geometry.Vec3(20, 30, 3), material='Air')
+        # b2 = geometry.Box(name='crystal', size=geometry.Vec3(
+        #     20, 1, 1), material='LYSO')
+        # c1.addChild(b1)
+        # b1.addChild(b2)
+        # cbr1 = geometry.RingRepeater(volume=b1.name, number=10)
+        # cbr2 = geometry.CubicRepeater(volume=b2.name, scale=geometry.Vec3(
+        #     1, 30, 3), repeatVector=geometry.Vec3(0, 1, 1))
+        # sys = camera.Ecat()
+        # sys.attachSystem(itemList=[b1.name, b2.name])
 
-        # create the camera and construt it
+        # # create the camera and construt it
+        # camera1 = camera.Camera(name='cam1', system=sys)
+        # camera1.addGeo(c1)
+        # camera1.addGeo(cbr2)
+        # camera1.addGeo(cbr1)
+        # camera1.addCrystalSD(b2.name)
+
+        # HRRT
+        hrrt_c1 = geometry.Cylinder(
+            name='cylindricalPET', Rmax=254.5, Rmin=234.5, Height=253.5, material='Air')
+        hrrt_head = geometry.Box(name='block', position=geometry.Vec3(
+            244.5, 0, 0), size=geometry.Vec3(20, 175.68, 253.5), material='Air')
+        hrrt_module = geometry.Box(name='module', position=geometry.Vec3(
+            0, 0, 0), size=geometry.Vec3(20, 19, 19), material='Air')
+        hrrt_crystal = geometry.Box(name='crystal', position=geometry.Vec3(
+            0, 0, 0), size=geometry.Vec3(20, 2, 2), material='LYSO')
+
+        hrrt_c1.addChild(hrrt_head)
+        hrrt_head.addChild(hrrt_module)
+        hrrt_module.addChild(hrrt_crystal)
+
+        hrrt_cbr2 = geometry.CubicRepeater(volume=hrrt_crystal.name, scale=geometry.Vec3(
+            1, 8, 8), repeatVector=geometry.Vec3(0, 2.375, 2.375))
+        hrrt_cbr1 = geometry.CubicRepeater(volume=hrrt_module.name, scale=geometry.Vec3(
+            1, 9, 13), repeatVector=geometry.Vec3(0, 19.52, 19.52))
+        hrrt_rr = geometry.RingRepeater(volume=hrrt_head.name, number=8)
+
+        sys = camera.CylindericalPET()
+        sys.attachSystem(itemList=['block', 'module', 'void', 'crystal'])
         camera1 = camera.Camera(name='cam1', system=sys)
-        camera1.addGeo(c1)
-        camera1.addGeo(cbr2)
-        camera1.addGeo(cbr1)
-        camera1.addCrystalSD(b2.name)
+        camera1.addGeo(hrrt_c1)
+        camera1.addGeo(hrrt_cbr2)
+        camera1.addGeo(hrrt_cbr1)
+        camera1.addGeo(hrrt_rr)
+        camera1.addCrystalSD(hrrt_crystal.name)
         ############################################################
 
         # phantom
@@ -243,16 +273,17 @@ class MacMaker:
         # phantom.addPhantomSD(b1)
 
         pv1 = geometry.ImageRegularParamerisedVolume(
-            mother='world', name='hof_heart', imagefile='heart_atn_phantom.h33', rangefile='range_atten_brain.dat',position = geometry.Vec3(0,0,0))
-        phantom = phantomModule.Phantom(name = 'phantom1')
-        phantom.addGeo(pv1)
-        phantom.addPhantomSD(pv1)
+            mother='world', name='hof_heart', imagefile='heart_atn_phantom.h33', rangefile='range_atten_brain.dat', position=geometry.Vec3(0, 0, 0))
+        phantom1 = phantom.Phantom(name='phantom1')
+        phantom1.addGeo(pv1)
+        phantom1.addPhantomSD(pv1)
 
         ##################################################
 
         # source
-        src1 = source.VoxelizedSrcItem(name = 'voxel_heart')
-        src1.addSrcModule(source.Voxelized(readtable = 'activity_range_brain.dat',readfile = 'heart_act_phantom.h33',position=geometry.Vec3(-38.4, -38.4,-0.15)))
+        src1 = source.VoxelizedSrcItem(name='voxel_heart')
+        src1.addSrcModule(source.Voxelized(readtable='activity_range_brain.dat',
+                                           readfile='heart_act_phantom.h33', position=geometry.Vec3(-38.4, -38.4, -0.15)))
         #src1 = source.SrcItem(name='src1')
         src1.addSrcModule(source.Particle(paticleType='gamma'))
         src1.addSrcModule(source.Angular(ang=[90, 90, 0, 360]))
@@ -272,17 +303,17 @@ class MacMaker:
         r = digitizer.Readout(depth=1)
         sc.addModule(a)
         sc.addModule(r)
-        sc.addModule(digitizer.Blurring(res=0.10,eor=511))
+        sc.addModule(digitizer.Blurring(res=0.10, eor=511))
         # sc.addModule(digitizer.CrystalBlurring())
         sc.addModule(digitizer.ThresHolder(holdvalue=250))
         sc.addModule(digitizer.UpHolder(holdvalue=750))
         # sc.addModule(digitizer.TimeResolution())
         # sc.addModule(digitizer.SpBlurring())
-        sc.addModule(digitizer.DeadTime(dtVolume='block',deadtime= 3000))
-        coin1 = digitizer.CoinSorter(window=10,offset = 0)
-        coin2 = digitizer.CoinSorter(name='delay', window=10,offset = 500)
+        sc.addModule(digitizer.DeadTime(dtVolume='block', deadtime=3000))
+        coin1 = digitizer.CoinSorter(window=10, offset=0)
+        coin2 = digitizer.CoinSorter(name='delay', window=10, offset=500)
         conichain1 = digitizer.CoinChain(
-            name='finalcoin', inputList=[coin1.name, coin2.name],usePriority = 'true')
+            name='finalcoin', inputList=[coin1.name, coin2.name], usePriority='true')
         # conichain1.addModule(digitizer.DeadTime(dtVolume='crystal'))
         # conichain1.addModule(digitizer.Buffer())
         digi = digitizer.Digitizer()
@@ -294,18 +325,25 @@ class MacMaker:
 
         # physics
         phy = physics.Physics()
-        phy.addCutPair(physics.CutPair(region='crystal', cutValue = 0.1))
-        phy.addCutPair(physics.CutPair(region=pv1.name, cutValue = 0.1))
-        phy.addMaxStep(physics.MaxStep(region=pv1.name, maxstepsize = 0.01 ))
+        phy.addCutPair(physics.CutPair(region='crystal', cutValue=0.1))
+        phy.addCutPair(physics.CutPair(region=pv1.name, cutValue=0.1))
+        phy.addMaxStep(physics.MaxStep(region=pv1.name, maxstepsize=0.01))
 
+        simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom1,
+                       src=src, digi=digi, phy=phy, randEngine=RandomEngine())
 
-        simu = SimuApp(name=yml_filename, cam=camera1, phan=phantom, src=src, digi=digi, phy=phy, randEngine=RandomEngine())
-        
-        dataout1 = Root(fileName = 'testroot')
-        dataout2 = Sino(fileName = 'testsino',inputDataName = 'finalcoin')
-        
+        dataout1 = Root(fileName='testroot')
+        dataout2 = Sino(fileName='testsino', inputDataName='finalcoin')
+
         simu.addDataout(dataout1)
         simu.addDataout(dataout2)
         # print(simu.getMacStr())
         # simu.generateMacs()
         simu.generateYaml()
+
+
+
+
+if __name__ == '__main__':
+    MacMaker.make_yml('test')
+

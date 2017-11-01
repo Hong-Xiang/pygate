@@ -40,7 +40,7 @@ class Systems:
         if name in Systems.sysList:
             self.name = name
         else:
-            print("invalid system name!  Systems:__init__() \n")
+            print("invalid system name!  Systems:__init__() \n", name)
         self.levelList = []
         self.attachList = []
 
@@ -53,7 +53,10 @@ class Systems:
         # for i in range(len(self.attachList)):
         for l, a in zip(self.levelList, self.attachList):
             # mac += fmt.format(self.name, self.levelList[i], self.attachList[i])
-            mac += fmt.format(self.name, l, a)
+            if a == 'void':
+                mac = mac
+            else:
+                mac += fmt.format(self.name, l, a)
         return mac
 
 
@@ -80,7 +83,7 @@ class Ecat(Systems):
 
 class CylindericalPET(Systems):
     def __init__(self):
-        super(CylindericalPET, self).__init__(name='cylindericalPET')
+        super(CylindericalPET, self).__init__(name='cylindricalPET')
         self.levelList.append('rsector')
         self.levelList.append('module')
         self.levelList.append('submodule')
