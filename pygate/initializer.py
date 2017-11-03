@@ -26,7 +26,12 @@ class Initializer:
         path_source = self.c['source']['directory']
         if not path_source.startswith('/'):
             path_source = self.fs.getsyspath(path_source)
+        with OSFS('/') as fs:
+            if not fs.exists(path_source):
+                raise ValueError(
+                    "Source path {} not exists.".format(path_source))
         with OSFS(path_source) as fs_sor:
+
             for f in self.c['source']['filenames']:
                 copy_file(fs_sor, f, self.fs, f)
 
@@ -68,7 +73,7 @@ class Initializer:
             self._copy_sources_from_template()
         if 'generate' in self.c:
             self._make_mac()
-        if 'phantom' in self.c:            
+        if 'phantom' in self.c:
             self._make_phantom()
 
     def make_sub(self):

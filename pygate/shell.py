@@ -43,7 +43,10 @@ class ShellScriptMap(ShellScriptBase):
     def _get_workdir_on_local_and_server(self):
         from dxpy.filesystem import Path
         p_ser = self.fs.getsyspath(Path(self.workdir).abs)
-        p_loc = (Path('~/Slurm/') / Path(self.workdir).rel).rel
+        import random
+        temps = random.randint(0, 100000000)
+        subd = 'tmp{}'.format(temps)
+        p_loc = (Path('~/Slurm/') / subd / Path(self.workdir).rel).rel
         return p_ser, p_loc
 
     def _make(self):

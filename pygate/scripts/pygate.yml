@@ -1,7 +1,7 @@
 #configs file of pygate
 init:
   source:
-    directory: '/hqlf/hongxwing/macs_template/srsimu/1mm'
+    directory: '/hqlf/hongxwing/macs_template/srsimu/2mm'
     filenames: 
      - GateMaterials.db
      - act.h33
