@@ -16,7 +16,7 @@ Grouped by two methods:
 class Initializer:
     def __init__(self, fs, config):
         self.fs = fs
-        self.c = config['init']        
+        self.c = config['init']
         self.c_full = config
 
     def _copy_sources_from_template(self):
@@ -33,6 +33,10 @@ class Initializer:
     def _make_mac(self):
         from .template import MacMaker
         MacMaker.make_mac(self.c['generate']['config'])
+
+    def _make_phantom(self):
+        from .phantom import PhantomBinFileMaker
+        PhantomBinFileMaker(self.fs, self.c['phantom']).make()
 
     def _sub_dir_name(self, i):
         return '{name}.{did}'.format(name=self.c_full['split']['name'], did=i)
@@ -64,6 +68,8 @@ class Initializer:
             self._copy_sources_from_template()
         if 'generate' in self.c:
             self._make_mac()
+        if 'phantom' in self.c:            
+            self._make_phantom()
 
     def make_sub(self):
         self._make_subdirs()

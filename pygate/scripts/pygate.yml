@@ -1,10 +1,19 @@
 #configs file of pygate
 init:
   source:
-    directory: '/hqlf/hongxwing/macs_template/SPECT'
-    filenames: ['GateMaterials.db']
+    directory: '/hqlf/hongxwing/macs_template/srsimu/1mm'
+    filenames: 
+     - GateMaterials.db
+     - act.h33
+     - atn.h33
+     - act_range.dat
+     - atn_range.dat
+     - experiment.yml
   generate:
     config: ['experiment.yml']
+  phantom:
+    - ['phantom.npy', 'act.s']
+    - ['phantom.npy', 'atn.s']
 split:
   nb_split: 10
   name: sub
@@ -23,7 +32,7 @@ shell:
       - merge    
       - clean
 clean:
-  keep: [pygate.yml, experiment.yml, pygate.out, result.root]
+  keep: [pygate.yml, experiment.yml, pygate.out, result.root, sinogram_1.dim, sinogram_1.ima, sinogram_1.info]
   sub_dirs: true
   sources: false
   dryrun: true
