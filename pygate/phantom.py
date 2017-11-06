@@ -18,7 +18,9 @@ class PhantomBinFileMaker:
         return data
 
     def _make_bin(self, target, data):
+        import numpy as np
         with self.fs.open(target, 'wb') as fout:
+            data = data.astype(np.uint16)
             fout.write(data.tostring())
 
     def make(self):
