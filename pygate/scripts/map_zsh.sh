@@ -4,6 +4,9 @@
 source ~/.zshrc
 echo 'Run on:' `hostname`
 echo 'Start at: ' `date`
+if [ ! -d ~/Slurm ]; then
+    mkdir ~/Slurm
+fi
 if [ ! -d {{local_work_directory}} ]; then
     mkdir {{local_work_directory}}
 fi
