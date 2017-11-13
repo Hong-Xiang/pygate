@@ -38,15 +38,52 @@ class Merger:
             return
         target = task['filename']
         sources = self._path_of_file_in_sub_dirs(target)
-        self.msg()
+        self.msg('cat', target, sources)
         if not self.c['dryrun']:
             with self.fs.open(target, 'w') as fout:
                 for f in sources:
                     with self.fs.open(f) as fin:
                         print(fin.read(), end='', file=fout)
 
+    def _sum(self, task):
+        import numpy as np
+        if not task['method'].lower() == 'sum':
+            return
+        target = task['filename']
+        sources = self._path_of_file_in_sub_dirs(target)
+        self.msg('sum', target, sources)
+        dtype = task['dtype']
+        mapped = {
+            'float32': np.float32,
+            'uint16': np.uint16,
+            'uint8': np.uint8,
+        }
+        dtype = mapped[dtype]
+        result = None
+        for f in sources:
+            with self.fs.open(f, 'rb') as fin:
+                data = np.fromstring(fin.read(), dtype=dtype)
+                if result is None:
+                    result = data
+                else:
+                    result += data
+        with self.fs.open(target, 'wb') as fout:
+            fout.write(result.tostring())
+
+    def _copy(self, task):
+        import numpy as np
+        if not task['method'].lower() == 'sum':
+            return
+        target = task['filename']
+        sources = self._path_of_file_in_sub_dirs(target)
+        if len(sources):
+            raise ValueError("Sources not found")
+        from fs.copy import copy_file
+        self.msg('copy', target, sources[0])
+        copy_file(self.fs, sources[0], self.fs, target)
+
     def merge(self):
-        supported_methods = [self._hadd, self._cat]
+        supported_methods = [self._hadd, self._cat, self._sum]
         for t in self.c['tasks']:
             for func in supported_methods:
                 func(t)
