@@ -18,7 +18,7 @@ class Submitter:
         run_infos = self._get_map_info()
         merge_infos = self._get_merge_info()
         if self.c['worker'] == 'slurm':
-            self._slurm(run_infos)
+            self._slurm(run_infos, merge_infos)
         elif self.c['worker'] == 'hqlf':
             self._hqlf(run_infos, merge_infos)
 
@@ -27,12 +27,17 @@ class Submitter:
         print(msg)
         print(msg, file=fout)
 
-    def _slurm(self, run_infos):
+    def _slurm(self, run_infos, post_infos):
         from dxpy.slurm import sbatch
+        sids = []
         with self.fs.open(self.c['output'], 'w') as fout:
             for t in run_infos:
                 sid = sbatch(t[0], t[1])
                 self._echo(('MAP', sid, t[0], t[1]), fout)
+                sids.append(sids)
+            deparg = '--dependency:afterok:' + ':'.join(map(str, sids))
+            sid = sbatch(post_infos[0], post_infos[1], deparg)
+            self._echo(('MERGE', sid, post_infos[0], post_infos[1]), fout)
 
     def _hqlf(self, run_infos, post_infos):
         from dxpy.task.model import creators

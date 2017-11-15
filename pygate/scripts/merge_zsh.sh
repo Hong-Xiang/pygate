@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 #SBATCH -o %J.out
 #SBATCH -e %J.err
+#SBATCH -p serv
 source ~/.zshrc
 echo 'Run on:' `hostname`
 echo 'Start at: ' `date`
