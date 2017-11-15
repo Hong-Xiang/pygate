@@ -34,8 +34,9 @@ class Submitter:
             for t in run_infos:
                 sid = sbatch(t[0], t[1])
                 self._echo(('MAP', sid, t[0], t[1]), fout)
-                sids.append(sids)
-            deparg = '--dependency:afterok:' + ':'.join(map(str, sids))
+                sids.append(sid)
+            sids = [str(s) for s in sids]
+            deparg = '--dependency=afterok:' + ':'.join(sids)
             sid = sbatch(post_infos[0], post_infos[1], deparg)
             self._echo(('MERGE', sid, post_infos[0], post_infos[1]), fout)
 
