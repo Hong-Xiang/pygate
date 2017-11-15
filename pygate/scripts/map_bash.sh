@@ -4,6 +4,9 @@
 source ~/.bashrc
 echo 'Run on:' `hostname`
 echo 'Start at: ' `date`
+if [ ! -d /tmp/Slurm ]; then
+    mkdir /tmp/Slurm
+fi
 if [ ! -d {{local_work_directory}} ]; then
     mkdir {{local_work_directory}}
 fi
