@@ -13,5 +13,6 @@ fi
 cp {{server_work_directory}}/* {{local_work_directory}}
 cd {{local_work_directory}}
 {{commands}}
+echo 'Finish MC Simulation at: ' `date`
 cp {{local_work_directory}}/* {{server_work_directory}}
 echo 'Finish at: ' `date`
