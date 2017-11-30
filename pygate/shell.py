@@ -28,8 +28,8 @@ class ShellScriptBase:
 
 
 class ShellScriptMap(ShellScriptBase):
-    def __init__(self, fs, workdir: str, output: str, tasks: list, shell='zsh'):
-        super(__class__, self).__init__(fs, workdir, output, tasks, shell)
+    def __init__(self, fs, workdir: str, output: str, tasks: list, shell='zsh', version="7.2"):
+        super(__class__, self).__init__(fs, workdir, output, tasks, shell, version)
         self.task_type = 'map'
         self.commands = []
 
@@ -87,6 +87,6 @@ class ShellScriptMaker:
         sub_dirs = batch.DirectoriesFilter(self.sub_filters).lst(self.fs)
         for d in sub_dirs:
             ShellScriptMap(self.fs, d, self.c['map']['output'],
-                           self.c['map']['tasks'], self.c['type']).dump()
+                           self.c['map']['tasks'], self.c['type'], self.c['version']).dump()
         ShellScriptMerge(self.fs, '.', self.c['merge']['output'],
-                         self.c['merge']['tasks'], self.c['type']).dump()
+                         self.c['merge']['tasks'], self.c['type'], self.c['version']).dump()
