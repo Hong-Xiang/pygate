@@ -80,6 +80,7 @@ class ShellScriptMaker:
         from .utils import sub_dir_filters
         self.fs = fs
         self.c = config['shell']
+        self.c['version'] = config['version']
         self.sub_filters = sub_dir_filters(config)
 
     def make(self):
@@ -89,4 +90,4 @@ class ShellScriptMaker:
             ShellScriptMap(self.fs, d, self.c['map']['output'],
                            self.c['map']['tasks'], self.c['type'], self.c['version']).dump()
         ShellScriptMerge(self.fs, '.', self.c['merge']['output'],
-                         self.c['merge']['tasks'], self.c['type'], self.c['version']).dump()
+                         self.c['merge']['tasks'], self.c['type']).dump()
