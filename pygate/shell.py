@@ -48,7 +48,7 @@ class ShellScriptMap(ShellScriptBase):
         import random
         temps = random.randint(0, 100000000)
         subd = 'tmp{}'.format(temps)
-        p_loc = Path('/tmp/Slurm') / subd
+        p_loc = Path('/tmp') / subd
         return p_ser, p_loc
 
     def _make(self):
