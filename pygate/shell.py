@@ -1,5 +1,5 @@
 class ShellScriptBase:
-    def __init__(self, fs, workdir: str, output: str, tasks: list, shell='zsh'):
+    def __init__(self, fs, workdir: str, output: str, tasks: list, shell='zsh', version='7.2'):
         self.fs = fs
         self.workdir = workdir
         self.output = output
@@ -9,6 +9,7 @@ class ShellScriptBase:
             raise ValueError("Unknown shell {}.".format(self.shell))
         self.content = None
         self.task_type = None
+        self.version = version
 
     def _load_shell_template(self):
         from .utils import load_script
@@ -59,7 +60,8 @@ class ShellScriptMap(ShellScriptBase):
         p_ser, p_loc = self._get_workdir_on_local_and_server()
         self.content = scrpt_tpl.render(local_work_directory=p_loc,
                                         server_work_directory=p_ser,
-                                        commands='\n'.join(self.commands))
+                                        commands='\n'.join(self.commands),
+                                        version=self.version)
 
 
 class ShellScriptMerge(ShellScriptBase):

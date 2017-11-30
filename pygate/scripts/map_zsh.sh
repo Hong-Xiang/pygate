@@ -2,7 +2,7 @@
 #SBATCH -o %J.out
 #SBATCH -e %J.err
 # source ~/.zshrc
-source /usr/local/bin/simuEnv7.2.sh
+source /hqlf/softwares/module/simu{{version}}.sh
 echo 'Run on:' `hostname`
 echo 'Start at: ' `date`
 if [ ! -d /tmp/Slurm ]; then

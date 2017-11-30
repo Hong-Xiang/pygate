@@ -46,5 +46,5 @@ merge:
     - method: hadd
       filename: result.root
   verbose: 1
-
+version: "7.2"
 
