@@ -1,0 +1,5 @@
+{% extends "repeater" %}
+{% block detail -%}
+/gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatNumber {{ o.number }}
+{% endblock detail -%}
+

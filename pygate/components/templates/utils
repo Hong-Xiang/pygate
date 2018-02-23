@@ -1,0 +1,8 @@
+{% macro vis(name, force_fire_frame, color) -%}
+{% if force_fire_frame -%}
+/gate/{{name}}/vis/forceWireframe
+{% endif -%}
+{% if color -%}
+/gate/{{name}}/vis/setColor             {{ color }}
+{% endif -%}
+{% endmacro -%}

@@ -1,0 +1,8 @@
+{% macro repeater(o) -%}
+/gate/{{ o.volume }}/repeaters/insert          {{ o.repeater_type }}
+{% block detail scoped -%}
+{%- endblock -%}
+{%- endmacro -%}
+{% if o -%}
+{{ repeater(o) }}
+{%- endif %}

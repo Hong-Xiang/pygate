@@ -1,0 +1,6 @@
+{% extends "repeater" %}
+{% block detail -%}
+/gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatNumber {{ o.n }}
+/gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatVector {{ o.rv | join(' ') }}
+{% endblock detail -%}
+

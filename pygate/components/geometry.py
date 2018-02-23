@@ -9,54 +9,57 @@ from .base import ObjectWithTemplate
 class Vec3(ObjectWithTemplate):
     template = 'vec3'
 
-    def __init__(self, x, y, z):
+    def __init__(self, x, y, z, unit='mm'):
         self.x = x
         self.y = y
         self.z = z
+        self.unit = unit
 
-    def getMacStr(self):
-        fmt1 = r' {0}    {1}    {2}'
-        return fmt1.format(self.x, self.y, self.z)
+    # def getMacStr(self):
+    #     fmt1 = r' {0}    {1}    {2}'
+    #     return fmt1.format(self.x, self.y, self.z)
 
 
 class Volume(ObjectWithTemplate):
     shape_type = 'volume'
     template = 'volume'
 
-    def __init__(self, name, material=None, mother=None, position=None):
-        self.mother = mother or 'world'
+    def __init__(self, name, material=None, mother=None, position=None, unit=None):
+        self.mother = mother
         self.name = name
         self.material = material
-        self.position = position or Vec3(0.0, 0.0, 0.0)
+        self.position = position
+        self.unit = unit or 'mm'
         self.children = []
         self.attrList = []
-        self.childList = []
+        # self.childList = []
 
-    def makeAttrList(self):
-        nameFmt = r"/gate/{0}/daughters/name {1}" + "\n"
-        insertFmt = r"/gate/{0}/daughters/insert {1}" + "\n"
-        posFmt = r"/gate/{0}/placement/setTranslation {1}  mm" + "\n"
-        matFmt = r"/gate/{0}/setMaterial {1}" + "\n"
-        self.addAttr(
-            AttrPair(self.mother, nameFmt.format(self.mother, self.name)))
-        self.addAttr(AttrPair(self.mother, insertFmt.format(
-            self.mother, self.shapeType)))
-        if self.position is not None:
-            self.addAttr(
-                AttrPair(self.position, posFmt.format(self.name, self.position.getMacStr())))
-        if self.material is not None:
-            self.addAttr(
-                AttrPair(self.material, matFmt.format(self.name, self.material)))
+    # def makeAttrList(self):
+    #     nameFmt = r"/gate/{0}/daughters/name {1}" + "\n"
+    #     insertFmt = r"/gate/{0}/daughters/insert {1}" + "\n"
+    #     posFmt = r"/gate/{0}/placement/setTranslation {1}  mm" + "\n"
+    #     matFmt = r"/gate/{0}/setMaterial {1}" + "\n"
+    #     self.addAttr(
+    #         AttrPair(self.mother, nameFmt.format(self.mother, self.name)))
+    #     self.addAttr(AttrPair(self.mother, insertFmt.format(
+    #         self.mother, self.shapeType)))
+    #     if self.position is not None:
+    #         self.addAttr(
+    #             AttrPair(self.position, posFmt.format(self.name, self.position.getMacStr())))
+    #     if self.material is not None:
+    #         self.addAttr(
+    #             AttrPair(self.material, matFmt.format(self.name, self.material)))
 
     def add_child(self, child):
         child.mother = self.name
         self.children.append(child)
+        return child
 
     def addAttr(self, attrItem):
         self.attrList.append(attrItem)
 
     def getMacStr(self):
-        self.makeAttrList()
+        # self.makeAttrList()
         mac = ""
         for item in self.attrList:
             if item.value is not None:
@@ -74,154 +77,171 @@ class Box(Volume):
     shape_type = 'box'
     template = 'box'
 
-    def __init__(self, name, size, material=None, mother=None, position=None):
-        super(Box, self).__init__(name,
-                                  material=material,
-                                  mother=mother,
-                                  position=position,)
+    def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
+        super(Box, self).__init__(name, material, mother, position, unit)
         self.size = size
 
-    def makeAttrList(self):
-        super(Box, self).makeAttrList()
-        sizeFmt = self.getMeStr() + r"/setXLength {0} mm" + "\n" + self.getMeStr(
-        ) + r"/setYLength {1} mm" + "\n" + self.getMeStr() + r"/setZLength {2} mm" + "\n"
-        self.addAttr(AttrPair(self.size, sizeFmt.format(
-            self.size.x, self.size.y, self.size.z)))
+    # def makeAttrList(self):
+    #     super(Box, self).makeAttrList()
+    #     sizeFmt = self.getMeStr() + r"/setXLength {0} mm" + "\n" + self.getMeStr(
+    #     ) + r"/setYLength {1} mm" + "\n" + self.getMeStr() + r"/setZLength {2} mm" + "\n"
+    #     self.addAttr(AttrPair(self.size, sizeFmt.format(
+    #         self.size.x, self.size.y, self.size.z)))
 
 
 class Cylinder(Volume):
-    def __init__(self, name, Rmax, mother=None, Height=None, position=None, material=None,
-                 Rmin=None, PhiStart=None, DeltaPhi=None):
-        super(Cylinder, self).__init__(shapeType='cylinder',
-                                       mother=mother, name=name, position=position, material=material)
-        self.Rmin = Rmin
-        self.Rmax = Rmax
-        self.Height = Height
-        self.PhiStart = PhiStart
-        self.DeltaPhi = DeltaPhi
+    shape_type = 'cylinder'
+    template = 'cylinder'
 
-    def makeAttrList(self):
-        super(Cylinder, self).makeAttrList()
-        fmtRmin = self.getMeStr() + r"/setRmin {0} mm" + "\n"
-        fmtRmax = self.getMeStr() + r"/setRmax {0} mm" + "\n"
-        fmtHeight = self.getMeStr() + r"/setHeight {0} mm" + "\n"
-        fmtPhiStart = self.getMeStr() + r"/setPhiStart {0}  deg" + "\n"
-        fmtDeltaPhi = self.getMeStr() + r"/setDeltaPhi {0}  deg" + "\n"
+    def __init__(self, name, rmax, rmin=None, height=None,
+                 phi_start=None, delta_phi=None,
+                 material=None, mother=None, position=None, unit=None):
+        super().__init__(name, material, mother, position, unit)
+        self.rmax = rmax
+        self.rmin = rmin
+        self.height = height
+        self.phi_start = phi_start
+        self.delta_phi = delta_phi
 
-        self.addAttr(AttrPair(self.Rmin, fmtRmin.format(self.Rmin)))
-        self.addAttr(AttrPair(self.Rmax, fmtRmax.format(self.Rmax)))
-        self.addAttr(AttrPair(self.Height, fmtHeight.format(self.Height)))
-        self.addAttr(
-            AttrPair(self.PhiStart, fmtPhiStart.format(self.PhiStart)))
-        self.addAttr(
-            AttrPair(self.DeltaPhi, fmtDeltaPhi.format(self.DeltaPhi)))
+    # def makeAttrList(self):
+    #     super(Cylinder, self).makeAttrList()
+    #     fmtRmin = self.getMeStr() + r"/setRmin {0} mm" + "\n"
+    #     fmtRmax = self.getMeStr() + r"/setRmax {0} mm" + "\n"
+    #     fmtHeight = self.getMeStr() + r"/setHeight {0} mm" + "\n"
+    #     fmtPhiStart = self.getMeStr() + r"/setPhiStart {0}  deg" + "\n"
+    #     fmtDeltaPhi = self.getMeStr() + r"/setDeltaPhi {0}  deg" + "\n"
+
+        # self.addAttr(AttrPair(self.Rmin, fmtRmin.format(self.Rmin)))
+        # self.addAttr(AttrPair(self.Rmax, fmtRmax.format(self.Rmax)))
+        # self.addAttr(AttrPair(self.Height, fmtHeight.format(self.Height)))
+        # self.addAttr(
+        #     AttrPair(self.PhiStart, fmtPhiStart.format(self.PhiStart)))
+        # self.addAttr(
+        #     AttrPair(self.DeltaPhi, fmtDeltaPhi.format(self.DeltaPhi)))
 
 
 class Sphere(Volume):
-    def __init__(self, name, Rmax, mother=None, position=None, material=None,
-                 Rmin=None, PhiStart=None, DeltaPhi=None, ThetaStart=None, DeltaTheta=None):
-        super(Sphere, self).__init__(shapeType='sphere',
-                                     mother=mother, name=name, position=position, material=material)
-        self.Rmin = Rmin
-        self.Rmax = Rmax
-        self.PhiStart = PhiStart
-        self.DeltaPhi = DeltaPhi
-        self.ThetaStart = ThetaStart
-        self.DeltaTheta = DeltaTheta
+    template = 'sphere'
+    shape_type = 'sphere'
 
-    def makeAttrList(self):
-        super(Sphere, self).makeAttrList()
-        fmtRmin = self.getMeStr() + r"/setRmin {0} mm" + "\n"
-        fmtRmax = self.getMeStr() + r"/setRmax {0} mm" + "\n"
-        fmtPhiStart = self.getMeStr() + r"/setPhiStart {0}  deg" + "\n"
-        fmtDeltaPhi = self.getMeStr() + r"/setDeltaPhi {0}  deg" + "\n"
-        fmtThetaStart = self.getMeStr() + r"/setThetaStart {0}  deg" + "\n"
-        fmtDeltaTheta = self.getMeStr() + r"/setDeltaTheta {0}  deg" + "\n"
+    def __init__(self, name, rmax, rmin=None, height=None,
+                 phi_start=None, delta_phi=None,
+                 theta_start=None, delta_theta=None,
+                 material=None, mother=None, position=None, unit=None):
+        super().__init__(name, material, mother, position, unit)
+        self.rmax = rmax
+        self.rmin = rmin
+        self.height = height
+        self.phi_start = phi_start
+        self.delta_phi = delta_phi
+        self.theta_start = theta_start
+        self.delta_theta = delta_theta
 
-        self.addAttr(AttrPair(self.Rmin, fmtRmin.format(self.Rmin)))
-        self.addAttr(AttrPair(self.Rmax, fmtRmax.format(self.Rmax)))
-        self.addAttr(
-            AttrPair(self.PhiStart, fmtPhiStart.format(self.PhiStart)))
-        self.addAttr(
-            AttrPair(self.DeltaPhi, fmtDeltaPhi.format(self.DeltaPhi)))
-        self.addAttr(AttrPair(self.ThetaStart,
-                              fmtThetaStart.format(self.ThetaStart)))
-        self.addAttr(AttrPair(self.DeltaTheta,
-                              fmtDeltaTheta.format(self.DeltaTheta)))
+    # def makeAttrList(self):
+    #     super(Sphere, self).makeAttrList()
+    #     fmtRmin = self.getMeStr() + r"/setRmin {0} mm" + "\n"
+    #     fmtRmax = self.getMeStr() + r"/setRmax {0} mm" + "\n"
+    #     fmtPhiStart = self.getMeStr() + r"/setPhiStart {0}  deg" + "\n"
+    #     fmtDeltaPhi = self.getMeStr() + r"/setDeltaPhi {0}  deg" + "\n"
+    #     fmtThetaStart = self.getMeStr() + r"/setThetaStart {0}  deg" + "\n"
+    #     fmtDeltaTheta = self.getMeStr() + r"/setDeltaTheta {0}  deg" + "\n"
+
+        # self.addAttr(AttrPair(self.Rmin, fmtRmin.format(self.Rmin)))
+        # self.addAttr(AttrPair(self.Rmax, fmtRmax.format(self.Rmax)))
+        # self.addAttr(
+        #     AttrPair(self.PhiStart, fmtPhiStart.format(self.PhiStart)))
+        # self.addAttr(
+        #     AttrPair(self.DeltaPhi, fmtDeltaPhi.format(self.DeltaPhi)))
+        # self.addAttr(AttrPair(self.ThetaStart,
+        #                       fmtThetaStart.format(self.ThetaStart)))
+        # self.addAttr(AttrPair(self.DeltaTheta,
+        #                       fmtDeltaTheta.format(self.DeltaTheta)))
 
 
 class ImageRegularParamerisedVolume(Volume):
-    def __init__(self,  name, imagefile, rangefile,  mother=None, position=None, material=None):
-        super(ImageRegularParamerisedVolume, self).__init__(shapeType='ImageRegularParametrisedVolume', mother=mother,
-                                                            name=name, position=position, material=None)
-        self.imagefile = imagefile
-        self.rangefile = rangefile
+    template = 'image_volume'
+    shape_type = 'ImageRegularParametrisedVolume'
 
-    def makeAttrList(self):
-        super(ImageRegularParamerisedVolume, self).makeAttrList()
-        ImageFileFmt = self.getMeStr() + r"/setImage {0} " + "\n"
-        self.addAttr(
-            AttrPair(self.imagefile, ImageFileFmt.format(self.imagefile)))
-        RangeFileFmt = self.getMeStr() + r"/setRangeToMaterialFile {0} " + "\n"
-        self.addAttr(
-            AttrPair(self.rangefile, RangeFileFmt.format(self.rangefile)))
+    def __init__(self,  name, image_file, range_file,
+                 material=None, mother=None, position=None, unit=None):
+        super().__init__(name, material, mother, position, unit)
+        self.image_file = image_file
+        self.range_file = range_file
+
+    # def makeAttrList(self):
+    #     super(ImageRegularParamerisedVolume, self).makeAttrList()
+    #     ImageFileFmt = self.getMeStr() + r"/setImage {0} " + "\n"
+    #     self.addAttr(
+    #         AttrPair(self.imagefile, ImageFileFmt.format(self.imagefile)))
+    #     RangeFileFmt = self.getMeStr() + r"/setRangeToMaterialFile {0} " + "\n"
+    #     self.addAttr(
+    #         AttrPair(self.rangefile, RangeFileFmt.format(self.rangefile)))
 
 
-class Repeater:
+class Repeater(ObjectWithTemplate):
+    template = 'repeater'
+    repeater_type = None
+
     def __init__(self, volume):
         self.volume = volume
 
-    def getMacStr(self):
-        pass
 
+class RepeaterRing(Repeater):
+    template = 'repeater_ring'
+    repeater_type = 'ring'
 
-class RingRepeater(Repeater):
     def __init__(self, volume, number):
-        super(RingRepeater, self).__init__(volume)
-        self.number = number
+        super().__init__(volume)
+        self.n = number
 
-    def getMacStr(self):
-        fmt1 = r"/gate/{0}/repeaters/insert ring " + "\n"
-        fmt2 = r"/gate/{0}/ring/setRepeatNumber {1}" + "\n"
+    # def getMacStr(self):
+    #     fmt1 = r"/gate/{0}/repeaters/insert ring " + "\n"
+    #     fmt2 = r"/gate/{0}/ring/setRepeatNumber {1}" + "\n"
 
-        return(fmt1.format(self.volume)
-               + fmt2.format(self.volume, self.number))
-
-
-class LinearRepeater(Repeater):
-    def __init__(self, volume, number, repeatVector):
-        super(LinearRepeater, self).__init__(volume)
-        self.number = number
-        self.repeatVector = repeatVector
-
-    def getMacStr(self):
-        fmt1 = r"/gate/{0}/repeaters/insert linear " + "\n"
-        fmt2 = r"/gate/{0}/linear/setRepeatNumber {1}" + " \n"
-        fmt3 = r"/gate/{0}/linear/setRepeatVector {1}" + " \n"
-        return (fmt1.format(self.volume) +
-                fmt2.format(self.volume, self.number) +
-                fmt3.format(self.volume, self.repeatVector))
+    #     return(fmt1.format(self.volume)
+    #            + fmt2.format(self.volume, self.number))
 
 
-class CubicRepeater(Repeater):
-    def __init__(self, volume, scale, repeatVector):
-        super(CubicRepeater, self).__init__(volume)
+class RepeaterLinear(Repeater):
+    template = 'repeater_linear'
+    repeater_type = 'linear'
+
+    def __init__(self, volume, number, repeat_vector):
+        super().__init__(volume)
+        self.n = number
+        self.rv = repeat_vector
+
+    # def getMacStr(self):
+    #     fmt1 = r"/gate/{0}/repeaters/insert linear " + "\n"
+    #     fmt2 = r"/gate/{0}/linear/setRepeatNumber {1}" + " \n"
+    #     fmt3 = r"/gate/{0}/linear/setRepeatVector {1}" + " \n"
+    #     return (fmt1.format(self.volume) +
+    #             fmt2.format(self.volume, self.number) +
+    #             fmt3.format(self.volume, self.repeatVector))
+
+
+class RepeaterCubic(Repeater):
+    template = 'repeater_cubic'
+    repeater_type = 'cubicArray'
+
+    def __init__(self, volume, scale: Vec3, repeat_vector: Vec3):
+        super().__init__(volume)
         self.scale = scale
-        self.repeatVector = repeatVector
+        self.rv = repeat_vector
 
-    def getMacStr(self):
-        fmt1 = r"/gate/{0}/repeaters/insert cubicArray" + "\n"
-        fmt2 = r"/gate/{0}/cubicArray/setRepeatNumberX   {1}" + " \n"
-        fmt3 = r"/gate/{0}/cubicArray/setRepeatNumberY   {1}" + " \n"
-        fmt4 = r"/gate/{0}/cubicArray/setRepeatNumberZ   {1}" + " \n"
-        fmt5 = r"/gate/{0}/cubicArray/setRepeatVector {1}  mm" + " \n"
+    # def getMacStr(self):
+    #     fmt1 = r"/gate/{0}/repeaters/insert cubicArray" + "\n"
+    #     fmt2 = r"/gate/{0}/cubicArray/setRepeatNumberX   {1}" + " \n"
+    #     fmt3 = r"/gate/{0}/cubicArray/setRepeatNumberY   {1}" + " \n"
+    #     fmt4 = r"/gate/{0}/cubicArray/setRepeatNumberZ   {1}" + " \n"
+    #     fmt5 = r"/gate/{0}/cubicArray/setRepeatVector {1}  mm" + " \n"
 
-        return (fmt1.format(self.volume) +
-                fmt2.format(self.volume, self.scale.x) +
-                fmt3.format(self.volume, self.scale.y) +
-                fmt4.format(self.volume, self.scale.z) +
-                fmt5.format(self.volume, self.repeatVector.getMacStr())
-                )
+    #     return (fmt1.format(self.volume) +
+    #             fmt2.format(self.volume, self.scale.x) +
+    #             fmt3.format(self.volume, self.scale.y) +
+    #             fmt4.format(self.volume, self.scale.z) +
+    #             fmt5.format(self.volume, self.repeatVector.getMacStr())
+    #             )
 
 
 # if __name__ == '__main__':
