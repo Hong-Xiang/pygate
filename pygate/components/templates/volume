@@ -1,14 +1,14 @@
 {% from "vec3" import vec3 -%}
-{% macro volume(v) -%}
-/gate/{{ v.mother }}/daughters/name            {{ v.name }}
-/gate/{{ v.mother }}/daughters/insert          {{ v.shape_type}}
-{% block size -%}
+{% macro volume(o) -%}
+/gate/{{ o.mother }}/daughters/name            {{ o.name }}
+/gate/{{ o.mother }}/daughters/insert          {{ o.shape_type}}
+{% block size scoped -%}
 {%- endblock -%}
-/gate/{{ v.name }}/placement/setTranslation    {{ vec3(v.position) }} mm
-{% if v.material -%}
-/gate/{{ v.name }}/setMaterial                 {{v.material}}
+/gate/{{ o.name }}/placement/setTranslation    {{ vec3(o.position) }} mm
+{% if o.material -%}
+/gate/{{ o.name }}/setMaterial                 {{o.material}}
 {%- endif %}
 {%- endmacro -%}
-{% if v -%}
-{{ volume(v) }}
+{% if o -%}
+{{ volume(o) }}
 {%- endif %}

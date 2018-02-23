@@ -1,6 +1,7 @@
 {% extends "volume" %}
 {% block size -%}
-/gate/{{ v.name }}/geometry/setXLength         {{ v.size.x }} mm
-/gate/{{ v.name }}/geometry/setYLength         {{ v.size.y }} mm
-/gate/{{ v.name }}/geometry/setZLength         {{ v.size.z }} mm
+/gate/{{ o.name }}/geometry/setXLength         {{ o.size.x }} mm
+/gate/{{ o.name }}/geometry/setYLength         {{ o.size.y }} mm
+/gate/{{ o.name }}/geometry/setZLength         {{ o.size.z }} mm
 {% endblock size -%}
+

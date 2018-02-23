@@ -1,3 +1,2 @@
 class ObjectWithTemplate:
     template = None
-

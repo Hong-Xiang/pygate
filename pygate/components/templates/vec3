@@ -1,6 +1,6 @@
-{% macro vec3(v) -%}
-{{ v.x }} {{ v.y }} {{v.z}}
-{%- endmacro -%}
-{% if v -%}
-{{ vec3(v) }}
+{% macro vec3(o) -%}
+{{ o.x }} {{ o.y }} {{o.z}}
+{%- endmacro %}
+{%- if o -%}
+{{ vec3(o) }}
 {%- endif %}

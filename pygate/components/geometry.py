@@ -3,9 +3,12 @@ from math import pi
 from .digitizer import AttrPair
 import yaml
 
+from .base import ObjectWithTemplate
 
-class Vec3:
+
+class Vec3(ObjectWithTemplate):
     template = 'vec3'
+
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
@@ -16,9 +19,10 @@ class Vec3:
         return fmt1.format(self.x, self.y, self.z)
 
 
-class Volume:
+class Volume(ObjectWithTemplate):
     shape_type = 'volume'
-    template = 'volume'    
+    template = 'volume'
+
     def __init__(self, name, material=None, mother=None, position=None):
         self.mother = mother or 'world'
         self.name = name
@@ -69,6 +73,7 @@ class Volume:
 class Box(Volume):
     shape_type = 'box'
     template = 'box'
+
     def __init__(self, name, size, material=None, mother=None, position=None):
         super(Box, self).__init__(name,
                                   material=material,

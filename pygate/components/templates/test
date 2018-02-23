@@ -1,0 +1,2 @@
+{% from "box" import volume as box %}
+{{ box(o) }}
