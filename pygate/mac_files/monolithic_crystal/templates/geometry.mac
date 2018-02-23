@@ -1,12 +1,19 @@
 # === optical system ===
 # Geometry
+
+/gate/world/geometry/setXLength       {{ world.hx }} mm
+/gate/world/geometry/setYLength       {{ world.hy }} mm
+/gate/world/geometry/setZLength       {{ world.hz }} mm
+/gate/world/setMaterial               {{ world.material | default('Air')}}
+/gate/world/vis/setVisible 0
+
 /gate/world/daughters/name                      OpticalSystem
 /gate/world/daughters/insert                    box
 /gate/OpticalSystem/geometry/setXLength         {{ optical_system.hx }} mm
 /gate/OpticalSystem/geometry/setYLength         {{ optical_system.hy }} mm
 /gate/OpticalSystem/geometry/setZLength         {{ optical_system.hz }} mm
 /gate/OpticalSystem/placement/setTranslation    0.0 0.0 0.0 mm
-/gate/OpticalSystem/setMaterial                 Air
+/gate/OpticalSystem/setMaterial                 {{ optical_system.material | default('Air')}}
 
 /gate/OpticalSystem/daughters/name              crystal
 /gate/OpticalSystem/daughters/insert            box
@@ -14,7 +21,7 @@
 /gate/crystal/geometry/setYLength               {{ crystal.hy }} mm
 /gate/crystal/geometry/setZLength               {{ crystal.hz }} mm
 /gate/crystal/placement/setTranslation          {{ crystal.tx }} {{ crystal.ty }} {{ crystal.tz }} mm
-/gate/crystal/setMaterial                       LYSO
+/gate/crystal/setMaterial                       {{ crystal.material | default('LSYO')}}
 /gate/crystal/vis/setColor                      red
 /gate/crystal/vis/forceWireframe
 

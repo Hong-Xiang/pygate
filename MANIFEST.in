@@ -1,1 +1,2 @@
 include pygate/scripts/*
+include pygate/components/templates/*

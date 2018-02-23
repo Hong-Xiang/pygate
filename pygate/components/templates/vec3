@@ -1,0 +1,6 @@
+{% macro vec3(v) -%}
+{{ v.x }} {{ v.y }} {{v.z}}
+{%- endmacro -%}
+{% if v -%}
+{{ vec3(v) }}
+{%- endif %}

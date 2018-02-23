@@ -5,6 +5,7 @@ import yaml
 
 
 class Vec3:
+    template = 'vec3'
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
@@ -16,43 +17,36 @@ class Vec3:
 
 
 class Volume:
-    shapeList = ['box', 'cylinder', 'sphere',
-                 'patch', 'ImageRegularParametrisedVolume']
-
-    def __init__(self, shapeType, name, material=None, mother=None, position=None):
-        if shapeType in Volume.shapeList:
-            self.shapeType = shapeType
-        else:
-            print("invalid shape type: %s \n", shapeType)
-        if mother is None:
-            self.mother = 'world'
-        else:
-            self.mother = mother
-        self.material = material
-
+    shape_type = 'volume'
+    template = 'volume'    
+    def __init__(self, name, material=None, mother=None, position=None):
+        self.mother = mother or 'world'
         self.name = name
-        self.position = position
+        self.material = material
+        self.position = position or Vec3(0.0, 0.0, 0.0)
+        self.children = []
         self.attrList = []
         self.childList = []
 
     def makeAttrList(self):
         nameFmt = r"/gate/{0}/daughters/name {1}" + "\n"
         insertFmt = r"/gate/{0}/daughters/insert {1}" + "\n"
-        posFmt =   r"/gate/{0}/placement/setTranslation {1}  mm" + "\n"
-        matFmt =  r"/gate/{0}/setMaterial {1}" + "\n"
+        posFmt = r"/gate/{0}/placement/setTranslation {1}  mm" + "\n"
+        matFmt = r"/gate/{0}/setMaterial {1}" + "\n"
         self.addAttr(
             AttrPair(self.mother, nameFmt.format(self.mother, self.name)))
         self.addAttr(AttrPair(self.mother, insertFmt.format(
             self.mother, self.shapeType)))
         if self.position is not None:
             self.addAttr(
-                AttrPair(self.position, posFmt.format(self.name,self.position.getMacStr())))
+                AttrPair(self.position, posFmt.format(self.name, self.position.getMacStr())))
         if self.material is not None:
-            self.addAttr(AttrPair(self.material, matFmt.format(self.name,self.material)))
+            self.addAttr(
+                AttrPair(self.material, matFmt.format(self.name, self.material)))
 
-    def addChild(self, child):
+    def add_child(self, child):
         child.mother = self.name
-        self.childList.append(child)
+        self.children.append(child)
 
     def addAttr(self, attrItem):
         self.attrList.append(attrItem)
@@ -73,13 +67,14 @@ class Volume:
 
 
 class Box(Volume):
-    def __init__(self,  name, mother=None, position=None, material=None, size=None):
-        super(Box, self).__init__(shapeType='box', mother=mother,
-                                  name=name, position=position, material=material)
-        if size is None:
-            print("no box size in Box: %s", self.name)
-        else:
-            self.size = size
+    shape_type = 'box'
+    template = 'box'
+    def __init__(self, name, size, material=None, mother=None, position=None):
+        super(Box, self).__init__(name,
+                                  material=material,
+                                  mother=mother,
+                                  position=position,)
+        self.size = size
 
     def makeAttrList(self):
         super(Box, self).makeAttrList()
@@ -159,10 +154,10 @@ class ImageRegularParamerisedVolume(Volume):
 
     def makeAttrList(self):
         super(ImageRegularParamerisedVolume, self).makeAttrList()
-        ImageFileFmt = self.getMeStr() + r"/setImage {0} "+ "\n"
+        ImageFileFmt = self.getMeStr() + r"/setImage {0} " + "\n"
         self.addAttr(
             AttrPair(self.imagefile, ImageFileFmt.format(self.imagefile)))
-        RangeFileFmt = self.getMeStr() + r"/setRangeToMaterialFile {0} "+"\n"
+        RangeFileFmt = self.getMeStr() + r"/setRangeToMaterialFile {0} " + "\n"
         self.addAttr(
             AttrPair(self.rangefile, RangeFileFmt.format(self.rangefile)))
 
