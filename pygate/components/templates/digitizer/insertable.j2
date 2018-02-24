@@ -1,0 +1,11 @@
+{% macro insertable(o) -%}
+{% if o.define_name -%}
+/gate/digitizer/name {{ o.name }}
+{% endif -%}   
+/gate/digitizer/{{ [o.base, o] | select | map(attribute='name') | join('/') }}/insert {{ o.insertable_type }}
+{% block detail scoped -%}
+{%- endblock -%}
+{% endmacro -%}
+{% if o -%}
+{{ insertable(o) }}
+{%- endif %}

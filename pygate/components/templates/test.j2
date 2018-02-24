@@ -1,2 +1,1 @@
-{% from "box.j2" import volume as box %}
-{{ box(o) }}
+xx {{ [b.base, b] | select | map(attribute='name') | join('/') }} xx

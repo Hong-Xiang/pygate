@@ -30,7 +30,6 @@ class Volume(ObjectWithTemplate):
         if self.position is not None and self.position.unit is None:
             self.position.unit = self.unit
         self.children = []
-        self.attrList = []
 
     def add_child(self, child):
         if not child.mother is self:
@@ -40,9 +39,6 @@ class Volume(ObjectWithTemplate):
         if not child in self.children:
             self.children.append(child)
         return child
-
-    # def __hash__(self):
-        # return self.name
 
 
 class Box(Volume):
