@@ -1,4 +1,4 @@
-{% extends "volume" %}
+{% extends "volume.j2" %}
 {% block detail -%}
 /gate/{{ o.name }}/geometry/setXLength         {{ o.size.x }} {{ o.size.unit }}
 /gate/{{ o.name }}/geometry/setYLength         {{ o.size.y }} {{ o.size.unit }}

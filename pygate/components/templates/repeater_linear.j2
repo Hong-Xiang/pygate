@@ -1,4 +1,4 @@
-{% extends "repeater" %}
+{% extends "repeater.j2" %}
 {% block detail -%}
 /gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatNumber {{ o.n }}
 /gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatVector {{ o.rv | join(' ') }}

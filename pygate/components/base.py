@@ -11,10 +11,11 @@ class Environments:
 
     def create_environment(self, experiment_set):
         from jinja2 import Environment, PackageLoader, ChoiceLoader
-        pkg_loaders = [PackageLoader('pygate.components'), ]
+        pkg_loaders = []
         if experiment_set != '_default':
             package = 'pygate.mac_files.{}'.format(experiment_set)
             pkg_loaders.append(PackageLoader(package))
+        pkg_loaders.append(PackageLoader('pygate.components'))
         env = Environment(loader=ChoiceLoader(pkg_loaders),
                           line_statement_prefix='#!')
         self._envs[experiment_set] = env
@@ -31,6 +32,9 @@ class ObjectWithTemplate:
 
 
 def render_object(obj: ObjectWithTemplate, experiment_set=None):
+    template_name = obj.template
+    if not template_name.endswith('.j2'):
+        template_name += '.j2'
     template = (envs.get_or_create_env(experiment_set)
-                .get_template(obj.template))
+                .get_template(template_name))
     return template.render(o=obj)

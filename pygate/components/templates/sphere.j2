@@ -1,13 +1,11 @@
-{% extends "volume" %}
+{% extends "volume.j2" %}
 {% block detail -%}
 /gate/{{ o.name }}/geometry/setRmin         {{ o.rmin }} mm
 /gate/{{ o.name }}/geometry/setRmax         {{ o.rmax }} mm
 /gate/{{ o.name }}/geometry/setHeight         {{ o.height }} mm
-{% if o.phi_start -%}
 /gate/{{ o.name }}/geometry/setPhiStart         {{ o.phi_start }} mm
-{% endif -%}
-{% if o.delta_phi -%}
 /gate/{{ o.name }}/geometry/setDeltaPhi         {{ o.delta_phi }} mm
-{% endif -%}
+/gate/{{ o.name }}/geometry/setThetaStart         {{ o.theta_start }} mm
+/gate/{{ o.name }}/geometry/setDeltaTheta         {{ o.delta_theta }} mm
 {% endblock detail -%}
 

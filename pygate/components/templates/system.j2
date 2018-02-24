@@ -1,0 +1,8 @@
+{% macro system(o) -%}
+{% for l in o.levels -%}
+/gate/systems/{{ o.name }}/{{ l }}/attach   {{ o.levels[l].name }}
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ system(o) }}
+{%- endif %}
