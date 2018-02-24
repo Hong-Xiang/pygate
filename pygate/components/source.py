@@ -1,26 +1,28 @@
-from .digitizer import AttrPair
-from .geometry import Vec3
-import yaml
+# from .digitizer import AttrPair
+# from .geometry import Vec3
+# import yaml
+
+from typing import List
 
 
-class SrcModule:
-    def __init__(self, srcName=None):
-        self.srcName = srcName
-        self.attrList = []
+# class SrcModule:
+#     def __init__(self, srcName=None):
+#         self.srcName = srcName
+#         self.attrList = []
 
-    def getMacStr(self):
-        self.makeAttrList()
-        mac = ""
-        for item in self.attrList:
-            if item.value is not None:
-                mac += item.fmtstr
-        return mac
+#     def getMacStr(self):
+#         self.makeAttrList()
+#         mac = ""
+#         for item in self.attrList:
+#             if item.value is not None:
+#                 mac += item.fmtstr
+#         return mac
 
-    def makeAttrList(self):
-        pass
+#     def makeAttrList(self):
+#         pass
 
-    def addAttr(self, attrItem):
-        self.attrList.append(attrItem)
+#     def addAttr(self, attrItem):
+#         self.attrList.append(attrItem)
 
 
 from .base import ObjectWithTemplate
@@ -32,7 +34,7 @@ class Source(ObjectWithTemplate):
 
     def __init__(self, name,
                  particle=None, activity=None, angle=None,
-                 shape=None, placement: Vec3=None):
+                 shape=None, position: Vec3=None):
         """
         Args:
             activity: str | int | float | list | tuple:
@@ -45,6 +47,7 @@ class Source(ObjectWithTemplate):
         self.angle = self.bind(angle)
         self.shape = self.bind(shape)
         self.activity = self.unified_activity(activity)
+        self.position = position
 
     def unified_activity(self, activity):
         if activity is None:
@@ -374,15 +377,15 @@ class VoxelizedSrcItem:
 class SourceList(ObjectWithTemplate):
     template = 'source_list'
 
-    def __init__(self, sources):
+    def __init__(self, sources: List[Source]):
         self.sources = sources
 
-    def getMacStr(self):
-        mac = ""
-        for item in self.srcItemList:
-            mac += item.getMacStr()
-        mac += r"/gate/source/list" + "\n"
-        return mac
+    # def getMacStr(self):
+    #     mac = ""
+    #     for item in self.srcItemList:
+    #         mac += item.getMacStr()
+    #     mac += r"/gate/source/list" + "\n"
+    #     return mac
 
 
 # if __name__ is "__main__":

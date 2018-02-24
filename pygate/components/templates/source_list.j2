@@ -1,7 +1,8 @@
+{% from "source.j2" import source -%}
 {% macro source_list(o) -%}
-/gate/source/addSource    {{ o.name }}
-/gate/source/posiC11/setActivity  {{ o.activity }}
-{{ o.particle.render() }}
+{% for s in o.sources -%}
+{{ source(s) }}
+{% endfor -%}
 /gate/source/list
 {% endmacro -%}
 {% if o -%}

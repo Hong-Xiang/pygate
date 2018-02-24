@@ -4,7 +4,6 @@
 /gate/source/{{ o.src.name }}/{{ o.reader }}Reader/translator/insert {{ o.translator }} 
 /gate/source/{{ o.src.name }}/{{ o.reader }}Reader/{{ o.translator }}Translator/readTable {{ o.read_table }}
 /gate/source/{{ o.src.name }}/{{ o.reader }}Reader/readFile  {{ o.read_file }}
-/gate/source/{{ o.src.name }}/setPosition {{ vec3(o.position) }} {{ o.position.unit | d('mm', true)}}
 {% endmacro -%}
 {% if o -%}
 {{ source_shape_voxelized(o) }}

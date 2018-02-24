@@ -7,6 +7,14 @@
 {% if o.shape -%}
 {{ o.shape.render() }}
 {% endif -%}
+{% if o.position -%}
+# Placement
+{% if o.is_voxelized() -%}
+/gate/source/{{ o.name }}/setPosition {{ vec3(o.position) }} {{ o.position.unit | d('mm', true)}}
+{% else -%}
+/gate/source/{{ o.name }}/gps/centre {{ vec3(o.position) }} {{ o.position.unit | d('mm', true)}}
+{% endif -%}
+{% endif -%}
 {{ o.particle.render() }}
 {{ o.angle.render() }}
 {% endmacro -%}
