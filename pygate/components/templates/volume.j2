@@ -1,8 +1,8 @@
 {% from "vec3.j2" import vec3 -%}
 {% macro volume(o) -%}
 {% if o.mother -%}
-/gate/{{ o.mother }}/daughters/name            {{ o.name }}
-/gate/{{ o.mother }}/daughters/insert          {{ o.shape_type}}
+/gate/{{ o.mother.name }}/daughters/name            {{ o.name }}
+/gate/{{ o.mother.name }}/daughters/insert          {{ o.shape_type}}
 {% endif -%}
 {% if o.position -%}
 /gate/{{ o.name }}/placement/setTranslation    {{ vec3(o.position) }} {{ o.position.unit }}
@@ -12,7 +12,7 @@
 {% if o.material -%}
 /gate/{{ o.name }}/setMaterial                 {{o.material}}
 {% endif -%}
-{% for c in o.children -%}
+{% for c in o.children %}
 {{ c.render() }}
 {%- endfor -%}
 {% endmacro -%}

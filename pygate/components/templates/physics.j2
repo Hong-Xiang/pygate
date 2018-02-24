@@ -1,0 +1,11 @@
+{% from "physics_list.j2" import physics_list %}
+{% from "cuts.j2" import cuts %}
+{% macro physics(o) -%}
+{{ physics_list(o.pl) }}
+{% for c in o.cl -%}
+{{ cuts(c) }}
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ physics(o) }}
+{%- endif %}

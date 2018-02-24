@@ -8,7 +8,7 @@ from .base import ObjectWithTemplate
 class Vec3(ObjectWithTemplate):
     template = 'vec3'
 
-    def __init__(self, x, y, z, unit='mm'):
+    def __init__(self, x, y, z, unit=None):
         self.x = x
         self.y = y
         self.z = z
@@ -21,17 +21,28 @@ class Volume(ObjectWithTemplate):
 
     def __init__(self, name, material=None, mother=None, position=None, unit=None):
         self.mother = mother
+        if self.mother is not None:
+            self.mother.add_child(self)
         self.name = name
         self.material = material
         self.position = position
         self.unit = unit or 'mm'
+        if self.position is not None and self.position.unit is None:
+            self.position.unit = self.unit
         self.children = []
         self.attrList = []
 
     def add_child(self, child):
-        child.mother = self.name
-        self.children.append(child)
+        if not child.mother is self:
+            raise ValueError(
+                "Trying to ({}).add_child({}) with another mother {}.".format(self.name, child.name, child.mother.name))
+        child.mother = self
+        if not child in self.children:
+            self.children.append(child)
         return child
+
+    # def __hash__(self):
+        # return self.name
 
 
 class Box(Volume):
@@ -41,6 +52,8 @@ class Box(Volume):
     def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
         super(Box, self).__init__(name, material, mother, position, unit)
         self.size = size
+        if self.size.unit is None:
+            self.size.unit = self.unit
 
 
 class Cylinder(Volume):
