@@ -65,10 +65,8 @@ class Source(ObjectWithTemplate):
             obj.src = self
         return obj
 
-    def title(self):
-        if isinstance(self.shape, Voxelized):
-            return "{} voxel".format(self.name)
-        return self.name
+    def is_voxelized(self):
+        return isinstance(self.shape, Voxelized)
 
 
 class Particle(ObjectWithTemplate):
@@ -252,24 +250,28 @@ class Sphere(Shape):
 
 
 class Ellipsoid(Shape):
-    def __init__(self, halfSize, dimension, srcName=None):
-        super(Ellipsoid, self).__init__(
-            dimension=dimension, shape='Ellipsoid', srcName=srcName)
-        self.halfSize = halfSize
+    template = 'source_shape_ellipsoid'
+    shape = 'Ellipsoid'
+
+    def __init__(self, half_size, dimension):
+        super().__init__(dimension)
+        self.half_size = half_size
 
     def makeAttrList(self):
         super(Ellipsoid, self).makeAttrList()
         fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
                 r"/gate/source/{0}/gps/halfy {2} mm" + "\n" +
                 r"/gate/source/{0}/gps/halfz {3} mm" + "\n")
-        self.addAttr(AttrPair(self.halfSize, fmt1.format(
-            self.srcName, self.halfSize[0], self.halfSize[1], self.halfSize[2])))
+        self.addAttr(AttrPair(self.half_size, fmt1.format(
+            self.srcName, self.half_size[0], self.half_size[1], self.half_size[2])))
 
 
-class Circle(Shape):
-    def __init__(self, radius, srcName=None):
-        super(Circle, self).__init__(
-            dimension='Plane', shape='Circle', srcName=srcName)
+class Circle(ShapePlane):
+    template = 'source_shape_circle'
+    shape = 'Circle'
+
+    def __init__(self, radius):
+        super().__init__()
         self.radius = radius
 
     def makeAttrList(self):
@@ -279,10 +281,9 @@ class Circle(Shape):
             AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
 
 
-class Annulus(Shape):
-    def __init__(self, radius0, radius, srcName=None):
-        super(Annulus, self).__init__(
-            dimension='Plane', shape='Annulus', srcName=srcName)
+class Annulus(ShapePlane):
+    def __init__(self, radius0, radius):
+        super().__init__()
         self.radius = radius
         self.radius0 = radius0
 
@@ -296,38 +297,37 @@ class Annulus(Shape):
             AttrPair(self.radius, fmt2.format(self.srcName, self.radius)))
 
 
-class Ellipse(Shape):
-    def __init__(self, halfSize, srcName=None):
-        super(Ellipse, self).__init__(
-            dimension="Plane", shape='Ellipse', srcName=srcName)
-        self.halfSize = halfSize
+class Ellipse(ShapePlane):
+    def __init__(self, half_size):
+        super().__init__()
+        self.half_size = half_size
 
     def makeAttrList(self):
         super(Ellipse, self).makeAttrList()
         fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
                 r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
-        self.addAttr(AttrPair(self.halfSize, fmt1.format(
-            self.srcName, self.halfSize[0], self.halfSize[1])))
+        self.addAttr(AttrPair(self.half_size, fmt1.format(
+            self.srcName, self.half_size[0], self.half_size[1])))
 
 
-class Rectangle(Shape):
-    def __init__(self, halfSize, srcName=None):
-        super(Rectangle, self).__init__(
-            dimension="Plane", shape='Rectangle', srcName=srcName)
-        self.halfSize = halfSize
+class Rectangle(ShapePlane):
+    def __init__(self, half_size):
+        super().__init__()
+        self.half_size = half_size
 
     def makeAttrList(self):
         super(Rectangle, self).makeAttrList()
         fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
                 r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
-        self.addAttr(AttrPair(self.halfSize, fmt1.format(
-            self.srcName, self.halfSize[0], self.halfSize[1])))
+        self.addAttr(AttrPair(self.half_size, fmt1.format(
+            self.srcName, self.half_size[0], self.half_size[1])))
 
 
-class Placement(SrcModule):
-    def __init__(self, srcName=None, placement=None):
-        super(Placement, self).__init__(srcName=srcName)
-        self.placement = placement
+class Placement(ObjectWithTemplate):
+    template = 'source_placement'
+
+    def __init__(self, position):
+        self.pos = position
 
     def makeAttrList(self):
         fmt = r"/gate/source/{0}/centre {1}  mm" + "\n"
@@ -390,7 +390,7 @@ class SourceList(ObjectWithTemplate):
 #     src1 = SrcItem(name='src1')
 #     src1.addSrcModule(Particle(paticleType='gamma'))
 #     src1.addSrcModule(Angular(ang=[90, 90, 0, 360]))
-#     # src1.addSrcModule(Rectangle(halfSize = [10,20]))
+#     # src1.addSrcModule(Rectangle(half_size = [10,20]))
 #     src1.addSrcModule(Cylinder(dimension = 'Volume',halfz = 10 , radius = 10))
 #     src1.addSrcModule(Placement(placement=Vec3(10, 10, 10)))
 

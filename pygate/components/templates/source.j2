@@ -1,5 +1,9 @@
 {% macro source(o) -%}
-/gate/source/addSource {{ o.title() }}
+{% if o.is_voxelized() -%}
+/gate/source/addSource {{ o.name }} voxel
+{% else -%}
+/gate/source/addSource {{ o.name }}
+{% endif -%}
 {% if o.shape -%}
 {{ o.shape.render() }}
 {% endif -%}
