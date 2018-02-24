@@ -1,0 +1,5 @@
+{% extends "digitizer/insertable.j2" -%}
+{% block detail -%}
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/setPolicy {{ o.policy }}
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/setDepth  {{ o.depth }}
+{%- endblock -%}

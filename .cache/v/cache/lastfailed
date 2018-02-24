@@ -1,10 +1,3 @@
 {
-  "pygate/tests/components/test_digitizer.py::TestBlurring::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestCoincidenceSorter::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestCoincidenceSorter::test_render_add_new": true,
-  "pygate/tests/components/test_digitizer.py::TestCoincidencesChain::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestDeadTime::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestReadout::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestThresHold::test_render": true,
-  "pygate/tests/components/test_digitizer.py::TestUpHolder::test_render": true
+  "pygate/tests/components/test_digitizer.py::TestBlurring::test_render": true
 }
