@@ -256,17 +256,17 @@ class Ellipsoid(Shape):
     template = 'source_shape_ellipsoid'
     shape = 'Ellipsoid'
 
-    def __init__(self, half_size, dimension):
+    def __init__(self, half_size:Vec3, dimension):
         super().__init__(dimension)
         self.half_size = half_size
 
-    def makeAttrList(self):
-        super(Ellipsoid, self).makeAttrList()
-        fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
-                r"/gate/source/{0}/gps/halfy {2} mm" + "\n" +
-                r"/gate/source/{0}/gps/halfz {3} mm" + "\n")
-        self.addAttr(AttrPair(self.half_size, fmt1.format(
-            self.srcName, self.half_size[0], self.half_size[1], self.half_size[2])))
+    # def makeAttrList(self):
+    #     super(Ellipsoid, self).makeAttrList()
+    #     fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
+    #             r"/gate/source/{0}/gps/halfy {2} mm" + "\n" +
+    #             r"/gate/source/{0}/gps/halfz {3} mm" + "\n")
+    #     self.addAttr(AttrPair(self.half_size, fmt1.format(
+    #         self.srcName, self.half_size[0], self.half_size[1], self.half_size[2])))
 
 
 class Circle(ShapePlane):
@@ -277,101 +277,108 @@ class Circle(ShapePlane):
         super().__init__()
         self.radius = radius
 
-    def makeAttrList(self):
-        super(Circle, self).makeAttrList()
-        fmt1 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
-        self.addAttr(
-            AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
+    # def makeAttrList(self):
+    #     super(Circle, self).makeAttrList()
+    #     fmt1 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
+    #     self.addAttr(
+    #         AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
 
 
 class Annulus(ShapePlane):
+    template = 'source_shape_annulus'
+    shape = 'Annulus'
+
     def __init__(self, radius0, radius):
         super().__init__()
         self.radius = radius
         self.radius0 = radius0
 
-    def makeAttrList(self):
-        super(Annulus, self).makeAttrList()
-        fmt1 = (r"/gate/source/{0}/gps/radius0 {1} mm" + "\n")
-        fmt2 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
-        self.addAttr(
-            AttrPair(self.radius0, fmt1.format(self.srcName, self.radius0)))
-        self.addAttr(
-            AttrPair(self.radius, fmt2.format(self.srcName, self.radius)))
+    # def makeAttrList(self):
+    #     super(Annulus, self).makeAttrList()
+    #     fmt1 = (r"/gate/source/{0}/gps/radius0 {1} mm" + "\n")
+    #     fmt2 = (r"/gate/source/{0}/gps/radius {1} mm" + "\n")
+    #     self.addAttr(
+    #         AttrPair(self.radius0, fmt1.format(self.srcName, self.radius0)))
+    #     self.addAttr(
+    #         AttrPair(self.radius, fmt2.format(self.srcName, self.radius)))
 
 
 class Ellipse(ShapePlane):
+    template = 'source_shape_ellipse'
+    shape = 'Ellipse'
     def __init__(self, half_size):
         super().__init__()
         self.half_size = half_size
 
-    def makeAttrList(self):
-        super(Ellipse, self).makeAttrList()
-        fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
-                r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
-        self.addAttr(AttrPair(self.half_size, fmt1.format(
-            self.srcName, self.half_size[0], self.half_size[1])))
+    # def makeAttrList(self):
+    #     super(Ellipse, self).makeAttrList()
+    #     fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
+    #             r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
+    #     self.addAttr(AttrPair(self.half_size, fmt1.format(
+    #         self.srcName, self.half_size[0], self.half_size[1])))
 
 
 class Rectangle(ShapePlane):
+    template = 'source_shape_rectangle'
+    shape = 'Rectangle'
     def __init__(self, half_size):
         super().__init__()
         self.half_size = half_size
 
-    def makeAttrList(self):
-        super(Rectangle, self).makeAttrList()
-        fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
-                r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
-        self.addAttr(AttrPair(self.half_size, fmt1.format(
-            self.srcName, self.half_size[0], self.half_size[1])))
+    # def makeAttrList(self):
+    #     super(Rectangle, self).makeAttrList()
+    #     fmt1 = (r"/gate/source/{0}/gps/halfx {1} mm" + "\n" +
+    #             r"/gate/source/{0}/gps/halfy {2} mm" + "\n")
+    #     self.addAttr(AttrPair(self.half_size, fmt1.format(
+    #         self.srcName, self.half_size[0], self.half_size[1])))
 
 
-class Placement(ObjectWithTemplate):
-    template = 'source_placement'
+# class Placement(ObjectWithTemplate):
+#     template = 'source_placement'
 
-    def __init__(self, position):
-        self.pos = position
+#     def __init__(self, position):
+#         self.pos = position
 
-    def makeAttrList(self):
-        fmt = r"/gate/source/{0}/centre {1}  mm" + "\n"
-        self.addAttr(AttrPair(self.placement, fmt.format(
-            self.srcName, self.placement.getMacStr())))
-
-
-class SrcItem:
-    def __init__(self, name):
-        self.srcModuleList = []
-        self.name = name
-
-    def addSrcModule(self, item):
-        item.srcName = self.name
-        self.srcModuleList.append(item)
-
-    def getMacStr(self):
-        mac = ""
-        fmt = r"/gate/source/addSource {0}" + "\n"
-        mac += fmt.format(self.name)
-        for item in self.srcModuleList:
-            mac += item.getMacStr()
-        return mac
+#     def makeAttrList(self):
+#         fmt = r"/gate/source/{0}/centre {1}  mm" + "\n"
+#         self.addAttr(AttrPair(self.placement, fmt.format(
+#             self.srcName, self.placement.getMacStr())))
 
 
-class VoxelizedSrcItem:
-    def __init__(self, name):
-        self.srcModuleList = []
-        self.name = name
+# class SrcItem:
+#     def __init__(self, name):
+#         self.srcModuleList = []
+#         self.name = name
 
-    def addSrcModule(self, item):
-        item.srcName = self.name
-        self.srcModuleList.append(item)
+#     def addSrcModule(self, item):
+#         item.srcName = self.name
+#         self.srcModuleList.append(item)
 
-    def getMacStr(self):
-        mac = ""
-        fmt = r"/gate/source/addSource {0} voxel" + "\n"
-        mac += fmt.format(self.name)
-        for item in self.srcModuleList:
-            mac += item.getMacStr()
-        return mac
+#     def getMacStr(self):
+#         mac = ""
+#         fmt = r"/gate/source/addSource {0}" + "\n"
+#         mac += fmt.format(self.name)
+#         for item in self.srcModuleList:
+#             mac += item.getMacStr()
+#         return mac
+
+
+# class VoxelizedSrcItem:
+#     def __init__(self, name):
+#         self.srcModuleList = []
+#         self.name = name
+
+#     def addSrcModule(self, item):
+#         item.srcName = self.name
+#         self.srcModuleList.append(item)
+
+#     def getMacStr(self):
+#         mac = ""
+#         fmt = r"/gate/source/addSource {0} voxel" + "\n"
+#         mac += fmt.format(self.name)
+#         for item in self.srcModuleList:
+#             mac += item.getMacStr()
+#         return mac
 
 
 class SourceList(ObjectWithTemplate):
