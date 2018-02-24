@@ -36,9 +36,36 @@ class Bremsstrahlung(PhysicsProcess):
     models = ('StandardModel e-', 'StandardModel e+')
 
 
-class PositronAnnihilation(PhysicsProcess):
-    name = 'PositronAnnihilation'
+class PhysicsProcessWithoutModels(PhysicsProcess):
     models = tuple()
+
+
+class PositronAnnihilation(PhysicsProcessWithoutModels):
+    name = 'PositronAnnihilation'
+
+
+class OpticalAbsorption(PhysicsProcessWithoutModels):
+    name = 'OpticalAbsorption'
+
+
+class OpticalRayleigh(PhysicsProcessWithoutModels):
+    name = 'OpticalRayleigh'
+
+
+class OpticalBoundary(PhysicsProcessWithoutModels):
+    name = 'OpticalBoundary'
+
+
+class OpticalMie(PhysicsProcessWithoutModels):
+    name = 'OpticalMie'
+
+
+class OpticalWLS(PhysicsProcessWithoutModels):
+    name = 'OpticalWLS'
+
+
+class Scintillation(PhysicsProcessWithoutModels):
+    name = 'Scintillation'
 
 
 class MultipleScattering(PhysicsProcess):
