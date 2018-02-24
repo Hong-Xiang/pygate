@@ -5,17 +5,18 @@ class Insertable(ObjectWithTemplate):
     template = 'digitizer/insertable'
     insertable_type = None
 
-    def __init__(self, name=None, define_name=False):
+    def __init__(self, name=None, define_name=False, no_explicit_insert=False):
         self.name = name
         self.base = None
         self.define_name = define_name
+        self.no_explict_insert = no_explicit_insert
 
 
 class Singles(Insertable):
     template = 'digitizer/singles/singles'
 
-    def __init__(self, plugins=None, name='Singles', define_name=False):
-        super().__init__(name, base, define_name)
+    def __init__(self, plugins=None, name='Singles', define_name=False, no_explicit_insert=False):
+        super().__init__(name, define_name, no_explicit_insert=True)
         self.plugins = plugins
         for p in self.plugins:
             p.base = self
@@ -23,6 +24,9 @@ class Singles(Insertable):
 
 class Adder(Insertable):
     insertable_type = 'adder'
+
+    def __init__(self, name='adder', define_name=False):
+        super().__init__(name, define_name)
 
 
 class Readout(Insertable):

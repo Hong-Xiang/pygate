@@ -2,7 +2,9 @@
 {% if o.define_name -%}
 /gate/digitizer/name {{ o.name }}
 {% endif -%}   
-/gate/digitizer/{{ [o.base, o] | select | map(attribute='name') | join('/') }}/insert {{ o.insertable_type }}
+{% if not o.no_explict_insert -%}
+/gate/digitizer/{{ [o.base.name, '/'] | join if o.base }}insert {{ o.insertable_type }}
+{% endif -%}
 {% block detail scoped -%}
 {%- endblock -%}
 {% endmacro -%}
