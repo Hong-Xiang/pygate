@@ -2,9 +2,9 @@
 {% for p in o.cuts -%}
 /gate/physics/{{ p }}/SetCutInRegion      {{ o.volume.name }} {{ o.cuts[p] }} mm
 {% endfor -%}
-{% if self.max_step %}
+{% if o.max_step -%}
 /gate/physics/SetMaxStepSizeInRegion    {{ o.volume.name }} {{ o.max_step }} mm
-{% endif %}
+{% endif -%}
 {% endmacro -%}
 {% if o -%}
 {{ cuts(o) }}

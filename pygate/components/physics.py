@@ -88,7 +88,7 @@ class Cuts(ObjectWithTemplate):
         All units are mm.
         cuts: map from partical name to cut.
         """
-
+        self.volume = volume
         if isinstance(cuts, float):
             cuts = {k: cuts for k in self.STD_PARTICLES}
         self.cuts = cuts
