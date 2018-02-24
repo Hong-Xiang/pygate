@@ -65,6 +65,11 @@ class Source(ObjectWithTemplate):
             obj.src = self
         return obj
 
+    def title(self):
+        if isinstance(self.shape, Voxelized):
+            return "{} voxel".format(self.name)
+        return self.name
+
 
 class Particle(ObjectWithTemplate):
     template = 'source_particle'
@@ -94,7 +99,7 @@ class ParticleGamma(Particle):
 
     def __init__(self,
                  unstable=True, halflife=6586.2,
-                 monoenery=511, back2back=True):
+                 monoenergy=511, back2back=True):
         super().__init__(unstable, halflife)
         self.back2back = back2back
         self.monoenergy = monoenergy
@@ -157,7 +162,8 @@ class ShapePlane(Shape):
 class ShapeSurfaceOrVolume(Shape):
     def __init__(self, dimension):
         if not dimension in ('Surface', 'Volume'):
-            raise ValueError('Invalid dimension {} for {}.'.format(dimension, __class__))
+            raise ValueError(
+                'Invalid dimension {} for {}.'.format(dimension, __class__))
         super().__init__(dimension=dimension)
 
 
@@ -233,6 +239,7 @@ class Cylinder(ShapeSurfaceOrVolume):
 class Sphere(Shape):
     template = 'source_shape_sphere'
     shape = 'Sphere'
+
     def __init__(self, radius, dimension):
         super().__init__(dimension)
         self.radius = radius
