@@ -1,0 +1,9 @@
+{% macro source_list(o) -%}
+/gate/source/addSource    {{ o.name }}
+/gate/source/posiC11/setActivity  {{ o.activity }}
+{{ o.particle.render() }}
+/gate/source/list
+{% endmacro -%}
+{% if o -%}
+{{ source_list(o) }}
+{%- endif %}

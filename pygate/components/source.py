@@ -23,56 +23,120 @@ class SrcModule:
         self.attrList.append(attrItem)
 
 
-class Particle(SrcModule):
-    def __init__(self, srcName=None, paticleType='positron'):
-        super(Particle, self).__init__(srcName=srcName)
-        self.particleType = paticleType
+from .base import ObjectWithTemplate
+from .geometry import Vec3
 
-    def makeAttrList(self):
-        if self.particleType == 'positron':
-            fmt = (r"/gate/source/{0}/gps/particle e+ " + "\n" +
-                   r"/gate/source/{0}/gps/energytype Fluor18" + "\n" +
-                   r"/gate/source/{0}/setForcedUnstableFlag true" + "\n" +
-                   r"/gate/source/{0}/setForcedHalfLife 6586 s" + "\n")
-            self.addAttr(AttrPair(self.particleType, fmt.format(self.srcName)))
-        elif self.particleType == 'gamma':
-            fmt = (r"/gate/source/{0}/setType backtoback" + "\n" +
-                   r"/gate/source/{0}/gps/particle gamma " + "\n" +
-                   r"/gate/source/{0}/gps/monoenergy 511 keV" + "\n" +
-                   r"/gate/source/{0}/setForcedUnstableFlag true" + "\n" +
-                   r"/gate/source/{0}/setForcedHalfLife 6586.2 s" + "\n")
-            self.addAttr(AttrPair(self.particleType, fmt.format(self.srcName)))
-        else:
-            print("invalid particle type in Particle:makeAttrList() \n")
+class Source(ObjectWithTemplate):
+    template = 'source'
+
+    def __init__(self, name, 
+                 particle=None, activity=None, angle=None,
+                 shape=None, placement:Vec3=None):
+        """
+        Args:
+            activity: str | int | float | list | tuple:
+                str: directly attached
+                int, float: add default unit becquerel
+                list, tuple: [0]: value, [1]: unit
+        """
+        self.name = name
+        self.particle = self.bind(particle)
+        self.angle = self.bind(angle)
+        self.shape = self.bind(shape)
+        self.activity = self.unified_activity(activity)
+
+    def unified_activity(self, activity):
+        if activity is None:
+            return None
+        if isinstance(activity, str):
+            return activity
+        if isinstance(activity, (int, float)):
+            unit = 'becquerel'
+        if isinstance(activity, (list, tuple)):
+            unit = activity[1]
+            activity = activity[0]
+            if unit.lower() in ['bq']:
+                unit = 'becquerel'
+        return "{} {}".format(activity, unit)
+
+    def bind(self, obj):
+        if obj is not None:
+            obj.src = self
+        return obj
+
+class Particle(ObjectWithTemplate):
+    template = 'source_particle'
+    particle_type = None
+
+    def bind_source(self, source):
+        self.src = source
+        return self
+
+    def __init__(self, unstable=None, halflife=None):
+        self.scr = None
+        self.unstable = unstable
+        self.halflife = halflife
+
+class ParticlePositron(Particle):
+    template = 'source_particle_positron'
+    particle_type = 'e+'
+
+    def __init__(self, unstable=True, halflife=6586):
+        super().__init__(unstable, halflife)
 
 
-class Activity(SrcModule):
-    def __init__(self, srcName=None, activity=None):
-        super(Activity, self).__init__(srcName=srcName)
-        self.activity = activity
+class ParticleGamma(Particle):
+    template = 'source_particle_gamma'
+    particle_type = 'gamma'
 
-    def makeAttrList(self):
-        fmt = r"/gate/source/{0}/setActivity {1}  becquerel" + "\n"
-        self.addAttr(AttrPair(self.activity, fmt.format(
-            self.srcName, self.activity)))
+    def __init__(self,
+                 unstable=True, halflife=6586.2,
+                 monoenery=511, back2back=True):
+        super().__init__(unstable, halflife)
+        self.back2back = back2back
+        self.monoenergy = monoenergy
+
+    # def makeAttrList(self):
+    #     if self.particleType == 'positron':
+    #         fmt = (r"/gate/source/{0}/gps/particle e+ " + "\n" +
+    #                r"/gate/source/{0}/gps/energytype Fluor18" + "\n" +
+    #                r"/gate/source/{0}/setForcedUnstableFlag true" + "\n" +
+    #                r"/gate/source/{0}/setForcedHalfLife 6586 s" + "\n")
+    #         self.addAttr(AttrPair(self.particleType, fmt.format(self.srcName)))
+    #     elif self.particleType == 'gamma':
+    #         fmt = (r"/gate/source/{0}/setType backtoback" + "\n" +
+    #                r"/gate/source/{0}/gps/particle gamma " + "\n" +
+    #                r"/gate/source/{0}/gps/monoenergy 511 keV" + "\n" +
+    #                r"/gate/source/{0}/setForcedUnstableFlag true" + "\n" +
+    #                r"/gate/source/{0}/setForcedHalfLife 6586.2 s" + "\n")
+    #         self.addAttr(AttrPair(self.particleType, fmt.format(self.srcName)))
+    #     else:
+    #         print("invalid particle type in Particle:makeAttrList() \n")
 
 
-class Angular(SrcModule):
-    def __init__(self, srcName=None, ang=[0, 180, 0, 360]):
-        super(Angular, self).__init__(srcName=srcName)
+# class Activity(SrcModule):
+#     def __init__(self, srcName=None, activity=None):
+#         super(Activity, self).__init__(srcName=srcName)
+#         self.activity = activity
+
+#     def makeAttrList(self):
+#         fmt = r"/gate/source/{0}/setActivity {1}  becquerel" + "\n"
+#         self.addAttr(AttrPair(self.activity, fmt.format(
+#             self.srcName, self.activity)))
+class Shape(ObjectWithTemplate):
+    template = 'source_shape'
+
+class Angular(ObjectWithTemplate):
+    template = 'source_angular'
+    ang_type = None
+
+class AngularISO(Angular):
+    template = 'source_angular_iso'
+    ang_type = 'iso'
+    def __init__(self, ang=[0, 180, 0, 360]):
         self.ang = ang
 
-    def makeAttrList(self):
-        fmt = (r"/gate/source/{0}/gps/angtype iso" + "\n" +
-               r"/gate/source/{0}/gps/mintheta {1} deg " + "\n" +
-               r"/gate/source/{0}/gps/maxtheta {2} deg" + "\n" +
-               r"/gate/source/{0}/gps/minphi   {3} deg" + "\n" +
-               r"/gate/source/{0}/gps/maxphi   {4} deg" + "\n")
-        self.addAttr(AttrPair(self.ang, fmt.format(
-            self.srcName, self.ang[0], self.ang[1], self.ang[2], self.ang[3])))
-
-
-class Voxelized(SrcModule):
+class Voxelized(Shape):
     def __init__(self, readtable, readfile, shape='Voxelized', reader='interfile', translator='range', srcName=None, position=None):
         super(Voxelized, self).__init__(srcName=srcName)
         self.shape = shape
@@ -268,12 +332,11 @@ class VoxelizedSrcItem:
         return mac
 
 
-class Source():
-    def __init__(self):
-        self.srcItemList = []
+class SourceList(ObjectWithTemplate):
+    template = 'source_list'
 
-    def addSourceItem(self, item):
-        self.srcItemList.append(item)
+    def __init__(self, sources):
+        self.sources = sources
 
     def getMacStr(self):
         mac = ""

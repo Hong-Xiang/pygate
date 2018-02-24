@@ -1,0 +1,12 @@
+{% macro source_particle(o) -%}
+/gate/source/{{ o.src.name }}/gps/particle {{ o.particle_type }} 
+{% block detail scoped -%}
+{%- endblock -%}
+{% if o.unstable -%}
+/gate/source/{{ o.src.name }}/setForcedUnstableFlag true
+/gate/source/{{ o.src.name }}/setForcedHalfLife {{ o.halflife }} s
+{% endif -%}
+{% endmacro -%}
+{% if o -%}
+{{ source_particle(o) }}
+{%- endif %}

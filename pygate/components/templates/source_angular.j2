@@ -1,0 +1,8 @@
+{% macro angular(o) -%}
+/gate/source/{{ o.src.name }}/gps/angtype {{ o.ang_type}}
+{% block detail scoped -%}
+{% endblock detail -%}
+{%- endmacro -%}
+{% if o -%}
+{{ angular(o) }}
+{%- endif %}
