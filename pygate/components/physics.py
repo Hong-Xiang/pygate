@@ -98,8 +98,8 @@ class Cuts(ObjectWithTemplate):
 class Physics(ObjectWithTemplate):
     template = 'physics'
 
-    def __init__(self, pyhsics_list, cuts_list):
-        self.pl = pyhsics_list
+    def __init__(self, physics_list, cuts_list):
+        self.pl = physics_list
         self.cl = cuts_list
 
     def getModelStr(self):
