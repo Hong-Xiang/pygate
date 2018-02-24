@@ -60,3 +60,8 @@ class TestSource(unittest.TestCase):
         src = Source('src', p, angle=ang, shape=v)
         self.assertEqual(src.render(),
                          '/gate/source/addSource src voxel\n/gate/source/src/reader/insert interfile\n/gate/source/src/interfileReader/translator/insert range \n/gate/source/src/interfileReader/rangeTranslator/readTable act_range.dat\n/gate/source/src/interfileReader/readFile  act.h33\n/gate/source/src/setPosition -128.0 -128.0 -0.15 mm\n\n/gate/source/src/gps/particle gamma \n/gate/source/src/setType backtoback\n/gate/source/src/gps/monoenergy 511 keV\n/gate/source/src/setForcedUnstableFlag true\n/gate/source/src/setForcedHalfLife 6586.2 s\n\n/gate/source/src/gps/angtype iso\n/gate/source/src/gps/mintheta 0 deg \n/gate/source/src/gps/maxtheta 180 deg\n/gate/source/src/gps/minphi   0 deg\n/gate/source/src/gps/maxphi   360 deg\n\n')
+    
+    def test_render_cylindrical_pet_wiki(self):
+        p = ParticleGamma(halflife=1223,)
+        a = AngularISO()
+        src = Source('posiC11', p, 10000, a)

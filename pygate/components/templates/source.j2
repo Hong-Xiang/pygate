@@ -1,6 +1,8 @@
 {% macro source(o) -%}
 /gate/source/addSource {{ o.title() }}
+{% if o.shape -%}
 {{ o.shape.render() }}
+{% endif -%}
 {{ o.particle.render() }}
 {{ o.angle.render() }}
 {% endmacro -%}
