@@ -73,9 +73,10 @@ class PhysicsList(ObjectWithTemplate):
         self.pps = physics_processes
 
 
-STD_PHYSICS_LIST = PhysicsList((PhotoElectric(), Compton(), RayleighScattering(),
-                                ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
-                                MultipleScattering('e-'), MultipleScattering('e+')))
+def standard_physics_list():
+    return PhysicsList((PhotoElectric(), Compton(), RayleighScattering(),
+                        ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
+                        MultipleScattering('e-'), MultipleScattering('e+')))
 
 
 class Cuts(ObjectWithTemplate):

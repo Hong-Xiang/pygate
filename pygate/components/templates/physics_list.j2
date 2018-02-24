@@ -1,4 +1,4 @@
-{% from "physics_procss.j2" import physics_process}
+{% from "physics_process.j2" import physics_process %}
 {% macro physics_list(o) -%}
 {% for pp in o.pps -%}
 {{ physics_process(pp) }}
