@@ -1,0 +1,9 @@
+{% macro source_shape(o) -%}
+/gate/source/{{ o.src.name }}/gps/type {{ o.dimension }}
+/gate/source/{{ o.src.name }}/gps/shape {{ o.shape }}
+{% block detail scoped -%}
+{%- endblock -%}
+{% endmacro -%}
+{% if o -%}
+{{ source_shape(o) }}
+{%- endif %}

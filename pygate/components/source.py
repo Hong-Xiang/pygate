@@ -26,12 +26,13 @@ class SrcModule:
 from .base import ObjectWithTemplate
 from .geometry import Vec3
 
+
 class Source(ObjectWithTemplate):
     template = 'source'
 
-    def __init__(self, name, 
+    def __init__(self, name,
                  particle=None, activity=None, angle=None,
-                 shape=None, placement:Vec3=None):
+                 shape=None, placement: Vec3=None):
         """
         Args:
             activity: str | int | float | list | tuple:
@@ -64,6 +65,7 @@ class Source(ObjectWithTemplate):
             obj.src = self
         return obj
 
+
 class Particle(ObjectWithTemplate):
     template = 'source_particle'
     particle_type = None
@@ -76,6 +78,7 @@ class Particle(ObjectWithTemplate):
         self.scr = None
         self.unstable = unstable
         self.halflife = halflife
+
 
 class ParticlePositron(Particle):
     template = 'source_particle_positron'
@@ -123,93 +126,122 @@ class ParticleGamma(Particle):
 #         fmt = r"/gate/source/{0}/setActivity {1}  becquerel" + "\n"
 #         self.addAttr(AttrPair(self.activity, fmt.format(
 #             self.srcName, self.activity)))
-class Shape(ObjectWithTemplate):
-    template = 'source_shape'
+
 
 class Angular(ObjectWithTemplate):
     template = 'source_angular'
     ang_type = None
 
+
 class AngularISO(Angular):
     template = 'source_angular_iso'
     ang_type = 'iso'
+
     def __init__(self, ang=[0, 180, 0, 360]):
         self.ang = ang
 
+
+class Shape(ObjectWithTemplate):
+    template = 'source_shape'
+    shape = None
+
+    def __init__(self, dimension):
+        self.dimension = dimension
+
+
+class ShapePlane(Shape):
+    def __init__(self):
+        super().__init__(dimension='Plane')
+
+
+class ShapeSurfaceOrVolume(Shape):
+    def __init__(self, dimension):
+        if not dimension in ('Surface', 'Volume'):
+            raise ValueError('Invalid dimension {} for {}.'.format(dimension, __class__))
+        super().__init__(dimension=dimension)
+
+
 class Voxelized(Shape):
-    def __init__(self, readtable, readfile, shape='Voxelized', reader='interfile', translator='range', srcName=None, position=None):
-        super(Voxelized, self).__init__(srcName=srcName)
-        self.shape = shape
+    template = 'source_shape_voxelized'
+    shape = 'Voxelized'
+
+    def __init__(self, read_table, read_file,
+                 reader='interfile', translator='range',
+                 position=None):
+        self.read_table = read_table
+        self.read_file = read_file
         self.reader = reader
         self.translator = translator
-        self.readtable = readtable
-        self.readfile = readfile
         self.position = position
 
-    def makeAttrList(self):
-        fmt = (r"/gate/source/{0}/reader/insert {1}" + "\n" +
-               r"/gate/source/{0}/{1}Reader/translator/insert {2} " + "\n" +
-               r"/gate/source/{0}/{1}Reader/{2}Translator/readTable {3}" + "\n" +
-               r"/gate/source/{0}/{1}Reader/readFile  {4}" + "\n" +
-               r"/gate/source/{0}/setPosition  {5}  mm" + "\n")
-        self.addAttr(AttrPair(self.shape, fmt.format(self.srcName, self.reader,
-                                                     self.translator, self.readtable, self.readfile, self.position.getMacStr())))
+    # def makeAttrList(self):
+    #     fmt = (r"/gate/source/{0}/reader/insert {1}" + "\n" +
+    #            r"/gate/source/{0}/{1}Reader/translator/insert {2} " + "\n" +
+    #            r"/gate/source/{0}/{1}Reader/{2}Translator/readTable {3}" + "\n" +
+    #            r"/gate/source/{0}/{1}Reader/readFile  {4}" + "\n" +
+    #            r"/gate/source/{0}/setPosition  {5}  mm" + "\n")
+    #     self.addAttr(AttrPair(self.shape, fmt.format(self.srcName, self.reader,
+    #                                                  self.translator, self.readtable, self.readfile, self.position.getMacStr())))
 
 
-class Shape(SrcModule):
-    PlaneList = ['Circle', 'Annulus', 'Ellpsoid', 'Square', 'Rectangle']
-    VolumeList = ['Sphere', 'Ellipsoid', 'Cylinder', 'Para']
+# class Shape(SrcModule):
 
-    def __init__(self, dimension, shape, srcName=None):
-        super(Shape, self).__init__(srcName=srcName)
-        if dimension is 'Plane':
-            if shape in Shape.PlaneList:
-                self.dimension = dimension
-                self.shape = shape
-        elif ((dimension is 'Surface') or (dimension is 'Volume')):
-            if shape in Shape.VolumeList:
-                self.dimension = dimension
-                self.shape = shape
-        else:
-            pass
+#     PlaneList = ['Circle', 'Annulus', 'Ellpsoid', 'Square', 'Rectangle']
+#     VolumeList = ['Sphere', 'Ellipsoid', 'Cylinder', 'Para']
 
-    def makeAttrList(self):
-        fmt1 = r"/gate/source/{0}/gps/type {1}" + "\n"
-        fmt2 = r"/gate/source/{0}/gps/shape {1}" + "\n"
-        self.addAttr(AttrPair(self.dimension, fmt1.format(
-            self.srcName, self.dimension)))
-        self.addAttr(
-            AttrPair(self.shape, fmt2.format(self.srcName, self.shape)))
+#     def __init__(self, dimension, shape, srcName=None):
+#         super(Shape, self).__init__(srcName=srcName)
+#         if dimension is 'Plane':
+#             if shape in Shape.PlaneList:
+#                 self.dimension = dimension
+#                 self.shape = shape
+#         elif ((dimension is 'Surface') or (dimension is 'Volume')):
+#             if shape in Shape.VolumeList:
+#                 self.dimension = dimension
+#                 self.shape = shape
+#         else:
+#             pass
+
+#     def makeAttrList(self):
+#         fmt1 = r"/gate/source/{0}/gps/type {1}" + "\n"
+#         fmt2 = r"/gate/source/{0}/gps/shape {1}" + "\n"
+#         self.addAttr(AttrPair(self.dimension, fmt1.format(
+#             self.srcName, self.dimension)))
+#         self.addAttr(
+#             AttrPair(self.shape, fmt2.format(self.srcName, self.shape)))
 
 
-class Cylinder(Shape):
-    def __init__(self, radius, halfz, dimension, srcName=None):
-        super(Cylinder, self).__init__(
-            dimension=dimension, shape='Cylinder', srcName=srcName)
+class Cylinder(ShapeSurfaceOrVolume):
+    template = 'source_shape_cylinder'
+    shape = 'Cylinder'
+
+    def __init__(self, radius, halfz, dimension):
+        super().__init__(dimension)
         self.radius = radius
         self.halfz = halfz
 
-    def makeAttrList(self):
-        super(Cylinder, self).makeAttrList()
-        fmt1 = r"/gate/source/{0}/gps/radius {1} mm" + "\n"
-        fmt2 = r"/gate/source/{0}/gps/halfz {1} mm" + "\n"
-        self.addAttr(
-            AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
-        self.addAttr(
-            AttrPair(self.halfz, fmt2.format(self.srcName, self.halfz)))
+    # def makeAttrList(self):
+    #     super(Cylinder, self).makeAttrList()
+    #     fmt1 = r"/gate/source/{0}/gps/radius {1} mm" + "\n"
+    #     fmt2 = r"/gate/source/{0}/gps/halfz {1} mm" + "\n"
+    #     self.addAttr(
+    #         AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
+    #     self.addAttr(
+    #         AttrPair(self.halfz, fmt2.format(self.srcName, self.halfz)))
 
 
 class Sphere(Shape):
-    def __init__(self, radius, dimension, srcName=None):
-        super(Sphere, self).__init__(
-            dimension=dimension, shape='Sphere', srcName=srcName)
+    template = 'source_shape_sphere'
+    shape = 'Sphere'
+    def __init__(self, radius, dimension):
+        super().__init__(dimension)
         self.radius = radius
 
-    def makeAttrList(self):
-        super(Sphere, self).makeAttrList()
-        fmt1 = r"/gate/source/{0}/gps/radius {1} mm" + "\n"
-        self.addAttr(
-            AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
+    # def makeAttrList(self):
+    #     super(Sphere, self).makeAttrList()
+    #     fmt1 = r"/gate/source/{0}/gps/radius {1} mm" + "\n"
+    #     self.addAttr(
+    #         AttrPair(self.radius, fmt1.format(self.srcName, self.radius)))
 
 
 class Ellipsoid(Shape):
