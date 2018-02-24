@@ -46,6 +46,7 @@ class Blurring(Insertable):
 
     def __init__(self, law=None, resolution=0.15, eor=511, slope=None,
                  name='blurring', define_name=False):
+        super().__init__(name, define_name)
         self.law = law
         self.resolution = resolution
         self.eor = eor

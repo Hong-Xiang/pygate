@@ -1,0 +1,7 @@
+{% extends "digitizer/insertable.j2" -%}
+{% block detail -%}
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/setResolution {{ o.resolution }}
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/setEnergyOfReference {{ o.eor }} keV
+{% block more_detail scoped -%}
+{% endblock %}
+{%- endblock -%}
