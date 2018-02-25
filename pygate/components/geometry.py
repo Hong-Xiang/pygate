@@ -17,7 +17,7 @@ class Vec3(ObjectWithTemplate):
 
 class Volume(ObjectWithTemplate):
     shape_type = 'volume'
-    template = 'volume'
+    template = 'geometry/volume/volume'
 
     def __init__(self, name, material=None, mother=None, position=None, unit=None):
         self.mother = mother
@@ -43,7 +43,7 @@ class Volume(ObjectWithTemplate):
 
 class Box(Volume):
     shape_type = 'box'
-    template = 'box'
+    template = 'geometry/volume/box'
 
     def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
         super(Box, self).__init__(name, material, mother, position, unit)

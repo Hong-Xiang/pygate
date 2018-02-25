@@ -1,0 +1,21 @@
+{% from "vec3.j2" import vec3 -%}
+{% macro volume(o) -%}
+{% if o.mother -%}
+/gate/{{ o.mother.name }}/daughters/name            {{ o.name }}
+/gate/{{ o.mother.name }}/daughters/insert          {{ o.shape_type}}
+{% endif -%}
+{% if o.position -%}
+/gate/{{ o.name }}/placement/setTranslation    {{ vec3(o.position) }} {{ o.position.unit }}
+{% endif -%}
+{% block detail scoped -%}
+{%- endblock -%}
+{% if o.material -%}
+/gate/{{ o.name }}/setMaterial                 {{o.material}}
+{% endif -%}
+{% for c in o.children %}
+{{ c.render() }}
+{%- endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ volume(o) }}
+{%- endif %}
