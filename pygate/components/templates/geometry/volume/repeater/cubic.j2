@@ -1,5 +1,5 @@
-{% extends "repeater.j2" %}
-{% from "vec3.j2" import vec3 %}
+{% extends "geometry/volume/repeater.j2" %}
+{% from "utils.j2" import vec3 %}
 {% block detail -%}
 /gate/{{ o.volume }}/cubicArray/setRepeatNumberX        {{ o.scale.x }}  
 /gate/{{ o.volume }}/cubicArray/setRepeatNumberY        {{ o.scale.y }}  

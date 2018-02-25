@@ -1,4 +1,4 @@
-{% from "vec3.j2" import vec3 -%}
+{% from "utils.j2" import vec3 -%}
 {% macro source_shape_voxelized(o) -%}
 /gate/source/{{ o.src.name }}/reader/insert {{ o.reader }}
 /gate/source/{{ o.src.name }}/{{ o.reader }}Reader/translator/insert {{ o.translator }} 

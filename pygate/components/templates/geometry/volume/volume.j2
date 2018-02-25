@@ -1,4 +1,4 @@
-{% from "vec3.j2" import vec3 -%}
+{% from "utils.j2" import vec3 -%}
 {% macro volume(o) -%}
 {% if o.mother -%}
 /gate/{{ o.mother.name }}/daughters/name            {{ o.name }}
