@@ -48,6 +48,8 @@ class TestCylinder(unittest.TestCase):
 
 class TestRepeatCubic(unittest.TestCase):
     def test_render(self):
-        r = RepeaterCubic('crystal', Vec3(1, 5, 5, None), Vec3(0.0, 3.2, 4.0))
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterCubic(Vec3(1, 5, 5, None), Vec3(0.0, 3.2, 4.0))
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'), 'Air', w, repeater=r)
         self.assertEqual(r.render(),
                          '/gate/crystal/repeaters/insert          cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX        1  \n/gate/crystal/cubicArray/setRepeatNumberY        5  \n/gate/crystal/cubicArray/setRepeatNumberZ        5  \n/gate/crystal/cubicArray/setRepeatVector         0.0 3.2 4.0 mm \n')
