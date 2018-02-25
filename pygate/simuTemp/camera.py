@@ -1,7 +1,7 @@
 from ..components import geometry
+from ..components import system
 
-
-class System:
+class Camera:
     def __init__(self, name, world=None, detector=None):
         self.name = name
         self.world = None
@@ -30,12 +30,12 @@ class System:
         self.world.add_child(self.detector)
 
 
-class PETscanner(System):
+class PETscanner(Camera):
     def __init__(self, world=None, detector=None, level1=None, level2=None, level3=None, level4=None, level5=None):
         super(PETscanner, self).__init__(name='PETscanner')
 
 
-class Ecat(System):
+class Ecat(Camera):
     def __init__(self, world=None, detector=None, block=None, crystal=None):
         super(Ecat, self).__init__(name='ecat')
         if detector is None:
@@ -60,7 +60,7 @@ class Ecat(System):
         self.block.add_child(self.crystal)
 
 
-class CylindricalPET(System):
+class CylindricalPET(Camera):
     # the complete levels of an cylindricalPET: cylindricalPET->rsector->module->submodule->crystal->layer0-3
     def __init__(self, world=None, detector=None, rsector=None, module=None, submodule=None, crystal=None,
                  layer0=None, layer1=None, layer2=None, layer3=None):
@@ -121,7 +121,7 @@ class CylindricalPET(System):
         pass
 
 
-class MultiPatchPET(System):
+class MultiPatchPET(Camera):
     # the complete levels of multiPatchPET: multiPatchPET->container->patches
     def __init__(self, world=None, detector=None, container=None, patchlist=None):
         super(MultiPatchPET, self).__init__(name='multiPatchPET')
@@ -153,7 +153,7 @@ class MultiPatchPET(System):
             self.container.add_child(item)
 
 
-class SPECThead(System):
+class SPECThead(Camera):
     # the complete levels of SPECThead: SPECThead->crystal->pixel
     def __init__(self, world=None, detector=None, crystal=None, pixel=None):
         super(SPECThead, self).__init__(name='SPECThead')
@@ -181,14 +181,14 @@ class SPECThead(System):
             self.crystal.add_child(self.pixel)
 
 
-class OpticalSystem(System):
+class OpticalCamera(Camera):
     def __init__(self, world=None, detector=None, crystal=None, pixel=None):
-        super(OpticalSystem, self).__init__(name='OpticalSystem')
+        super(OpticalCamera, self).__init__(name='OpticalCamera')
         if detector is None:
-            self.detector = geometry.Box(name='OpticalSystem', position=geometry.Vec3(200.0, 0.0, 0.0), material='Air',
+            self.detector = geometry.Box(name='OpticalCamera', position=geometry.Vec3(200.0, 0.0, 0.0), material='Air',
                                          size=geometry.Vec3(70.0, 210.0, 300.0))
         else:
-            detector.name = 'OpticalSystem'
+            detector.name = 'OpticalCamera'
             self.detector = detector
         if crystal is None:
             self.crystal = geometry.Box(

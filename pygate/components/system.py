@@ -28,7 +28,6 @@ class PETscanner(Systems):
         }
         super().__init__(sensitive_detectors)
 
-
 class Ecat(Systems):
     name = 'ecat'
 
@@ -54,4 +53,22 @@ class CylindericalPET(Systems):
             'layer2': layer2,
             'layer3': layer3,
         }
+        super().__init__(sensitive_detectors)
+
+class multiPatchPET(Systems):
+    name = 'multiPatchPET'
+    def __init__(self, container, patch, sensitive_detectors = None):
+        self.attach_systems = lambda: {'contianer':container, 'patch':patch}
+        super().__init__(sensitive_detectors)
+
+class SPECThead(Systems):
+    name = 'SPECThead'
+    def __init__(self, crystal, pixel = None, sensitive_detectors = None):
+        self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel }
+        super().__init__(sensitive_detectors)
+
+class OpticalSystem(Systems):
+    name = 'OpticalSystem'
+    def __init__(self,crystal, pixel = None, sensitive_detectors = None):
+        self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel}
         super().__init__(sensitive_detectors)

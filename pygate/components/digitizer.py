@@ -142,14 +142,16 @@ class CoincidenceSorter(Insertable):
         self.window = window
         self.offset = offset
 
-class
 
 class CoincidencesChain(Insertable):
     template = 'digitizer/coincidence_chain'
     insertable_type = 'coincidenceChain'
-    def __init__(self, input1, input2, name, dead_time = None,  use_priority=True, define_name=True):
+    def __init__(self, input1, input2, name, plugins = None, use_priority=True, conserve_all_event = True, define_name=True):
         super().__init__(name, define_name)
         self.input1 = input1
         self.input2 = input2
-        self.dead_time = dead_time
         self.use_priority = use_priority
+        self.conserve_all_event = conserve_all_event
+        self.plugins = plugins
+        for p in self.plugins:
+            p.base = self
