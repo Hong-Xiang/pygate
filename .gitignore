@@ -5,3 +5,4 @@ pygate/template/SimuMacs
 pygate/template/ymls
 /dist
 /.cache
+/.vs
