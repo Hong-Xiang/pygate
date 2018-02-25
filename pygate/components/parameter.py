@@ -22,7 +22,7 @@ class AcquisitionPeriod(Acquisition):
     def __init__(self, start=0.0, end=1.0, step=1.0):
         super().__init__()
         self.start = start
-        self.slice = step
+        self.step = step
         self.end = end
 
 

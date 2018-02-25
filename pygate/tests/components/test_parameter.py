@@ -38,4 +38,4 @@ class TestAcquisitionPeriod(unittest.TestCase):
     def test_render(self):
         ap = AcquisitionPeriod(0.0, 0.1, 0.1)
         ae(self, ap.render(),
-           '/gate/application/setTimeStart  0 s\n/gate/application/setTimeStop  0.1 s\n        /gate/application/setTimeSlice  0.1 s\n/gate/application/startDAQ\n')
+           '/gate/application/setTimeStart  0.0 s\n/gate/application/setTimeStop  0.1 s\n/gate/application/setTimeSlice  0.1 s\n/gate/application/startDAQ\n')
