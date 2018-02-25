@@ -1,4 +1,4 @@
-import geometry
+from ..components import geometry
 
 
 class System:
@@ -27,7 +27,7 @@ class System:
             self.world = world
 
     def composite(self):
-        self.world.addChild(self.detector)
+        self.world.add_child(self.detector)
 
 
 class PETscanner(System):
@@ -40,7 +40,7 @@ class Ecat(System):
         super(Ecat, self).__init__(name='ecat')
         if detector is None:
             self.detector = geometry.Cylinder(
-                name='ecat', Rmax=442.0, Rmin=412.0, Height=155.2, material='Air')
+                name='ecat', rmax=442.0, rmin=412.0, height=155.2, material='Air')
         else:
             detector.name = 'ecat'
             self.detector = detector
@@ -56,8 +56,8 @@ class Ecat(System):
 
     def composite(self):
         super(Ecat, self).composite()
-        self.detector.addChild(self.block)
-        self.block.addChild(self.crystal)
+        self.detector.add_child(self.block)
+        self.block.add_child(self.crystal)
 
 
 class CylindricalPET(System):
@@ -67,7 +67,7 @@ class CylindricalPET(System):
         super(CylindricalPET, self).__init__(name='cylindricalPET')
         if detector is None:
             self.ring = geometry.Cylinder(
-                name='cylindricalPET', Rmax=520, Rmin=399, Height=40.2, material='Air')
+                name='cylindricalPET', rmax=520, rmin=399, height=40.2, material='Air')
         else:
             detector.name = 'cylindricalPET'
             self.detector = detector
@@ -101,20 +101,20 @@ class CylindricalPET(System):
     # define the parent-child relationship between the geometries.
     def composite(self):
         super(CylindricalPET, self).composite()
-        self.detector.addChild(self.rsector)
-        self.rsector.addChild(self.module)
+        self.detector.add_child(self.rsector)
+        self.rsector.add_child(self.module)
         if not self.submodule:
-            self.module.addChild(self.submodule)
-            self.submodule.addChild(self.crystal)
+            self.module.add_child(self.submodule)
+            self.submodule.add_child(self.crystal)
         else:
-            self.module.addChild(self.crystal)
-        self.crystal.addChild(self.layer0)
+            self.module.add_child(self.crystal)
+        self.crystal.add_child(self.layer0)
         if not self.layer1:
-            self.crystal.addChild(self.layer1)
+            self.crystal.add_child(self.layer1)
         if not self.layer2:
-            self.crystal.addChild(self.layer2)
+            self.crystal.add_child(self.layer2)
         if not self.layer3:
-            self.crystal.addChild(self.layer3)
+            self.crystal.add_child(self.layer3)
 
     def attach_SD(self):
 
@@ -132,8 +132,8 @@ class MultiPatchPET(System):
             detector.name = 'multiPatchPET'
             self.detector = detector
         if container is None:
-            self.container = geometry.Sphere(name='container', Rmax=360.0, Rmin=300.0, material='Air',
-                                             PhiStart=0.0, DeltaPhi=360, ThetaStart=0, DeltaTheta=180)
+            self.container = geometry.Sphere(name='container', rmax=360.0, rmin=300.0, material='Air',
+                                             phi_start=0.0, delta_phi=360, theta_start=0, delta_theta=180)
         else:
             self.container = container
 
@@ -148,9 +148,9 @@ class MultiPatchPET(System):
 
     def composite(self):
         super(MultiPatchPET, self).composite()
-        self.detector.addChild(self.container)
+        self.detector.add_child(self.container)
         for item in self.patchlist:
-            self.container.addChild(item)
+            self.container.add_child(item)
 
 
 class SPECThead(System):
@@ -176,9 +176,9 @@ class SPECThead(System):
 
     def composite(self):
         super(SPECThead, self).composite()
-        self.detector.addChild(self.crystal)
+        self.detector.add_child(self.crystal)
         if not self.pixel:
-            self.crystal.addChild(self.pixel)
+            self.crystal.add_child(self.pixel)
 
 
 class OpticalSystem(System):
