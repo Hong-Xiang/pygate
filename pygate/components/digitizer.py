@@ -28,6 +28,16 @@ class Adder(Insertable):
     def __init__(self, name='adder', define_name=False):
         super().__init__(name, define_name)
 
+class AdderCompton(Insertable):
+    insertable_type = 'adderCompton'
+    def __init__(self, name='adderCompton', define_name=False):
+        super().__init__(name, define_name)
+
+class AdderOptical(Insertable):
+    insertable_type = 'opticaladder'
+    def __init__(self, name='opticaladder', define_name = False):
+        super().__init__(name,define_name)
+
 
 class Readout(Insertable):
     template = 'digitizer/singles/readout'
@@ -51,18 +61,6 @@ class Blurring(Insertable):
         self.resolution = resolution
         self.eor = eor
         self.slope = slope
-
-
-class CrystalBlurring(Blurring):
-    insertable_type = 'crystalBlurring'
-
-    def __init__(self, res_window, qe, eor, name, define_name):
-        super().__init__(name=name, define_name=define_name)
-
-
-class SpBlurring(Blurring):
-    insertable_type = 'spBlurring'
-    pass
 
 
 class Holder(Insertable):
@@ -129,7 +127,7 @@ class DeadTime(WithBuffer):
         self.mode = mode
 
 
-class SinglesChain(Insertable):
+class SinglesChain(Singles):
     def __init__(self, name, define_name=True):
         super().__init__(name, define_name)
 
@@ -144,11 +142,14 @@ class CoincidenceSorter(Insertable):
         self.window = window
         self.offset = offset
 
+class
 
 class CoincidencesChain(Insertable):
     template = 'digitizer/coincidence_chain'
     insertable_type = 'coincidenceChain'
-    def __init__(self, inputs, name, use_priority=True, define_name=True):
+    def __init__(self, input1, input2, name, dead_time = None,  use_priority=True, define_name=True):
         super().__init__(name, define_name)
-        self.inputs = inputs
+        self.input1 = input1
+        self.input2 = input2
+        self.dead_time = dead_time
         self.use_priority = use_priority
