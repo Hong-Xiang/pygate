@@ -109,7 +109,7 @@ class TestCoincidencesChain(unittest.TestCase):
         cs0 = CoincidenceSorter(window=10, offset=0)
         cs1 = CoincidenceSorter(window=10, offset=500,
                                 name='delay', define_name=True)
-        cc = CoincidencesChain([cs0, cs1], name='finalcoin', )
+        cc = CoincidencesChain(cs0, cs1, name='finalcoin', )
         to_compare = [cc.render(),
                       '/gate/digitizer/name finalcoin\n/gate/digitizer/insert coincidenceChain\n/gate/digitizer/finalcoin/addInputName Coincidences\n/gate/digitizer/finalcoin/addInputName delay\n/gate/digitizer/finalcoin/usePriority true']
         to_compare = [unified(s) for s in to_compare]

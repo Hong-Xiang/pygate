@@ -142,7 +142,6 @@ class CoincidenceSorter(Insertable):
         self.window = window
         self.offset = offset
 
-class
 
 class CoincidencesChain(Insertable):
     template = 'digitizer/coincidence_chain'
