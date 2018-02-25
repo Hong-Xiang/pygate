@@ -91,7 +91,6 @@ class UpHolder(Holder):
         super().__init__(value, name)
 
 
-
 class TimeResolution(Insertable):
     template = 'digitizer/singles/time_resolution'
     insertable_type = 'timeResolution'
@@ -136,11 +135,19 @@ class SinglesChain(Insertable):
 
 
 class CoincidenceSorter(Insertable):
-    def __init__(self, input_=None, window=None, offset=None, name='Coincidences', define_name=False):
-        super().__init__(name, define_name)
+    template = 'digitizer/coincidence_sorter'
+    insertable_type = 'coincidenceSorter'
+
+    def __init__(self, input_=None, window=None, offset=None, name='Coincidences', define_name=False, no_explicit_insert=True):
+        super().__init__(name, define_name, no_explicit_insert)
+        self.input_ = input_
+        self.window = window
+        self.offset = offset
 
 
 class CoincidencesChain(Insertable):
+    template = 'digitizer/coincidence_chain'
+    insertable_type = 'coincidenceChain'
     def __init__(self, inputs, name, use_priority=True, define_name=True):
         super().__init__(name, define_name)
         self.inputs = inputs

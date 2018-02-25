@@ -1,0 +1,7 @@
+{% extends "digitizer/insertable.j2" -%}
+{% block detail -%}
+{% for cs in o.inputs -%}
+/gate/digitizer/{{ o.name }}/addInputName {{ cs.name }}
+{% endfor -%}
+/gate/digitizer/{{ o.name }}/usePriority {{ o.use_priority | lower }}
+{%- endblock -%}
