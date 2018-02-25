@@ -60,15 +60,32 @@ class TestUpHolder(unittest.TestCase):
 
 class TestDeadTime(unittest.TestCase):
     def test_render(self):
-        class dummyVolume:
+        class DummyVolume:
             name = 'block'
-        ddt = DeadTime(dummyVolume(), 3000)
+        ddt = DeadTime(DummyVolume(), 3000)
         singles = Singles([ddt])
         to_compare = [ddt.render(),
                       '/gate/digitizer/Singles/insert deadtime\n/gate/digitizer/Singles/deadtime/setDeadTime 3000 ns\n/gate/digitizer/Singles/deadtime/chooseDTVolume block']
         to_compare = [unified(s) for s in to_compare]
         self.assertEqual(*to_compare)
 
+
+class TestSingles(unittest.TestCase):
+    def test_render(self):
+        ad = Adder()
+        rdr = Readout()
+        blur = Blurring(resolution=0.1, eor=511)
+        thres = ThresHolder(250)
+        uph = UpHolder(750)
+
+        class DummyVolume:
+            name = 'block'
+        ddt = DeadTime(DummyVolume(), 3000)
+        singles = Singles([ad, rdr, blur, thres, uph, ddt])
+        to_compare = [singles.render(),
+                      '/gate/digitizer/Singles/insert adder\n/gate/digitizer/Singles/insert readout\n/gate/digitizer/Singles/readout/setPolicy TakeEnergyCentroid\n/gate/digitizer/Singles/readout/setDepth  1\n/gate/digitizer/Singles/insert blurring\n/gate/digitizer/Singles/blurring/setResolution 0.1\n/gate/digitizer/Singles/blurring/setEnergyOfReference 511 keV\n/gate/digitizer/Singles/insert thresholder\n/gate/digitizer/Singles/thresholder/setThreshold 250 keV\n/gate/digitizer/Singles/insert upholder\n/gate/digitizer/Singles/upholder/setUphold 750 keV\n/gate/digitizer/Singles/insert deadtime\n/gate/digitizer/Singles/deadtime/setDeadTime 3000 ns\n/gate/digitizer/Singles/deadtime/chooseDTVolume block\n']
+        to_compare = [unified(s) for s in to_compare]
+        self.assertEqual(*to_compare)
 
 class TestCoincidenceSorter(unittest.TestCase):
     def test_render(self):

@@ -1,0 +1,8 @@
+{% extends "digitizer/insertable.j2" -%}
+{% block detail -%}
+{% for p in o.plugins -%}
+{{ p.render() }}
+{% endfor -%}
+{% block more_detail scoped -%}
+{% endblock %}
+{%- endblock -%}
