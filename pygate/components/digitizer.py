@@ -72,16 +72,24 @@ class Holder(Insertable):
 
     def __init__(self, value, name=None, define_name=False):
         super().__init__(name, define_name)
+        self.value = value
 
 
 class ThresHolder(Holder):
     holder_name = 'Threshold'
     insertable_type = 'thresholder'
 
+    def __init__(self, value, name='thresholder'):
+        super().__init__(value, name)
+
 
 class UpHolder(Holder):
     holder_name = 'Uphold'
     insertable_type = 'upholder'
+
+    def __init__(self, value, name='upholder'):
+        super().__init__(value, name)
+
 
 
 class TimeResolution(Insertable):

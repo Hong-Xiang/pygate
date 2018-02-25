@@ -1,3 +1,3 @@
 {
-  "pygate/tests/components/test_digitizer.py::TestThresHold::test_render": true
+  "pygate/tests/components/test_digitizer.py::TestDeadTime::test_render": true
 }

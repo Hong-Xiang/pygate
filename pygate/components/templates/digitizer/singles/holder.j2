@@ -1,0 +1,6 @@
+{% extends "digitizer/insertable.j2" -%}
+{% block detail -%}
+/gate/digitizer/Singles/{{ o.name }}/set{{ o.holder_name }} {{ o.value }} keV
+{% block more_detail scoped -%}
+{% endblock %}
+{%- endblock -%}

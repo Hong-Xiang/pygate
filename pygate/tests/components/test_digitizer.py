@@ -46,7 +46,7 @@ class TestThresHold(unittest.TestCase):
 
 class TestUpHolder(unittest.TestCase):
     def test_render(self):
-        uph = ThresHolder(750)
+        uph = UpHolder(750)
         singles = Singles([uph])
         to_compare = [uph.render(),
                       '/gate/digitizer/Singles/insert upholder\n/gate/digitizer/Singles/upholder/setUphold 750 keV']
