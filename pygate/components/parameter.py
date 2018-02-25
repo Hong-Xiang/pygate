@@ -69,7 +69,7 @@ class RandomEngine:
 
 
 class Parameter:
-    def __init__(self, acquisition=None, output=None, random_engine=None):
-        self.acquisition = acquisition
-        self.output = output
+    def __init__(self, random_engine=None, acquisition=None, output_list=None):
         self.random_engine = random_engine
+        self.acquisition = acquisition
+        self.output_list = output_list

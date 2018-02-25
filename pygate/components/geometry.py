@@ -46,7 +46,7 @@ class Box(Volume):
     template = 'box'
 
     def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
-        super(Box, self).__init__(name, material, mother, position, unit)
+        super().__init__(name, material, mother, position, unit)
         self.size = size
         if self.size.unit is None:
             self.size.unit = self.unit
