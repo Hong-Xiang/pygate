@@ -123,7 +123,7 @@ class DeadTime(WithBuffer):
     template = 'digitizer/singles/dead_time'
     insertable_type = 'deadtime'
 
-    def __init__(self, volume, t, mode, buffer_size, buffer_mode):
+    def __init__(self, volume, t, mode=None, buffer_size=None, buffer_mode=None, name='deadtime', define_name=False):
         super().__init__(buffer_size, buffer_mode, name, define_name)
         self.volume = volume
         self.t = t

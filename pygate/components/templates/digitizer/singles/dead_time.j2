@@ -1,0 +1,8 @@
+{% extends "digitizer/singles/buffer.j2" -%}
+{% block detail -%}
+{{ super() }}
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/setDeadTime {{ o.t }} ns
+/gate/digitizer/{{ o.base.name }}/{{ o.name }}/chooseDTVolume {{ o.volume.name }}
+{% block more_detail scoped -%}
+{% endblock %}
+{%- endblock -%}
