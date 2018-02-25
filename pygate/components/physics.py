@@ -7,7 +7,7 @@ from typing import List, Dict
 class PhysicsProcess(ObjectWithTemplate):
     name = None
     models = ('StandardModel',)
-    template = 'physics_process'
+    template = 'physics/process'
 
     def content_in_adding(self):
         return self.name
@@ -79,7 +79,7 @@ class MultipleScattering(PhysicsProcess):
 
 
 class PhysicsList(ObjectWithTemplate):
-    template = 'physics_list'
+    template = 'physics/list'
 
     def __init__(self, physics_processes: List[PhysicsProcess]):
         self.pps = physics_processes
@@ -92,7 +92,7 @@ def standard_physics_list():
 
 
 class Cuts(ObjectWithTemplate):
-    template = 'cuts'
+    template = 'physics/cuts'
     STD_PARTICLES = ('Gamma', 'Electron', 'Positron')
 
     def __init__(self, volume: Volume, cuts: TV('CutT', float, Dict[Volume, float]), max_step: float=None):
@@ -108,7 +108,7 @@ class Cuts(ObjectWithTemplate):
 
 
 class Physics(ObjectWithTemplate):
-    template = 'physics'
+    template = 'physics/physics'
 
     def __init__(self, physics_list, cuts_list):
         self.pl = physics_list
