@@ -26,7 +26,9 @@ class TestRoot(unittest.TestCase):
 
 class TestSinogram(unittest.TestCase):
     def test_render(self):
-        sino = Sinogram('sinogram', 'finalcoin', None,
+        class DummyInput:
+            name = 'finalcoin'
+        sino = Sinogram('sinogram', DummyInput(), None,
                         None, True, 1.8, 1.8, True, True)
         ae(self, sino.render(),
            '/gate/output/sinogram/enable\n/gate/output/sinogram/setFileName  sinogram\n/gate/output/sinogram/setTangCrystalBlurring 1.8 mm\n/gate/output/sinogram/setAxialCrystalBlurring 1.8 mm\n/gate/output/sinogram/RawOutputEnable true\n/gate/output/sinogram/StoreDelayeds\n/gate/output/sinogram/StoreScatters\n/gate/output/sinogram/setInputDataName finalcoin\n')

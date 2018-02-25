@@ -47,6 +47,7 @@ class Ascii(Output):
 
 class Binary(Output):
     template = 'parameter/output/binary'
+    output_type = 'binary'
 
     def __init__(self, file_name, hit=0, singles=0, coincidences=0):
         super().__init__(file_name)
@@ -57,8 +58,10 @@ class Binary(Output):
 
 class Root(Output):
     template = 'parameter/output/root'
+    output_type = 'root'
 
-    def __init__(self, file_name, hit=0, singles=0, coincidences=0, optical=0):
+    def __init__(self, file_name,
+                 hit=None, singles=None, coincidences=None, optical=None):
         super().__init__(file_name)
         self.hit = hit
         self.singles = singles
@@ -68,18 +71,19 @@ class Root(Output):
 
 class Sinogram(Output):
     template = 'parameter/output/sinogram'
+    output_type = 'sinogram'
 
-    def __init__(self, file_name, 
-                 input_name,
-                 radial_bin=None, 
-                 is_true_only=None, 
+    def __init__(self, file_name,
+                 input_,
+                 radial_bin=None,
+                 is_true_only=None,
                  is_raw_output=None,
-                 tang_blurring=None, 
-                 axial_blurring=None, 
-                 is_store_delay=None, 
+                 tang_blurring=None,
+                 axial_blurring=None,
+                 is_store_delay=None,
                  is_store_scatter=None):
         super().__init__(file_name)
-        self.input_name = input_name
+        self.input_ = input_
         self.radial_bin = radial_bin
         self.is_true_only = is_true_only
         self.is_raw_output = is_raw_output
