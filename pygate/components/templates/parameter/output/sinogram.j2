@@ -1,0 +1,10 @@
+{% extends 'parameter/output/output.j2' -%}
+{% from "parameter/output/output.j2" import prefix -%}
+{% block detail -%}
+{{ "{}/setTangCrystalBlurring {} mm".format(prefix(o), o.tang_blurring) if not o.tang_blurring is none }}
+{{ "{}/setAxialCrystalBlurring {} mm".format(prefix(o), o.axial_blurring) if not o.axial_blurring is none }}
+{{ "{}/RawOutputEnable true".format(prefix(o), o.is_raw_output) if not o.is_raw_output is none }}
+{{ "{}/StoreDelayeds".format(prefix(o), o.is_store_delay) if not o.is_store_delay is  none }}
+{{ "{}/StoreScatters".format(prefix(o), o.is_store_scatter) if not o.is_store_scatter is none }}
+{{ prefix(o) }}/setInputDataName {{ o.input_.name }}
+{% endblock detail -%}

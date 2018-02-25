@@ -1,0 +1,8 @@
+{% extends "source/particle/particle.j2" %}
+{% block detail -%}
+{% if o.back2back -%}
+/gate/source/{{ o.src.name }}/setType backtoback
+{% endif -%}
+/gate/source/{{ o.src.name }}/gps/monoenergy {{ o.monoenergy }} keV
+{% endblock detail -%}
+

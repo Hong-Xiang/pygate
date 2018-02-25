@@ -1,0 +1,5 @@
+{% extends "source/shape/shape.j2" %}
+{% block detail -%}
+/gate/source/{{ o.src.name }}/gps/radius {{ o.radius }} mm
+/gate/source/{{ o.src.name }}/gps/halfz {{ o.halfz }} mm
+{% endblock detail -%}

@@ -1,13 +1,35 @@
 import unittest
 from pygate.components.physics import *
 from pygate.components.geometry import *
+from pygate.utils.strs import assert_equal_ignoring_multiple_whitespaces as ae
+
+
+class TestPhotoElectric(unittest.TestCase):
+    def test_render(self):
+        pe = PhotoElectric()
+        ae(self, pe.render(),
+           '/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n')
+
+
+class TestElectronIonization(unittest.TestCase):
+    def test_render(self):
+        ei = ElectronIonisation()
+        ae(self, ei.render(),
+           '/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n')
+
+
+class TestMultipleScattering(unittest.TestCase):
+    def test_render(self):
+        ms = MultipleScattering('e+')
+        ae(self, ms.render(),
+           '/gate/physics/addProcess MultipleScattering e+\n')
 
 
 class TestStandardPhysicsList(unittest.TestCase):
     def test_render(self):
         std_pl = standard_physics_list()
-        self.assertEqual(std_pl.render(),
-                         '/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n \n/gate/physics/addProcess Compton\n/gate/physics/processes/Compton/setModel StandardModel\n \n/gate/physics/addProcess RayleighScattering\n/gate/physics/processes/RayleighScattering/setModel PenelopeModel\n \n/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n \n/gate/physics/addProcess Bremsstrahlung\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+\n \n/gate/physics/addProcess PositronAnnihilation\n \n/gate/physics/addProcess MultipleScattering e-\n/gate/physics/processes/MultipleScattering/setModel StandardModel\n \n/gate/physics/addProcess MultipleScattering e+\n/gate/physics/processes/MultipleScattering/setModel StandardModel\n \n/gate/physics/processList Enabled\n/gate/physics/processList Initialized\n')
+        ae(self, '\n'.join([p.render() for p in std_pl]),
+           '/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n/gate/physics/addProcess Compton\n/gate/physics/processes/Compton/setModel StandardModel\n/gate/physics/addProcess RayleighScattering\n/gate/physics/processes/RayleighScattering/setModel PenelopeModel\n/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n/gate/physics/addProcess Bremsstrahlung\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+\n/gate/physics/addProcess PositronAnnihilation\n/gate/physics/addProcess MultipleScattering e-\n/gate/physics/addProcess MultipleScattering e+')
 
 
 class TestCuts(unittest.TestCase):
@@ -64,5 +86,5 @@ class TestPhysics(unittest.TestCase):
         cuts_list = [Cuts(lso, 10.0), Cuts(bgo, 10.0),
                      Cuts(phantom, 0.1, 0.01)]
         phys = Physics(std_pl, cuts_list)
-        self.assertEqual(phys.render(),
-                         '/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n \n/gate/physics/addProcess Compton\n/gate/physics/processes/Compton/setModel StandardModel\n \n/gate/physics/addProcess RayleighScattering\n/gate/physics/processes/RayleighScattering/setModel PenelopeModel\n \n/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n \n/gate/physics/addProcess Bremsstrahlung\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+\n \n/gate/physics/addProcess PositronAnnihilation\n \n/gate/physics/addProcess MultipleScattering e-\n/gate/physics/processes/MultipleScattering/setModel StandardModel\n \n/gate/physics/addProcess MultipleScattering e+\n/gate/physics/processes/MultipleScattering/setModel StandardModel\n \n/gate/physics/processList Enabled\n/gate/physics/processList Initialized\n\n/gate/physics/Gamma/SetCutInRegion      LSO 10.0 mm\n/gate/physics/Electron/SetCutInRegion      LSO 10.0 mm\n/gate/physics/Positron/SetCutInRegion      LSO 10.0 mm\n\n/gate/physics/Gamma/SetCutInRegion      BGO 10.0 mm\n/gate/physics/Electron/SetCutInRegion      BGO 10.0 mm\n/gate/physics/Positron/SetCutInRegion      BGO 10.0 mm\n\n/gate/physics/Gamma/SetCutInRegion      phantom 0.1 mm\n/gate/physics/Electron/SetCutInRegion      phantom 0.1 mm\n/gate/physics/Positron/SetCutInRegion      phantom 0.1 mm\n/gate/physics/SetMaxStepSizeInRegion    phantom 0.01 mm\n\n')
+        ae(self, phys.render(),
+           '#=====================================================\n# PHYSICS\n#=====================================================\n\n/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n\n/gate/physics/addProcess Compton\n/gate/physics/processes/Compton/setModel StandardModel\n\n/gate/physics/addProcess RayleighScattering\n/gate/physics/processes/RayleighScattering/setModel PenelopeModel\n\n/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n\n/gate/physics/addProcess Bremsstrahlung\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+\n\n/gate/physics/addProcess PositronAnnihilation\n\n/gate/physics/addProcess MultipleScattering e-\n/gate/physics/addProcess MultipleScattering e+\n\n/gate/physics/processList Enabled\n/gate/physics/processList Initialized\n\n#=====================================================\n# CUTS\n#=====================================================\n\n/gate/physics/Gamma/SetCutInRegion      LSO 10.0 mm\n/gate/physics/Electron/SetCutInRegion   LSO 10.0 mm\n/gate/physics/Positron/SetCutInRegion   LSO 10.0 mm\n\n/gate/physics/Gamma/SetCutInRegion      BGO 10.0 mm\n/gate/physics/Electron/SetCutInRegion   BGO 10.0 mm\n/gate/physics/Positron/SetCutInRegion   BGO 10.0 mm\n\n\n/gate/physics/Gamma/SetCutInRegion      phantom 0.1 mm\n/gate/physics/Electron/SetCutInRegion   phantom 0.1 mm\n/gate/physics/Positron/SetCutInRegion   phantom 0.1 mm\n\n/gate/physics/SetMaxStepSizeInRegion    phantom 0.01 mm')

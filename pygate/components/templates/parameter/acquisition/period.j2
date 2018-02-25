@@ -1,0 +1,7 @@
+{% extends 'parameter/acquisition/acqusition.j2' -%}
+{% block detail -%}
+/gate/application/setTimeStart {{ o.start }} s
+/gate/application/setTimeStop {{ o.end }} s
+/gate/application/setTimeSlice {{ o.step }} s
+/gate/application/startDAQ
+{% endblock detail -%}

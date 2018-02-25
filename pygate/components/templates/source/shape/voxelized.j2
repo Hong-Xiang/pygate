@@ -1,0 +1,10 @@
+{% from "utils.j2" import vec3 -%}
+{% macro source_shape_voxelized(o) -%}
+/gate/source/{{ o.src.name }}/reader/insert {{ o.reader }}
+/gate/source/{{ o.src.name }}/{{ o.reader }}Reader/translator/insert {{ o.translator }} 
+/gate/source/{{ o.src.name }}/{{ o.reader }}Reader/{{ o.translator }}Translator/readTable {{ o.read_table }}
+/gate/source/{{ o.src.name }}/{{ o.reader }}Reader/readFile  {{ o.read_file }}
+{% endmacro -%}
+{% if o -%}
+{{ source_shape_voxelized(o) }}
+{%- endif %}

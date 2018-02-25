@@ -1,0 +1,11 @@
+{% from "physics/process.j2" import physics_process -%}
+{% macro physics_list(o) -%}
+{% for pp in o.pps -%}
+{{ physics_process(pp) }} 
+{% endfor -%}
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+{% endmacro -%}
+{% if o -%}
+{{ physics_list(o) }}
+{%- endif %}

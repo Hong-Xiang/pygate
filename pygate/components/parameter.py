@@ -1,75 +1,122 @@
-class Acquisition:
-    def __init__(self, category):
-        self.category = category
+from .base import ObjectWithTemplate
 
 
-class Primaries(Acquisition):
+class Acquisition(ObjectWithTemplate):
+    template = 'parameter/acquisition/acquisition'
+    acquisition_type = None
+
+
+class AcquisitionPrimaries(Acquisition):
+    template = 'parameter/acquisition/primaries'
+    acquisition_type = 'primaries'
+
     def __init__(self, number=10000):
-        super(Primaries, self).__init__(category='primaries')
+        super().__init__()
         self.number = number
 
 
-class Period(Acquisition):
-    def __init__(self, time_start=0.0, time_stop=1.0, time_slice=1.0):
-        super(Period, self).__init__(category='peroid')
-        self.time_start = time_start
-        self.time_slice = time_slice
-        self.time_stop = time_stop
+class AcquisitionPeriod(Acquisition):
+    template = 'parameter/acquisition/period'
+    acquisition_type = 'period'
+
+    def __init__(self, start=0.0, end=1.0, step=1.0):
+        super().__init__()
+        self.start = start
+        self.step = step
+        self.end = end
 
 
-class Output:
-    def __init__(self, type, file_name):
-        self.type = type
+class Output(ObjectWithTemplate):
+    template = 'parameter/output/output'
+    output_type = None
+
+    def __init__(self, file_name):
         self.file_name = file_name
 
 
 class Ascii(Output):
-    def __init__(self, file_name, hit_flag=0, single_flag=0, coincidence_flag=0):
-        super(Ascii, self).__init__(type='ascii', file_name=file_name)
-        self.hit_flag = hit_flag
-        self.coincidence_flag = coincidence_flag
-        self.single_flag = single_flag
+    template = 'parameter/output/ascii'
+    output_type = 'ascii'
+
+    def __init__(self, file_name, hit=0, singles=0, coincidences=0):
+        super().__init__(file_name)
+        self.hit = hit
+        self.coincidences = coincidences
+        self.singles = singles
 
 
 class Binary(Output):
-    def __init__(self, file_name, hit_flag=0, single_flag=0, coincidence_flag=0):
-        super(Binary, self).__init__(type='binary', file_name=file_name)
-        self.hit_flag = hit_flag
-        self.coincidence_flag = coincidence_flag
-        self.single_flag = single_flag
+    template = 'parameter/output/binary'
+    output_type = 'binary'
+
+    def __init__(self, file_name, hit=0, singles=0, coincidences=0):
+        super().__init__(file_name)
+        self.hit = hit
+        self.coincidences = coincidences
+        self.singles = singles
 
 
 class Root(Output):
-    def __init__(self, file_name, hit_flag=0, single_flag=0, coincidence_flag=0, optical_flag=0):
-        super(Root, self).__init__(type='root', file_name=file_name)
-        self.hit_flag = hit_flag
-        self.single_flag = single_flag
-        self.coincidence_flag = coincidence_flag
-        self.optical_flag = optical_flag
+    template = 'parameter/output/root'
+    output_type = 'root'
+
+    def __init__(self, file_name,
+                 hit=None, singles=None, coincidences=None, optical=None):
+        super().__init__(file_name)
+        self.hit = hit
+        self.singles = singles
+        self.coincidences = coincidences
+        self.optical = optical
 
 
 class Sinogram(Output):
-    def __init__(self, file_name, input_name, radial_bin=None, true_only_flag=None, raw_out_flag=None,
-                 tang_blur=None, axial_blur=None, delay_flag=None, scatter_flag=None):
-        super(Sinogram, self).__init__(type='sinogram', file_name=file_name)
-        self.input_name = input_name
-        self.radial_bin = radial_bin
-        self.true_only_flag = true_only_flag
-        self.raw_out_flag = raw_out_flag
-        self.tang_blur = tang_blur
-        self.axial_blur = axial_blur
-        self.delay_flag = delay_flag
-        self.scatter_flag = scatter_flag
+    template = 'parameter/output/sinogram'
+    output_type = 'sinogram'
 
-class RandomEngine:
-    engine_list = ['Ranlux64','JameRandom','MersenneTwister']
-    def __init__(self, engine_name = 'JameRandom', seed = 'default'):
-        self.engine_name = engine_name
+    def __init__(self, file_name,
+                 input_,
+                 radial_bin=None,
+                 is_true_only=None,
+                 is_raw_output=None,
+                 tang_blurring=None,
+                 axial_blurring=None,
+                 is_store_delay=None,
+                 is_store_scatter=None):
+        super().__init__(file_name)
+        self.input_ = input_
+        self.radial_bin = radial_bin
+        self.is_true_only = is_true_only
+        self.is_raw_output = is_raw_output
+        self.tang_blurring = tang_blurring
+        self.axial_blurring = axial_blurring
+        self.is_store_delay = is_store_delay
+        self.is_store_scatter = is_store_scatter
+
+
+class RandomEngine(ObjectWithTemplate):
+    template = 'parameter/random_engine/random_engine'
+    engine_type = 'JamesRandom'
+
+    def __init__(self, seed='default'):
         self.seed = seed
 
 
-class Parameter:
-    def __init__(self, random_engine=None, acquisition=None, output_list=None):
-        self.random_engine = random_engine
+class RandomEngineRanlux64(RandomEngine):
+    engine_type = 'Ranlux64'
+
+
+class RandomEngineJamesRandom(RandomEngine):
+    engine_type = 'JamesRandom'
+
+
+class RandomEngineMersenneTwister(RandomEngine):
+    engine_type = 'MersenneTwister'
+
+
+class Parameter(ObjectWithTemplate):
+    template = 'parameter/parameter'
+
+    def __init__(self, acquisition=None, output=None, random_engine=None):
         self.acquisition = acquisition
-        self.output_list = output_list
+        self.output = output
+        self.random_engine = random_engine

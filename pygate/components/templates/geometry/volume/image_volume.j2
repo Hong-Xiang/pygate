@@ -1,0 +1,5 @@
+{% extends "geometry/volume/volume.j2" %}
+{% block detail -%}
+/gate/{{ o.name }}/geometry/setImage         {{ o.image_file }}
+/gate/{{ o.name }}/geometry/setRangeToMaterialFile         {{ o.range_file }}
+{% endblock detail -%}

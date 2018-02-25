@@ -1,0 +1,6 @@
+{% extends "source/shape/shape.j2" %}
+{% block detail -%}
+/gate/source/{{ o.src.name }}/gps/halfx {{ o.half_size.x }} {{ o.half_size.unit | d('mm', true)}}
+/gate/source/{{ o.src.name }}/gps/halfy {{ o.half_size.y }} {{ o.half_size.unit | d('mm', true)}}
+/gate/source/{{ o.src.name }}/gps/halfz {{ o.half_size.z }} {{ o.half_size.unit | d('mm', true)}}
+{% endblock detail -%}

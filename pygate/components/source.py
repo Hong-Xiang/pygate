@@ -4,7 +4,7 @@ from .geometry import Vec3
 
 
 class Source(ObjectWithTemplate):
-    template = 'source'
+    template = 'source/source'
 
     def __init__(self, name,
                  particle=None, activity=None, angle=None,
@@ -47,7 +47,7 @@ class Source(ObjectWithTemplate):
 
 
 class Particle(ObjectWithTemplate):
-    template = 'source_particle'
+    template = 'source/particle/particle'
     particle_type = None
 
     def bind_source(self, source):
@@ -61,7 +61,7 @@ class Particle(ObjectWithTemplate):
 
 
 class ParticlePositron(Particle):
-    template = 'source_particle_positron'
+    template = 'source/particle/positron'
     particle_type = 'e+'
 
     def __init__(self, unstable=True, halflife=6586):
@@ -69,7 +69,7 @@ class ParticlePositron(Particle):
 
 
 class ParticleGamma(Particle):
-    template = 'source_particle_gamma'
+    template = 'source/particle/gamma'
     particle_type = 'gamma'
 
     def __init__(self,
@@ -81,12 +81,12 @@ class ParticleGamma(Particle):
 
 
 class Angular(ObjectWithTemplate):
-    template = 'source_angular'
+    template = 'source/angular/angular'
     ang_type = None
 
 
 class AngularISO(Angular):
-    template = 'source_angular_iso'
+    template = 'source/angular/iso'
     ang_type = 'iso'
 
     def __init__(self, ang=[0, 180, 0, 360]):
@@ -94,7 +94,7 @@ class AngularISO(Angular):
 
 
 class Shape(ObjectWithTemplate):
-    template = 'source_shape'
+    template = 'source/shape/shape'
     shape = None
 
     def __init__(self, dimension):
@@ -115,7 +115,7 @@ class ShapeSurfaceOrVolume(Shape):
 
 
 class Voxelized(Shape):
-    template = 'source_shape_voxelized'
+    template = 'source/shape/voxelized'
     shape = 'Voxelized'
 
     def __init__(self, read_table, read_file,
@@ -129,7 +129,7 @@ class Voxelized(Shape):
 
 
 class Cylinder(ShapeSurfaceOrVolume):
-    template = 'source_shape_cylinder'
+    template = 'source/shape/cylinder'
     shape = 'Cylinder'
 
     def __init__(self, radius, halfz, dimension):
@@ -139,7 +139,7 @@ class Cylinder(ShapeSurfaceOrVolume):
 
 
 class Sphere(Shape):
-    template = 'source_shape_sphere'
+    template = 'source/shape/sphere'
     shape = 'Sphere'
 
     def __init__(self, radius, dimension):
@@ -148,7 +148,7 @@ class Sphere(Shape):
 
 
 class Ellipsoid(Shape):
-    template = 'source_shape_ellipsoid'
+    template = 'source/shape/ellipsoid'
     shape = 'Ellipsoid'
 
     def __init__(self, half_size: Vec3, dimension):
@@ -157,7 +157,7 @@ class Ellipsoid(Shape):
 
 
 class Circle(ShapePlane):
-    template = 'source_shape_circle'
+    template = 'source/shape/circle'
     shape = 'Circle'
 
     def __init__(self, radius):
@@ -166,7 +166,7 @@ class Circle(ShapePlane):
 
 
 class Annulus(ShapePlane):
-    template = 'source_shape_annulus'
+    template = 'source/shape/annulus'
     shape = 'Annulus'
 
     def __init__(self, radius0, radius):
@@ -176,7 +176,7 @@ class Annulus(ShapePlane):
 
 
 class Ellipse(ShapePlane):
-    template = 'source_shape_ellipse'
+    template = 'source/shape/ellipse'
     shape = 'Ellipse'
 
     def __init__(self, half_size):
@@ -185,7 +185,7 @@ class Ellipse(ShapePlane):
 
 
 class Rectangle(ShapePlane):
-    template = 'source_shape_rectangle'
+    template = 'source/shape/rectangle'
     shape = 'Rectangle'
 
     def __init__(self, half_size):
@@ -194,7 +194,7 @@ class Rectangle(ShapePlane):
 
 
 class SourceList(ObjectWithTemplate):
-    template = 'source_list'
+    template = 'source/source_list'
 
     def __init__(self, sources: List[Source]):
         self.sources = sources

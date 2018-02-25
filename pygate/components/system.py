@@ -2,7 +2,7 @@ from .base import ObjectWithTemplate
 
 
 class Systems(ObjectWithTemplate):
-    template = 'system'
+    template = 'geometry/system'
     name = None
     attach_systems = None
 
