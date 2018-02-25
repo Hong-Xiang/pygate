@@ -15,11 +15,45 @@ class Vec3(ObjectWithTemplate):
         self.unit = unit
 
 
+class Repeater(ObjectWithTemplate):
+    template = 'geometry/volume/repeater/repeater'
+    repeater_type = None
+
+
+class RepeaterRing(Repeater):
+    template = 'geometry/volume/repeater/ring'
+    repeater_type = 'ring'
+
+    def __init__(self, number):
+        super().__init__()
+        self.n = number
+
+
+class RepeaterLinear(Repeater):
+    template = 'geometry/volume/repeater/linear'
+    repeater_type = 'linear'
+
+    def __init__(self, number, repeat_vector):
+        super().__init__()
+        self.n = number
+        self.rv = repeat_vector
+
+
+class RepeaterCubic(Repeater):
+    template = 'geometry/volume/repeater/cubic'
+    repeater_type = 'cubicArray'
+
+    def __init__(self, scale: Vec3, repeat_vector: Vec3):
+        super().__init__()
+        self.scale = scale
+        self.rv = repeat_vector
+
+
 class Volume(ObjectWithTemplate):
     shape_type = 'volume'
     template = 'geometry/volume/volume'
 
-    def __init__(self, name, material=None, mother=None, position=None, unit=None):
+    def __init__(self, name, material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
         self.mother = mother
         if self.mother is not None:
             self.mother.add_child(self)
@@ -29,6 +63,9 @@ class Volume(ObjectWithTemplate):
         self.unit = unit or 'mm'
         if self.position is not None and self.position.unit is None:
             self.position.unit = self.unit
+        self.repeater = repeater
+        if self.repeater is not None:
+            self.repeater.volume = self
         self.children = []
 
     def add_child(self, child):
@@ -45,8 +82,8 @@ class Box(Volume):
     shape_type = 'box'
     template = 'geometry/volume/box'
 
-    def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
-        super().__init__(name, material, mother, position, unit)
+    def __init__(self, name, size, material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeater)
         self.size = size
         if self.size.unit is None:
             self.size.unit = self.unit
@@ -58,8 +95,8 @@ class Cylinder(Volume):
 
     def __init__(self, name, rmax, rmin=None, height=None,
                  phi_start=None, delta_phi=None,
-                 material=None, mother=None, position=None, unit=None):
-        super().__init__(name, material, mother, position, unit)
+                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeater)
         self.rmax = rmax
         self.rmin = rmin
         self.height = height
@@ -74,8 +111,8 @@ class Sphere(Volume):
     def __init__(self, name, rmax, rmin=None, height=None,
                  phi_start=None, delta_phi=None,
                  theta_start=None, delta_theta=None,
-                 material=None, mother=None, position=None, unit=None):
-        super().__init__(name, material, mother, position, unit)
+                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeater)
         self.rmax = rmax
         self.rmin = rmin
         self.height = height
@@ -90,44 +127,7 @@ class ImageRegularParamerisedVolume(Volume):
     shape_type = 'ImageRegularParametrisedVolume'
 
     def __init__(self,  name, image_file, range_file,
-                 material=None, mother=None, position=None, unit=None):
-        super().__init__(name, material, mother, position, unit)
+                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeater)
         self.image_file = image_file
         self.range_file = range_file
-
-
-class Repeater(ObjectWithTemplate):
-    template = 'geometry/volume/repeater/repeater'
-    repeater_type = None
-
-    def __init__(self, volume):
-        self.volume = volume
-
-
-class RepeaterRing(Repeater):
-    template = 'geometry/volume/repeater/ring'
-    repeater_type = 'ring'
-
-    def __init__(self, volume, number):
-        super().__init__(volume)
-        self.n = number
-
-
-class RepeaterLinear(Repeater):
-    template = 'geometry/volume/repeater/linear'
-    repeater_type = 'linear'
-
-    def __init__(self, volume, number, repeat_vector):
-        super().__init__(volume)
-        self.n = number
-        self.rv = repeat_vector
-
-
-class RepeaterCubic(Repeater):
-    template = 'geometry/volume/repeater/cubic'
-    repeater_type = 'cubicArray'
-
-    def __init__(self, volume, scale: Vec3, repeat_vector: Vec3):
-        super().__init__(volume)
-        self.scale = scale
-        self.rv = repeat_vector

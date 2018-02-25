@@ -1,5 +1,5 @@
 {% extends "geometry/volume/repeater/repeater.j2" %}
 {% block detail -%}
-/gate/{{ o.volume }}/{{ o.repeater_type}}/setRepeatNumber {{ o.number }}
+/gate/{{ o.volume.name }}/{{ o.repeater_type}}/setRepeatNumber {{ o.number }}
 {% endblock detail -%}
 
