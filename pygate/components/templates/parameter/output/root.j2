@@ -1,0 +1,7 @@
+{% extends 'parameter/output/output.j2' -%}
+{% from "parameter/output/output.j2" import prefix -%}
+{% block detail -%}
+{{ "{}/setRootHitFlag {}".format(prefix(o), o.hit) if not o.hit is none}}
+{{ "{}/setRootSinglesFlag {}".format(prefix(o), o.singles) if not o.singles is none }}
+{{ "{}/setRootCoincidencesFlag {}".format(prefix(o), o.coincidences) if not o.coincidences is none }}
+{% endblock detail -%}

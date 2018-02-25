@@ -1,0 +1,10 @@
+{% from "physics/model.j2" import model -%}
+{% macro process(o) -%}
+/gate/physics/addProcess {{ o.content_in_adding() }}
+{% for m in o.models -%}
+{{ model(m) }}
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ process(o) }}
+{%- endif %}

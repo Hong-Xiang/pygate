@@ -1,9 +1,0 @@
-{% extends "repeater.j2" %}
-{% from "vec3.j2" import vec3 %}
-{% block detail -%}
-/gate/{{ o.volume }}/cubicArray/setRepeatNumberX        {{ o.scale.x }}  
-/gate/{{ o.volume }}/cubicArray/setRepeatNumberY        {{ o.scale.y }}  
-/gate/{{ o.volume }}/cubicArray/setRepeatNumberZ        {{ o.scale.z }}  
-/gate/{{ o.volume }}/cubicArray/setRepeatVector         {{ vec3(o.rv) }} mm 
-{% endblock detail -%}
-

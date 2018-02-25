@@ -17,7 +17,7 @@ class Vec3(ObjectWithTemplate):
 
 class Volume(ObjectWithTemplate):
     shape_type = 'volume'
-    template = 'volume'
+    template = 'geometry/volume/volume'
 
     def __init__(self, name, material=None, mother=None, position=None, unit=None):
         self.mother = mother
@@ -43,7 +43,7 @@ class Volume(ObjectWithTemplate):
 
 class Box(Volume):
     shape_type = 'box'
-    template = 'box'
+    template = 'geometry/volume/box'
 
     def __init__(self, name, size, material=None, mother=None, position=None, unit=None):
         super(Box, self).__init__(name, material, mother, position, unit)
@@ -54,7 +54,7 @@ class Box(Volume):
 
 class Cylinder(Volume):
     shape_type = 'cylinder'
-    template = 'cylinder'
+    template = 'geometry/volume/cylinder'
 
     def __init__(self, name, rmax, rmin=None, height=None,
                  phi_start=None, delta_phi=None,
@@ -97,7 +97,7 @@ class ImageRegularParamerisedVolume(Volume):
 
 
 class Repeater(ObjectWithTemplate):
-    template = 'repeater'
+    template = 'geometry/volume/repeater/repeater'
     repeater_type = None
 
     def __init__(self, volume):
@@ -105,7 +105,7 @@ class Repeater(ObjectWithTemplate):
 
 
 class RepeaterRing(Repeater):
-    template = 'repeater_ring'
+    template = 'geometry/volume/repeater/ring'
     repeater_type = 'ring'
 
     def __init__(self, volume, number):
@@ -114,7 +114,7 @@ class RepeaterRing(Repeater):
 
 
 class RepeaterLinear(Repeater):
-    template = 'repeater_linear'
+    template = 'geometry/volume/repeater/linear'
     repeater_type = 'linear'
 
     def __init__(self, volume, number, repeat_vector):
@@ -124,7 +124,7 @@ class RepeaterLinear(Repeater):
 
 
 class RepeaterCubic(Repeater):
-    template = 'repeater_cubic'
+    template = 'geometry/volume/repeater/cubic'
     repeater_type = 'cubicArray'
 
     def __init__(self, volume, scale: Vec3, repeat_vector: Vec3):

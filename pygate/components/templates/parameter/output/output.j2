@@ -1,0 +1,10 @@
+{% macro prefix(o) %}/gate/output/{{ o.output_type }}{% endmacro -%}
+{% macro output(o) -%}
+{{ prefix(o) }}/enable
+{{ prefix(o) }}/setFileName {{ o.file_name }}
+{% block detail scoped -%}
+{% endblock detail -%}
+{% endmacro -%}
+{% if o -%}
+{{ output(o) }}
+{%- endif %}

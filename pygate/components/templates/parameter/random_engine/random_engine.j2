@@ -1,0 +1,9 @@
+{% macro random_engine(o) -%}
+/gate/random/setEngineName {{ o.engine_type }}
+/gate/random/setEngineSeed {{ o.seed }}
+{% block detail scoped -%}
+{% endblock detail -%}
+{% endmacro -%}
+{% if o -%}
+{{ random_engine(o) }}
+{%- endif %}

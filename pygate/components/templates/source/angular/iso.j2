@@ -1,0 +1,7 @@
+{% extends "source/angular/angular.j2" -%}
+{% block detail -%}
+/gate/source/{{ o.src.name }}/gps/mintheta {{ o.ang[0] }} deg 
+/gate/source/{{ o.src.name }}/gps/maxtheta {{ o.ang[1] }} deg
+/gate/source/{{ o.src.name }}/gps/minphi   {{ o.ang[2] }} deg
+/gate/source/{{ o.src.name }}/gps/maxphi   {{ o.ang[3] }} deg
+{% endblock detail -%}
