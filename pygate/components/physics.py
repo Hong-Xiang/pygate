@@ -23,10 +23,11 @@ class StandardModel(Model):
 
 class PhysicsProcess(ObjectWithTemplate):
     name = None
-    models = ('StandardModel',)
     template = 'physics/process'
 
-    def __init__(self, models=tuple()):
+    def __init__(self, models=None):
+        if models is None:
+            models = (StandardModel(),)
         self.models = models
         for m in self.models:
             m.process = self
@@ -67,7 +68,8 @@ class Bremsstrahlung(PhysicsProcess):
 
 
 class PhysicsProcessWithoutModels(PhysicsProcess):
-    models = tuple()
+    def __init__(self):
+        super().__init__(tuple())
 
 
 class PositronAnnihilation(PhysicsProcessWithoutModels):
@@ -98,10 +100,11 @@ class Scintillation(PhysicsProcessWithoutModels):
     name = 'Scintillation'
 
 
-class MultipleScattering(PhysicsProcess):
+class MultipleScattering(PhysicsProcessWithoutModels):
     name = 'MultipleScattering'
 
     def __init__(self, particle):
+        super().__init__()
         self.p = particle
 
     def content_in_adding(self):
@@ -116,9 +119,9 @@ class PhysicsList(ObjectWithTemplate):
 
 
 def standard_physics_list():
-    return PhysicsList((PhotoElectric(), Compton(), RayleighScattering(),
-                        ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
-                        MultipleScattering('e-'), MultipleScattering('e+')))
+    return (PhotoElectric(), Compton(), RayleighScattering(),
+            ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
+            MultipleScattering('e-'), MultipleScattering('e+'))
 
 
 class Cuts(ObjectWithTemplate):
