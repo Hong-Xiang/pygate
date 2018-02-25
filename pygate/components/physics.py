@@ -4,10 +4,32 @@ from typing import TypeVar as TV
 from typing import List, Dict
 
 
+class Model(ObjectWithTemplate):
+    name = None
+    template = 'physics/model'
+
+    def __init__(self, particle=None):
+        self.particle = particle
+        self.process = None
+
+
+class PenelopeModel(Model):
+    name = 'PenelopeModel'
+
+
+class StandardModel(Model):
+    name = 'StandardModel'
+
+
 class PhysicsProcess(ObjectWithTemplate):
     name = None
     models = ('StandardModel',)
     template = 'physics/process'
+
+    def __init__(self, models=tuple()):
+        self.models = models
+        for m in self.models:
+            m.process = self
 
     def content_in_adding(self):
         return self.name
@@ -23,17 +45,25 @@ class Compton(PhysicsProcess):
 
 class RayleighScattering(PhysicsProcess):
     name = 'RayleighScattering'
-    models = ('PenelopeModel',)
+
+    def __init__(self, models=(PenelopeModel(),)):
+        super().__init__(models)
 
 
 class ElectronIonisation(PhysicsProcess):
     name = 'ElectronIonisation'
-    models = ('StandardModel e-', 'StandardModel e+')
+
+    def __init__(self, models=(StandardModel('e-'),
+                               StandardModel('e+'))):
+        super().__init__(models)
 
 
 class Bremsstrahlung(PhysicsProcess):
     name = 'Bremsstrahlung'
-    models = ('StandardModel e-', 'StandardModel e+')
+
+    def __init__(self, models=(StandardModel('e-'),
+                               StandardModel('e+'))):
+        super().__init__(models)
 
 
 class PhysicsProcessWithoutModels(PhysicsProcess):

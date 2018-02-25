@@ -1,0 +1,6 @@
+{% macro model(o) -%}
+/gate/physics/processes/{{ o.process.name }}/setModel {{ o.name }}{{ " "+o.particle if o.particle}}
+{% endmacro -%}
+{% if o -%}
+{{ model(o) }}
+{%- endif %}
