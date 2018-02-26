@@ -6,6 +6,4 @@
 /gate/{{name}}/vis/setColor             {{ color }}
 {% endif -%}
 {% endmacro -%}
-{% macro vec3(o) -%}
-{{ o.x }} {{ o.y }} {{o.z}}
-{%- endmacro %}
+{% macro vec3(o) -%} {{ o.x }} {{ o.y }} {{o.z}}{{ ' '+o.unit if not o.unit is none }} {%- endmacro -%}

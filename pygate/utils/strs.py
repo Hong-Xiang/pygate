@@ -20,7 +20,8 @@ def rstrip(s):
     lines = [s.rstrip() for s in lines]
     return '\n'.join(lines)
 
-
+def expand_tabs(s, number_of_spaces=4):
+    return s.replace('\t', ' '*number_of_spaces)
 
 def ignore_multiple_whitespaces(s: str):
     s = join_multiple(s, ' ')

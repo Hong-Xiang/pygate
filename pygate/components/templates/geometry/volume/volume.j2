@@ -5,7 +5,7 @@
 /gate/{{ o.mother.name }}/daughters/insert          {{ o.shape_type}}
 {% endif -%}
 {% if o.position -%}
-/gate/{{ o.name }}/placement/setTranslation    {{ vec3(o.position) }} {{ o.position.unit }}
+/gate/{{ o.name }}/placement/setTranslation    {{ vec3(o.position) }}
 {% endif -%}
 {% block detail scoped -%}
 {%- endblock -%}
@@ -15,6 +15,9 @@
 {% for c in o.children %}
 {{ c.render() }}
 {%- endfor -%}
+{% for r in o.repeaters -%}
+{{ r.render() }}
+{% endfor -%}
 {% endmacro -%}
 {% if o -%}
 {{ volume(o) }}

@@ -1,0 +1,10 @@
+{% macro camera(o) -%}
+{{ o.world.render() }}
+{{ o.system.render() }}
+{% for s in o.sds -%}
+/gate/{{ s.name }}/attachCrystalSD
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ camera(o) }}
+{%- endif %}

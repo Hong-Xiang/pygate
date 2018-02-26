@@ -1,12 +1,17 @@
 import unittest
 
 from pygate.components.geometry import *
+from pygate.utils.strs import assert_equal_ignoring_multiple_whitespaces as ae
 
 
 class TestVec3(unittest.TestCase):
     def test_render(self):
         v = Vec3(1, 2, 3)
-        self.assertEqual(v.render(), '1 2 3')
+        ae(self, v.render(), '1 2 3')
+
+    def test_render_unit(self):
+        v = Vec3(0.0, 0.0, 0.0, 'mm')
+        ae(self, v.render(), '0.0 0.0 0.0 mm')
 
 
 class TestVolume(unittest.TestCase):
@@ -47,9 +52,25 @@ class TestCylinder(unittest.TestCase):
 
 
 class TestRepeatCubic(unittest.TestCase):
+    maxDiff = None
+
     def test_render(self):
         w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
-        r = RepeaterCubic(Vec3(1, 5, 5, None), Vec3(0.0, 3.2, 4.0))
-        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'), 'Air', w, repeater=r)
-        self.assertEqual(r.render(),
-                         '/gate/crystal/repeaters/insert          cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX        1  \n/gate/crystal/cubicArray/setRepeatNumberY        5  \n/gate/crystal/cubicArray/setRepeatNumberZ        5  \n/gate/crystal/cubicArray/setRepeatVector         0.0 3.2 4.0 mm \n')
+        r = RepeaterCubic(Vec3(1, 5, 5, None), Vec3(0.0, 3.2, 4.0, 'mm'))
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX        1  \n/gate/crystal/cubicArray/setRepeatNumberY        5  \n/gate/crystal/cubicArray/setRepeatNumberZ        5  \n/gate/crystal/cubicArray/setRepeatVector         0.0 3.2 4.0 mm \n')
+
+    def test_render_multiple(self):
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        ecat = Cylinder('ecat', 442.0, 412.0, 155.2, material='Air', mother=w)
+        r1 = RepeaterLinear(4, Vec3(0.0, 0.0, 38.8, 'mm'))
+        r2 = RepeaterRing(72)
+        block = Box('block', Vec3(30.0, 35.8594, 38.7), 'Air', position=Vec3(
+            427.0, 0.0, 0.0, 'mm'), mother=ecat, repeaters=[r1, r2])
+        rc = RepeaterCubic(Vec3(1, 8, 8), Vec3(0.0, 4.4942, 4.85, 'mm'))
+        crystal = Box('crystal', Vec3(30.0, 4.4, 4.75),
+                      'BGO', mother=block, repeaters=[rc])
+        ae(self, w.render(),
+           '/gate/world/geometry/setXLength 400.0 cm\n/gate/world/geometry/setYLength 400.0 cm\n/gate/world/geometry/setZLength 400.0 cm\n/gate/world/daughters/name ecat\n/gate/world/daughters/insert cylinder\n/gate/ecat/geometry/setRmin 412.0 mm\n/gate/ecat/geometry/setRmax 442.0 mm\n/gate/ecat/geometry/setHeight 155.2 mm\n/gate/ecat/setMaterial Air\n/gate/ecat/daughters/name block\n/gate/ecat/daughters/insert box\n/gate/block/placement/setTranslation 427.0 0.0 0.0 mm\n/gate/block/geometry/setXLength 30.0 mm\n/gate/block/geometry/setYLength 35.8594 mm\n/gate/block/geometry/setZLength 38.7 mm\n/gate/block/setMaterial Air\n/gate/block/daughters/name crystal\n/gate/block/daughters/insert box\n/gate/crystal/geometry/setXLength 30.0 mm\n/gate/crystal/geometry/setYLength 4.4 mm\n/gate/crystal/geometry/setZLength 4.75 mm\n/gate/crystal/setMaterial BGO\n/gate/crystal/repeaters/insert cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX 1\n/gate/crystal/cubicArray/setRepeatNumberY 8\n/gate/crystal/cubicArray/setRepeatNumberZ 8\n/gate/crystal/cubicArray/setRepeatVector 0.0 4.4942 4.85 mm\n/gate/block/repeaters/insert linear\n/gate/block/linear/setRepeatNumber 4\n/gate/block/linear/setRepeatVector 0.0 0.0 38.8 mm\n/gate/block/repeaters/insert ring\n/gate/block/ring/setRepeatNumber 72')

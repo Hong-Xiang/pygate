@@ -1,6 +1,7 @@
 {% extends "geometry/volume/repeater/repeater.j2" %}
+{% from "utils.j2" import vec3 -%}
 {% block detail -%}
 /gate/{{ o.volume.name }}/{{ o.repeater_type}}/setRepeatNumber {{ o.n }}
-/gate/{{ o.volume.name }}/{{ o.repeater_type}}/setRepeatVector {{ o.rv | join(' ') }}
+/gate/{{ o.volume.name }}/{{ o.repeater_type}}/setRepeatVector {{ vec3(o.rv) }}
 {% endblock detail -%}
 

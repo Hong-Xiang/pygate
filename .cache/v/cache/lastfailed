@@ -1,1 +1,3 @@
-{}
+{
+  "pygate/tests/components/test_camera.py::TestCamera::test_sd": true
+}
