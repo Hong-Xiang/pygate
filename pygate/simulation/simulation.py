@@ -1,81 +1,87 @@
-import camera
-import physics_template as phy
+from ..components import physics as phy
 from ..components import parameter as para
-
 from ..components import ObjectWithTemplate
-from ..components.simulation import Simulation
+from ..components import geometry as geo
+from ..components.simulation import * 
 
-def pet_simulation():
+from .predefined_cameras import *
+from .predefined_phantoms import*
+from .predefined_digitizers import *
+from .predefined_physics import*
+#from .predefined_parameters import*
 
-    return Simulation()
 
 
-class Simulation(ObjectWithTemplate):
-    # camera name list
-    system_name_list = ["PETscanner", "cylindricalPET", "ecat",
-                        "multiPatchPET", "SPECThead", "OpticalSystem", "OpticalGamma"]
 
-    def __init__(self, system, camera=None, physics=None, parameter=None,
-                 phantom=None, source=None, digitizer=None):
-        self.camera = camera
-        self.physics = physics
-        self.digitizer = digitizer
 
-        self.phantomList = phantomList
-        self.sourceList = sourceList
+def make_default_physics(simu_name, cut_pair_list):
+    # decide the cut pair list
+    if simu_name is 'PETscanner' or 'cylindricalPET' or 'ecat' or 'multiPatchPET':
+         return phy.PET(cut_pair_list)
+    elif simu_name is 'SPECThead':
+         physics = phy.SPECT(cut_pair_list)
+    elif f.camera.name is 'OpticalSystem':
+         .physics = phy.OpticalPhysics(cut_pair_list)
+    elif f.camera.name is 'OpticalGamma':
+         .physics = phy.OpticalGamma(cut_pair_list)
+    else:
+        raise ValueError(
+            "simulation<set_physics> invalid system name: {}".format(self.camera.name))
 
-        if camera is None:
-            self.set_camera_default(system_name)
-        if physics is None:
-            self.set_physics_default()
+def make_default_parameter():
+    if self.camera.name is 'OpticalSystem' or 'OpticalGamma':
+        self.parameter = para.Parameter(acquisition=para.AcquisitionPrimaries(), output=para.Ascii(file_name=self.camera.name),
+                                        random_engine=para.RandomEngine())
+    elif self.camera.name is 'PETscanner'
+        pass
+    else:
+        pass
+def make_default_digitizer(self):
+    pass
+
+
+
+def simu():
+    
+
+if __name__ == '__main__':
+    
+    ## must be given parts
+    #####################
+    #####################
+    
+    # define the world volume
+    world = geo.Box(name='world',size = geo.Vec3(400,400,400,'cm'))
+    # define the camera
+    cam = Predefined_CylindricalPET(world)
+    # define the phantom
+    phan =  Predefined_Voxelized_Phantom(world)
+    # define the source
+    source = 
+
+    #####################
+    #####################
+
+    ##optional parts
+    #####################
+    #####################
+    
+    #phy = pet_physics()
+    digi = ecat_digitizer(cam)
+    
+
+
+
+
+    simu = Simulation(world,cam,phan,source)
+    
+            if physics is None:
+                self.set_physics_default()
         if parameter is None:
             self.set_parameter_default()
         if digitizer is None:
             self.set_digitizer_default()
 
-    def set_camera_default(self, system_name):
-        if system_name in self.system_name_list:
-            if system_name is 'PETscanner':
-                self.system = camera.PETscanner()
-            elif system_name is 'cylindricalPET':
-                self.system = camera.CylindricalPET()
-            elif system_name is 'ecat':
-                self.system = camera.Ecat()
-            elif system_name is 'multiPatchPET':
-                self.system = camera.MultiPatchPET()
-            elif system_name is 'SPECThead':
-                self.system = camera.SPECThead()
-            else:
-                self.system = camera.OpticalSystem()
-        else:
-            raise ValueError(
-                "simulation<set_system> invalid system name: {}".format(system_name))
-
-    def set_physics_default(self):
-        if self.system_name is 'PETscanner' or 'cylindricalPET' or 'ecat' or 'multiPatchPET':
-            self.physics = phy.PET()
-        elif self.system_name is 'SPECThead':
-            self.physics = phy.SPECT()
-        elif self.system_name is 'OpticalSystem':
-            self.physics = phy.OpticalPhysics()
-        elif self.system_name is 'OpticalGamma':
-            self.physics = phy.OpticalGamma()
-        else:
-            raise ValueError(
-                "simulation<set_physics> invalid system name: {}".format(system_name))
-    
-    def set_parameter_default(self):
-        if self.system_name is 'OpticalSystem' or 'OpticalGamma':
-            self.parameter = para.Parameter(acquisition=para.Primaries(), output=para.Ascii(file_name=self.system_name),
-                                random_engine=para.RandomEngine())   
-            
-
-
-    def set_digitizer_default(self):
-        if self.system_name is ''
 
 
 
-
-if __name__ == '__main__':
-    simu1 = SimuApp(system_name='ecat')

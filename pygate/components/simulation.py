@@ -5,7 +5,6 @@ from .misc import MaterialDatabaseLocal, Visualisation
 
 class Simulation(ObjectWithTemplate):
     template = 'simulation'
-
     def __init__(self,
                  geometry,
                  digitizer,

@@ -20,6 +20,14 @@ class PenelopeModel(Model):
 class StandardModel(Model):
     name = 'StandardModel'
 
+class LivermoreModel(Model):
+    name = 'LivermoreModel'
+
+class LivermorePolarizedModel(Model):
+    name = 'LivermorePolarizedModel'
+
+
+
 
 class PhysicsProcess(ObjectWithTemplate):
     name = None
@@ -43,6 +51,8 @@ class PhotoElectric(PhysicsProcess):
 class Compton(PhysicsProcess):
     name = 'Compton'
 
+class GammaConversion(PhysicsProcess):
+    name = 'GammaConversion'
 
 class RayleighScattering(PhysicsProcess):
     name = 'RayleighScattering'
