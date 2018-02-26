@@ -37,7 +37,7 @@ class Ecat(System):
         super().__init__(sensitive_detectors)
 
 
-class CylindericalPET(System):
+class CylindricalPET(System):
     name = 'cylindricalPET'
 
     def __init__(self,
