@@ -36,7 +36,7 @@ class Ecat(Systems):
         super().__init__(sensitive_detectors)
 
 
-class CylindericalPET(Systems):
+class CylindricalPET(Systems):
     name = 'cylindricalPET'
 
     def __init__(self,
@@ -55,10 +55,11 @@ class CylindericalPET(Systems):
         }
         super().__init__(sensitive_detectors)
 
-class multiPatchPET(Systems):
+class MultiPatchPET(Systems):
     name = 'multiPatchPET'
-    def __init__(self, container, patch, sensitive_detectors = None):
-        self.attach_systems = lambda: {'contianer':container, 'patch':patch}
+    def __init__(self, container, patch_list, sensitive_detectors = None):
+        self.attach_systems = lambda: {'contianer':container, 
+        'patch_list':patch_list}
         super().__init__(sensitive_detectors)
 
 class SPECThead(Systems):
