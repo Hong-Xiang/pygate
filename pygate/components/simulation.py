@@ -1,5 +1,5 @@
 from ..components import ObjectWithTemplate
-from .geometry import Volume
+from .geometry import Geometry
 from .misc import MaterialDatabaseLocal
 
 
@@ -7,19 +7,14 @@ class Simulation(ObjectWithTemplate):
     template = 'simulation'
 
     def __init__(self,
-                 world: Volume,
-                 surfaces,
-                 camera,
-                 phantom,
+                 geometry,
                  digitizer,
                  source,
                  parameter,
                  physics,
                  material_database=None,
                  visualisation=None):
-        self.world = world
-        self.camera = camera
-        self.phantom = phantom
+        self.geometry = geometry
         self.digitizer = digitizer
         self.source = source
         self.parameter = parameter
