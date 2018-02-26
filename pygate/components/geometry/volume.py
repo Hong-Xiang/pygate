@@ -2,17 +2,11 @@
 from math import pi
 import yaml
 
-from .base import ObjectWithTemplate
+from ..base import ObjectWithTemplate
+from ..utils import Vec3
+from typing import Tuple
 
 
-class Vec3(ObjectWithTemplate):
-    template = 'vec3'
-
-    def __init__(self, x, y, z, unit=None):
-        self.x = x
-        self.y = y
-        self.z = z
-        self.unit = unit
 
 
 class Repeater(ObjectWithTemplate):
@@ -141,15 +135,6 @@ class Patch(Volume):
         self.patch_file = patch_file
 
 
-class Surface(ObjectWithTemplate):
-    template = 'geometry/surface'
-    surface_type = None
-
-    def __init__(self, name, base: Volume, insert: Volume):
-        self.name = name
-        self.base = base
-        self.insert = insert
 
 
-class SurfacePerfectAPD(Surface):
-    surface_type = 'perfect_apd'
+
