@@ -8,7 +8,5 @@ class Phantom(ObjectWithTemplate):
     template = 'phantom'
 
     def __init__(self,
-                 world: Volume,
                  sensitive_phantoms: Tuple[Volume]=tuple()):
-        self.world = world
         self.sds = sensitive_phantoms

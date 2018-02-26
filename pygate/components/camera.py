@@ -8,9 +8,7 @@ class Camera(ObjectWithTemplate):
     template = 'camera'
 
     def __init__(self,
-                 world: Volume,
                  system: System,
                  sensitive_detectors: Tuple[Volume]=tuple()):
-        self.world = world
         self.system = system
         self.sds = sensitive_detectors
