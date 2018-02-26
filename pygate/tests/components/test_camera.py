@@ -12,10 +12,13 @@ class TestCamera(unittest.TestCase):
         world = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
         cylinder = Cylinder('cylindricalPET', 520.0, 399.0, 402.0, material='Air',
                             mother=world, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='cm')
+        rh = RepeaterRing(4)
         head = Box('head', Vec3(8, 32, 40, 'cm'), 'Air',
-                   cylinder, Vec3(44.0, 0.0, 0.0, 'cm'))
-        block = Box('block', Vec3(30, 16, 20, 'mm'), 'Air', head, position=Vec3(0.0, 0.0, 0.0, 'cm'))
-        crystal = Box('crystal', Vec3(30, 3.0, 3.8, 'mm'), 'Air', block, position=Vec3(0.0, 0.0, 0.0, 'cm'))
+                   cylinder, Vec3(44.0, 0.0, 0.0, 'cm'), repeaters=[rh])
+        rb = RepeaterCubic(Vec3(1, 20, 20), Vec3(0.0, 1.6, 2.0, 'cm'))
+        block = Box('block', Vec3(30, 16, 20, 'mm'), 'Air', head, position=Vec3(0.0, 0.0, 0.0, 'cm'), repeaters=[rb])
+        rc = RepeaterCubic(Vec3(1, 5, 5), Vec3(0.0, 3.2, 4.0, 'mm'))
+        crystal = Box('crystal', Vec3(30, 3.0, 3.8, 'mm'), 'Air', block, position=Vec3(0.0, 0.0, 0.0, 'cm'), repeaters=[rc])
         lso = Box('LSO', Vec3(15, 3.0, 3.8), 'LSO',
                   crystal, Vec3(-0.75, 0.0, 0.0, 'cm'))
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
