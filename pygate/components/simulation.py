@@ -4,6 +4,7 @@ from ..components import parameter as para
 
 from ..components import ObjectWithTemplate
 from .camera import Camera
+from .misc import MaterialDatabaseLocal
 
 
 class Simulation(ObjectWithTemplate):
@@ -15,14 +16,15 @@ class Simulation(ObjectWithTemplate):
                  source,
                  parameter,
                  physics=None,
+                 material_database=None,
                  visualisation=None):
         self.camera = camera
         self.digitizer = digitizer
         self.source = source
         self.parameter = parameter
         self.physics = physics
+        self.material_database = material_database or MaterialDatabaseLocal()
         self.visualisation = visualisation
-
 
         if camera is None:
             self.set_camera_default(system_name)
