@@ -1,0 +1,8 @@
+{% macro visualisation(o) -%}
+{% if o.is_disbale -%}
+/vis/disable
+{% endif -%}
+{% endmacro -%}
+{% if o -%}
+{{ visualisation(o) }}
+{%- endif %}

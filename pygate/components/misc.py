@@ -31,10 +31,13 @@ class Verbose(ObjectWithTemplate):
         self.event = event
         self.tracking = tracking
 
+
 class MaterialDatabase(ObjectWithTemplate):
     template = 'misc/database'
-    def __init__(self, path:str=None):
+
+    def __init__(self, path: str=None):
         self.path = path
+
 
 class MaterialDatabaseLocal(MaterialDatabase):
     def __init__(self):
@@ -42,5 +45,9 @@ class MaterialDatabaseLocal(MaterialDatabase):
 
 # TODO: add MaterialDatabaseShared
 
+
 class Visualisation(ObjectWithTemplate):
     template = 'misc/visualisation'
+
+    def __init__(self, is_disable=True):
+        self.is_disable = is_disable
