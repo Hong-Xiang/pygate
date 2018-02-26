@@ -1,4 +1,4 @@
-{% macro vec3(o) -%} {{ o.x }} {{ o.y }} {{o.z}}{{ ' '+o.unit if not o.unit is none }} {%- endmacro -%}
+{% from "utils.j2" import vec3 -%}
 {%- if o -%}
 {{ vec3(o) }}
 {%- endif %}

@@ -1,0 +1,6 @@
+{% macro database(o) -%}
+/gate/geometry/setMaterialDatabase    {{ o.path }}
+{% endmacro -%}
+{% if o -%}
+{{ database(o) }}
+{%- endif %}

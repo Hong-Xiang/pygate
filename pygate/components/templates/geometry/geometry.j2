@@ -1,0 +1,11 @@
+{% macro geometry(o) -%}
+{{ o.world.render() }}
+{{ o.camera.render() }}
+{{ o.phantom.render() }}
+{% for s in o.surfaces -%}
+{{ s.render() }}
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ geometry(o) }}
+{%- endif %}

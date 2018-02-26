@@ -1,0 +1,8 @@
+{% macro phantom(o) -%}
+{% for s in o.sds -%}
+/gate/{{ s.name }}/attachPhantomSD
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ phantom(o) }}
+{%- endif %}
