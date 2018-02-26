@@ -1,0 +1,8 @@
+{% macro surface(o) -%}
+/gate/{{ o.base.name }}/surfaces/name                     {{ o.name }}
+/gate/{{ o.base.name }}/surfaces/insert                   {{ o.insert.name }}
+/gate/{{ o.base.name }}/surfaces/{{ o.name }}/setSurface    {{ o.surface_type }}  
+{% endmacro -%}
+{% if o -%}
+{{ surface(o) }}
+{%- endif %}

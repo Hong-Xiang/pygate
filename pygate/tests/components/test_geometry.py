@@ -74,3 +74,15 @@ class TestRepeatCubic(unittest.TestCase):
                       'BGO', mother=block, repeaters=[rc])
         ae(self, w.render(),
            '/gate/world/geometry/setXLength 400.0 cm\n/gate/world/geometry/setYLength 400.0 cm\n/gate/world/geometry/setZLength 400.0 cm\n/gate/world/daughters/name ecat\n/gate/world/daughters/insert cylinder\n/gate/ecat/geometry/setRmin 412.0 mm\n/gate/ecat/geometry/setRmax 442.0 mm\n/gate/ecat/geometry/setHeight 155.2 mm\n/gate/ecat/setMaterial Air\n/gate/ecat/daughters/name block\n/gate/ecat/daughters/insert box\n/gate/block/placement/setTranslation 427.0 0.0 0.0 mm\n/gate/block/geometry/setXLength 30.0 mm\n/gate/block/geometry/setYLength 35.8594 mm\n/gate/block/geometry/setZLength 38.7 mm\n/gate/block/setMaterial Air\n/gate/block/daughters/name crystal\n/gate/block/daughters/insert box\n/gate/crystal/geometry/setXLength 30.0 mm\n/gate/crystal/geometry/setYLength 4.4 mm\n/gate/crystal/geometry/setZLength 4.75 mm\n/gate/crystal/setMaterial BGO\n/gate/crystal/repeaters/insert cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX 1\n/gate/crystal/cubicArray/setRepeatNumberY 8\n/gate/crystal/cubicArray/setRepeatNumberZ 8\n/gate/crystal/cubicArray/setRepeatVector 0.0 4.4942 4.85 mm\n/gate/block/repeaters/insert linear\n/gate/block/linear/setRepeatNumber 4\n/gate/block/linear/setRepeatVector 0.0 0.0 38.8 mm\n/gate/block/repeaters/insert ring\n/gate/block/ring/setRepeatNumber 72')
+
+
+class TestSurface(unittest.TestCase):
+    def test_render_perfect_apd(self):
+        class DummyVolume:
+            def __init__(self, name):
+                self.name = name
+        crystal = DummyVolume('crystal')
+        elec = DummyVolume('Electronics')
+        s = SurfacePerfectAPD('Detection1', crystal, elec)
+        ae(self, s.render(),
+           '/gate/crystal/surfaces/name                           Detection1\n/gate/crystal/surfaces/insert                         Electronics\n/gate/crystal/surfaces/Detection1/setSurface          perfect_apd ')

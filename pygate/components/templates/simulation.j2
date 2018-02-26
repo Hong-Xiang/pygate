@@ -1,0 +1,6 @@
+{% macro simulation(o) -%}
+{{ o.visualisation.render() }}
+{% endmacro -%}
+{% if o -%}
+{{ simulation(o) }}
+{%- endif %}
