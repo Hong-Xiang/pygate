@@ -53,7 +53,7 @@ class Volume(ObjectWithTemplate):
     shape_type = 'volume'
     template = 'geometry/volume/volume'
 
-    def __init__(self, name, material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
+    def __init__(self, name, material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
         self.mother = mother
         if self.mother is not None:
             self.mother.add_child(self)
@@ -63,9 +63,9 @@ class Volume(ObjectWithTemplate):
         self.unit = unit or 'mm'
         if self.position is not None and self.position.unit is None:
             self.position.unit = self.unit
-        self.repeater = repeater
-        if self.repeater is not None:
-            self.repeater.volume = self
+        self.repeaters = repeaters or ()
+        for r in self.repeaters:
+            r.volume = self
         self.children = []
 
     def add_child(self, child):
@@ -82,8 +82,8 @@ class Box(Volume):
     shape_type = 'box'
     template = 'geometry/volume/box'
 
-    def __init__(self, name, size, material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
-        super().__init__(name, material, mother, position, unit, repeater)
+    def __init__(self, name, size, material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeaters)
         self.size = size
         if self.size.unit is None:
             self.size.unit = self.unit
@@ -95,8 +95,8 @@ class Cylinder(Volume):
 
     def __init__(self, name, rmax, rmin=None, height=None,
                  phi_start=None, delta_phi=None,
-                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
-        super().__init__(name, material, mother, position, unit, repeater)
+                 material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeaters)
         self.rmax = rmax
         self.rmin = rmin
         self.height = height
@@ -111,8 +111,8 @@ class Sphere(Volume):
     def __init__(self, name, rmax, rmin=None, height=None,
                  phi_start=None, delta_phi=None,
                  theta_start=None, delta_theta=None,
-                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
-        super().__init__(name, material, mother, position, unit, repeater)
+                 material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeaters)
         self.rmax = rmax
         self.rmin = rmin
         self.height = height
@@ -127,7 +127,7 @@ class ImageRegularParamerisedVolume(Volume):
     shape_type = 'ImageRegularParametrisedVolume'
 
     def __init__(self,  name, image_file, range_file,
-                 material=None, mother=None, position=None, unit=None, repeater: Repeater=None):
-        super().__init__(name, material, mother, position, unit, repeater)
+                 material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
+        super().__init__(name, material, mother, position, unit, repeaters)
         self.image_file = image_file
         self.range_file = range_file

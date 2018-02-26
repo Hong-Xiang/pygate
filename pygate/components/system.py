@@ -1,7 +1,7 @@
 from .base import ObjectWithTemplate
 
 
-class Systems(ObjectWithTemplate):
+class System(ObjectWithTemplate):
     template = 'geometry/system'
     name = None
     attach_systems = None
@@ -15,7 +15,7 @@ class Systems(ObjectWithTemplate):
         self.sds = sensitive_detectors
 
 
-class PETscanner(Systems):
+class PETscanner(System):
     name = 'PETscanner'
 
     def __init__(self, level1, level2, level3, level4, level5, sensitive_detectors=None):
@@ -29,7 +29,7 @@ class PETscanner(Systems):
         super().__init__(sensitive_detectors)
 
 
-class Ecat(Systems):
+class Ecat(System):
     name = 'ecat'
 
     def __init__(self, block=None, crystal=None, sensitive_detectors=None):
@@ -37,7 +37,7 @@ class Ecat(Systems):
         super().__init__(sensitive_detectors)
 
 
-class CylindericalPET(Systems):
+class CylindericalPET(System):
     name = 'cylindricalPET'
 
     def __init__(self,
