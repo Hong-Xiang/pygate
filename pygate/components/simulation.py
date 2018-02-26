@@ -10,18 +10,19 @@ class Simulation(ObjectWithTemplate):
     template = 'simulation'
 
     def __init__(self,
-                 camera:=None,
+                 camera,
+                 digitizer,
+                 source,
+                 parameter,
                  physics=None,
-                 digitizer=None,
-                 source=None,
-                 parameter=None,
-                 phantom=None, source=None, digitizer=None, visualisation=None):
+                 visualisation=None):
         self.camera = camera
-        self.physics = physics
         self.digitizer = digitizer
+        self.source = source
+        self.parameter = parameter
+        self.physics = physics
+        self.visualisation = visualisation
 
-        self.phantomList = phantomList
-        self.sourceList = sourceList
 
         if camera is None:
             self.set_camera_default(system_name)
