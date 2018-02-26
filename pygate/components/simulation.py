@@ -2,15 +2,20 @@ import camera
 import physics_template as phy
 from ..components import parameter as para
 
+from ..components import ObjectWithTemplate
+from .camera import Camera
 
-class SimuApp:
-    # camera name list
-    system_name_list = ["PETscanner", "cylindricalPET", "ecat",
-                        "multiPatchPET", "SPECThead", "OpticalSystem", "OpticalGamma"]
 
-    def __init__(self, system_name, camera=None, physics=None, parameter=None,
-                 phantom=None, source=None, digitizer=None):
-        self.system_name = system_name
+class Simulation(ObjectWithTemplate):
+    template = 'simulation'
+
+    def __init__(self,
+                 camera:=None,
+                 physics=None,
+                 digitizer=None,
+                 source=None,
+                 parameter=None,
+                 phantom=None, source=None, digitizer=None, visualisation=None):
         self.camera = camera
         self.physics = physics
         self.digitizer = digitizer
@@ -57,18 +62,14 @@ class SimuApp:
         else:
             raise ValueError(
                 "simulation<set_physics> invalid system name: {}".format(system_name))
-    
+
     def set_parameter_default(self):
         if self.system_name is 'OpticalSystem' or 'OpticalGamma':
             self.parameter = para.Parameter(acquisition=para.Primaries(), output=para.Ascii(file_name=self.system_name),
-                                random_engine=para.RandomEngine())   
-            
-
+                                            random_engine=para.RandomEngine())
 
     def set_digitizer_default(self):
         if self.system_name is ''
-
-
 
 
 if __name__ == '__main__':

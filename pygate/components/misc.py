@@ -42,3 +42,6 @@ class MaterialDatabaseLocal(MaterialDatabase):
         super().__init__('./GateMaterials.db')
 
 # TODO: add MaterialDatabaseShared
+
+class Visualisation(ObjectWithTemplate):
+    template = 'misc/visualisation'
