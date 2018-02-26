@@ -1,6 +1,6 @@
 from ..components import ObjectWithTemplate
 from .geometry import Geometry
-from .misc import MaterialDatabaseLocal
+from .misc import MaterialDatabaseLocal, Visualisation
 
 
 class Simulation(ObjectWithTemplate):
@@ -20,4 +20,4 @@ class Simulation(ObjectWithTemplate):
         self.parameter = parameter
         self.physics = physics
         self.material_database = material_database or MaterialDatabaseLocal()
-        self.visualisation = visualisation
+        self.visualisation = visualisation or Visualisation()
