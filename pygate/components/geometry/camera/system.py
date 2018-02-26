@@ -1,4 +1,4 @@
-from .base import ObjectWithTemplate
+from ...base import ObjectWithTemplate
 
 
 class System(ObjectWithTemplate):
