@@ -1,5 +1,4 @@
 {% macro camera(o) -%}
-{{ o.world.render() }}
 {{ o.system.render() }}
 {% for s in o.sds -%}
 /gate/{{ s.name }}/attachCrystalSD

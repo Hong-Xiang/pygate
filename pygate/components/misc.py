@@ -12,8 +12,7 @@ class Verbose(ObjectWithTemplate):
                  output=0,
                  beam=0,
                  volume=0, image=0, geometry=0, core=0,
-                 run=0, event=0, tracking=0
-                 )
+                 run=0, event=0, tracking=0):
         self.physics = physics
         self.cuts = cuts
         self.sd = sd
@@ -32,10 +31,13 @@ class Verbose(ObjectWithTemplate):
         self.event = event
         self.tracking = tracking
 
+
 class MaterialDatabase(ObjectWithTemplate):
-    template = 'material_database'
-    def __init__(self, database:str=None)
-        self.database = database
+    template = 'misc/database'
+
+    def __init__(self, path: str=None):
+        self.path = path
+
 
 class MaterialDatabaseLocal(MaterialDatabase):
     def __init__(self):
@@ -43,5 +45,9 @@ class MaterialDatabaseLocal(MaterialDatabase):
 
 # TODO: add MaterialDatabaseShared
 
+
 class Visualisation(ObjectWithTemplate):
     template = 'misc/visualisation'
+
+    def __init__(self, is_disable=True):
+        self.is_disable = is_disable

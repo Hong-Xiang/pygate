@@ -2,17 +2,11 @@
 from math import pi
 import yaml
 
-from .base import ObjectWithTemplate
+from ..base import ObjectWithTemplate
+from ..utils import Vec3
+from typing import Tuple
 
 
-class Vec3(ObjectWithTemplate):
-    template = 'vec3'
-
-    def __init__(self, x, y, z, unit=None):
-        self.x = x
-        self.y = y
-        self.z = z
-        self.unit = unit
 
 
 class Repeater(ObjectWithTemplate):
@@ -103,8 +97,9 @@ class Cylinder(Volume):
         self.phi_start = phi_start
         self.delta_phi = delta_phi
 
+
 class Sphere(Volume):
-    template = 'sphere'
+    template = 'geometry/volume/sphere'
     shape_type = 'sphere'
 
     def __init__(self, name, rmax, rmin=None,
@@ -121,7 +116,7 @@ class Sphere(Volume):
 
 
 class ImageRegularParamerisedVolume(Volume):
-    template = 'image_volume'
+    template = 'geometry/volume/image_volume'
     shape_type = 'ImageRegularParametrisedVolume'
 
     def __init__(self,  name, image_file, range_file,
@@ -130,9 +125,16 @@ class ImageRegularParamerisedVolume(Volume):
         self.image_file = image_file
         self.range_file = range_file
 
+
 class Patch(Volume):
-    template = 'patch'
+    template = 'geometry/patch'
     shape_type = 'shape'
-    def __init__(self, name, patch_file, material = None, mother = None, position = None, unit = None, repeater: Repeater = None):
-        super().__init__(name,material,mother,position,unit,repeater)
+
+    def __init__(self, name, patch_file, material=None, mother=None, position=None, unit=None, repeater: Repeater = None):
+        super().__init__(name, material, mother, position, unit, repeater)
         self.patch_file = patch_file
+
+
+
+
+

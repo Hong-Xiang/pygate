@@ -1,6 +1,6 @@
 from typing import List
 from .base import ObjectWithTemplate
-from .geometry import Vec3
+from .utils import Vec3
 
 
 class Source(ObjectWithTemplate):

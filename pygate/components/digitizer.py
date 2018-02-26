@@ -152,6 +152,6 @@ class CoincidencesChain(Insertable):
         self.input2 = input2
         self.use_priority = use_priority
         self.conserve_all_event = conserve_all_event
-        self.plugins = plugins
+        self.plugins = plugins or ()
         for p in self.plugins:
             p.base = self

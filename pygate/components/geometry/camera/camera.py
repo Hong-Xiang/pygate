@@ -1,16 +1,14 @@
-from .base import ObjectWithTemplate
-from .geometry import Volume
+from ...base import ObjectWithTemplate
+from ..volume import Volume
 from .system import System
 from typing import Tuple
 
 
 class Camera(ObjectWithTemplate):
-    template = 'camera'
+    template = 'geometry/camera'
 
     def __init__(self,
-                 world: Volume,
                  system: System,
-                 sensitive_detectors: Tuple[Volume]=tuple()):
-        self.world = world
+                 sensitive_detectors: Tuple[Volume]=()):
         self.system = system
         self.sds = sensitive_detectors
