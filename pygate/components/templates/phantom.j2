@@ -1,8 +1,8 @@
-{% macro camera(o) -%}
+{% macro phantom(o) -%}
 {% for s in o.sds -%}
-/gate/{{ s.name }}/attachCrystalSD
+/gate/{{ s.name }}/attachPhantomSD
 {% endfor -%}
 {% endmacro -%}
 {% if o -%}
-{{ camera(o) }}
+{{ phantom(o) }}
 {%- endif %}
