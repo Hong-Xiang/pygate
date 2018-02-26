@@ -55,3 +55,22 @@ class CylindericalPET(System):
             'layer3': layer3,
         }
         super().__init__(sensitive_detectors)
+
+class MultiPatchPET(System):
+    name = 'multiPatchPET'
+    def __init__(self, container, patch_list, sensitive_detectors = None):
+        self.attach_systems = lambda: {'contianer':container, 
+        'patch_list':patch_list}
+        super().__init__(sensitive_detectors)
+
+class SPECThead(System):
+    name = 'SPECThead'
+    def __init__(self, crystal, pixel = None, sensitive_detectors = None):
+        self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel }
+        super().__init__(sensitive_detectors)
+
+class OpticalSystem(System):
+    name = 'OpticalSystem'
+    def __init__(self,crystal, pixel = None, sensitive_detectors = None):
+        self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel}
+        super().__init__(sensitive_detectors)

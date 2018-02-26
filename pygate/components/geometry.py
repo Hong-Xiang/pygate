@@ -103,19 +103,17 @@ class Cylinder(Volume):
         self.phi_start = phi_start
         self.delta_phi = delta_phi
 
-
 class Sphere(Volume):
     template = 'sphere'
     shape_type = 'sphere'
 
-    def __init__(self, name, rmax, rmin=None, height=None,
+    def __init__(self, name, rmax, rmin=None,
                  phi_start=None, delta_phi=None,
                  theta_start=None, delta_theta=None,
                  material=None, mother=None, position=None, unit=None, repeaters: Repeater=None):
         super().__init__(name, material, mother, position, unit, repeaters)
         self.rmax = rmax
         self.rmin = rmin
-        self.height = height
         self.phi_start = phi_start
         self.delta_phi = delta_phi
         self.theta_start = theta_start
@@ -131,3 +129,10 @@ class ImageRegularParamerisedVolume(Volume):
         super().__init__(name, material, mother, position, unit, repeaters)
         self.image_file = image_file
         self.range_file = range_file
+
+class Patch(Volume):
+    template = 'patch'
+    shape_type = 'shape'
+    def __init__(self, name, patch_file, material = None, mother = None, position = None, unit = None, repeater: Repeater = None):
+        super().__init__(name,material,mother,position,unit,repeater)
+        self.patch_file = patch_file
