@@ -1,9 +1,7 @@
-from pygate.components.system import *
 from pygate.components.geometry import *
-from pygate.components.camera import *
 
 
-def predefined_cylindricalPET(world: Volume, cylinder=None, rrh=None,
+def cylindricalPET(world: Volume, cylinder=None, rrh=None,
                               head=None, rcb=None, block=None, rcc=None,
                               crystal=None, lso=None, bgo=None):
     if cylinder is None:
@@ -40,7 +38,7 @@ def predefined_cylindricalPET(world: Volume, cylinder=None, rrh=None,
     return cam
 
 
-def predefined_ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
+def ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
                     block=None, rcc=None, crystal=None):
     if cylinder is None:
         cylinder = Cylinder('ecat', rmax=44.2, rmin=41.2, height=15.52, material='Air',
@@ -65,7 +63,7 @@ def predefined_ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
     return cam
 
 
-def predefined_opticalsystem(world: Volume, box = None, crystal = None,
+def opticalsystem(world: Volume, box = None, crystal = None,
                              rcp = None, pixel = None):
     if box is None:
         box = Box('OpticalSystem', size=Vec3(
@@ -84,7 +82,7 @@ def predefined_opticalsystem(world: Volume, box = None, crystal = None,
     return cam
 
 
-def predefined_multipatchPET(world: Volume):
+def multipatchPET(world: Volume):
     world = Box('world', Vec3(50, 50, 50, 'cm'))
 
     box = Box('multiPatchPET', size=Vec3(
@@ -98,6 +96,11 @@ def predefined_multipatchPET(world: Volume):
     sen_list = [patch_list]
     cam = Camera(sys, sen_list)
     return cam
+
+def optical_surfaces():
+    pass
+
+
 
 # class Camera:
 #     def __init__(self, name, world=None, detector=None):

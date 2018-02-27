@@ -1,3 +1,4 @@
+from typing import List
 from .base import ObjectWithTemplate
 
 
@@ -61,12 +62,13 @@ class Root(Output):
     output_type = 'root'
 
     def __init__(self, file_name,
-                 hit=None, singles=None, coincidences=None, optical=None):
+                 hit=None, singles=None, coincidences=None, optical=None, delay=None):
         super().__init__(file_name)
         self.hit = hit
         self.singles = singles
         self.coincidences = coincidences
         self.optical = optical
+        self.delay = delay
 
 
 class Sinogram(Output):
@@ -116,7 +118,7 @@ class RandomEngineMersenneTwister(RandomEngine):
 class Parameter(ObjectWithTemplate):
     template = 'parameter/parameter'
 
-    def __init__(self, acquisition=None, output=None, random_engine=None):
+    def __init__(self, random_engine, outputs: List[Output], acquisition):
         self.acquisition = acquisition
-        self.output = output
+        self.outputs = outputs
         self.random_engine = random_engine

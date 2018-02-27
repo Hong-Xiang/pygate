@@ -82,9 +82,12 @@ class PhysicsProcessWithoutModels(PhysicsProcess):
         super().__init__(tuple())
 
 
+
 class PositronAnnihilation(PhysicsProcessWithoutModels):
     name = 'PositronAnnihilation'
 
+class RadioactiveDecay(PhysicsProcessWithoutModels):
+    name = 'RadioactiveDecay'
 
 class OpticalAbsorption(PhysicsProcessWithoutModels):
     name = 'OpticalAbsorption'

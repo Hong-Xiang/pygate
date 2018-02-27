@@ -1,21 +1,21 @@
 from ..components.physics import *
-from ..components.camera import*
-from ..components.phantom import*
 
 # used in cylindricalPET ,ecat and multiPatchPET systems.
-def pet_physics(geo:Geometry, cut_pair_list = None):
-    if cut_pair_list is None:
-        #generate the  
-        pass
-    return Physics([PhotoElectric, Compton, ElectronIonisation,
-                    Bremsstrahlung, PositronAnnihilation, MultipleScattering], cut_pair_list)
+
+def pet_physics(cut_pair_list):
+    return Physics([PhotoElectric(), Compton(), ElectronIonisation(),
+                    RayleighScattering([LivermoreModel(), ]),
+                    Bremsstrahlung(), PositronAnnihilation(),
+                    RadioactiveDecay(), MultipleScattering('e+'), MultipleScattering('e-')], cut_pair_list)
 
 
-
-def optical_physics(geo:Geometry, cut_pair_list =None):
+def optical_physics(cut_pair_list):
     pass
 
-def gamma_physics():
+
+def gamma_physics(cut_pair_list):
     pass
-def spect_physics():
+
+
+def spect_physics(cut_pair_list):
     pass
