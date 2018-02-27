@@ -2,7 +2,7 @@ from .base import Routine, Operation
 
 class OpCleanSubdir(Operation):
     @classmethod
-    def _work_func(cls, routine):
+    def work(cls, routine):
 
 class Cleaner:
     def __init__(self, fs, is_clean_subdir, is_clean_source):

@@ -2,14 +2,11 @@ from typing import Tuple
 
 
 class Operation:
-    work_func = None
-    msg_func = None
-
     def apply(self, routine):
-        return self.work_func(routine)
+        raise NotImplementedError
 
     def dryrun(self, routine):
-        return self.msg_func(routine)
+        raise NotImplementedError
 
 
 class Routine:
