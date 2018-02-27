@@ -1,5 +1,5 @@
 import unittest
-from pygate.shell_scripts.shell import ScriptRun, GateSimulation, RootAnalysis
+from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis
 
 
 class TestScriptRun(unittest.TestCase):
