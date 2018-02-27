@@ -1,5 +1,5 @@
 from pygate.components.geometry.volume import *
-from pygate.components.phantom import Phantom
+from pygate.components.geometry.phantom import Phantom
 
 
 def voxelized_phantom(world, image_file = 'phan.h33', range_file = 'mat_range.dat', position = None):

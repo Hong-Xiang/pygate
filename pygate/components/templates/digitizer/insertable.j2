@@ -1,8 +1,8 @@
 {% macro insertable(o) -%}
-{% if o.define_name -%}
+{% if o.is_define_name -%}
 /gate/digitizer/name {{ o.name }}
 {% endif -%}   
-{% if not o.no_explict_insert -%}
+{% if o.is_explict_insert -%}
 /gate/digitizer/{{ [o.base.name, '/'] | join if o.base }}insert {{ o.insertable_type }}
 {% endif -%}
 {% block detail scoped -%}
