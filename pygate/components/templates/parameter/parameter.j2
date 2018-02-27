@@ -1,0 +1,10 @@
+{% macro parameter(o) -%}
+{{ o.random_engine.render() }}
+{% for out in o.outputs -%}
+{{ out.render() }}
+{% endfor -%}
+{{ o.acquisition.render() }}
+{% endmacro -%}
+{% if o -%}
+{{ parameter(o) }}
+{%- endif %}

@@ -8,13 +8,13 @@ class Simulation(ObjectWithTemplate):
     def __init__(self,
                  geometry,
                  physics,
-                 digitizer,
+                 digitizers,
                  source,
                  parameter,
                  material_database=None,
                  visualisation=None):
         self.geometry = geometry
-        self.digitizer = digitizer
+        self.digitizers = digitizers
         self.physics = physics
         self.source = source
         self.parameter = parameter

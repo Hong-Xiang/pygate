@@ -10,12 +10,12 @@ def pet_physics(cut_pair_list):
 
 
 def optical_physics(cut_pair_list):
-    pass
+    return Physics([],cut_pair_list)
 
 
 def gamma_physics(cut_pair_list):
-    pass
+    return Physics([],cut_pair_list)
 
 
 def spect_physics(cut_pair_list):
-    pass
+    return Physics([],cut_pair_list)

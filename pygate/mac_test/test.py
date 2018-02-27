@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # define the world volume
     world = Box(name='world',size = Vec3(400,400,400,'cm'))
     # define the camera
-    cam = cylindricalPET(world)
+    cam = make_default_camera(simu_name,world)
     # define the phantom
     phan =  voxelized_phantom(world)
 
@@ -26,12 +26,12 @@ if __name__ == '__main__':
     #####################
     #####################
     
-    phy = make_default_physics(simu_name,cam)
+    phy = make_default_physics(simu_name,cam, phan)
     
     digi = make_default_digitizer(simu_name,cam)
 
     # define the source
-    src = voxelized_gamma(position = Vec3(-10,-10,-10))
+    src = voxelized_gamma(position = Vec3(-10,-10,-10,'mm'))
 
     # define the parameters
     para = pet_parameters()
@@ -39,7 +39,8 @@ if __name__ == '__main__':
     #####################
 
     simu = Simulation(geo,phy,digi,src,para)
-    print(simu.render())
+    with open('./pygate/mac_test/cylindricalPET.txt', 'w') as fout:
+        print(simu.render(), file=fout)
     print("OK!\n")
 
 

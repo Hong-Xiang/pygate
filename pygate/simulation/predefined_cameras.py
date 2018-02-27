@@ -1,4 +1,4 @@
-from pygate.components.geometry import *
+from ..components.geometry import *
 
 
 def cylindricalPET(world: Volume, cylinder=None, rrh=None,
@@ -13,14 +13,14 @@ def cylindricalPET(world: Volume, cylinder=None, rrh=None,
         head = Box('head', Vec3(8, 32, 40, 'cm'), 'Air',
                    cylinder, Vec3(44, 0, 0, 'cm'), repeaters=[rrh])
     if rcb is None:
-        rcb = RepeaterCubic(scale=Vec3(1, 5, 5, ''),
-                            repeat_vector=Vec3(0.0, 3.2, 4.0))
+        rcb = RepeaterCubic(scale=Vec3(1, 20, 20, ''),
+                            repeat_vector=Vec3(0.0, 1.6, 2.0,'cm'))
     if block is None:
         block = Box('block', Vec3(30, 16, 20, 'mm'),
                     'Air', head, repeaters=[rcb])
     if rcc is None:
-        rcc = RepeaterCubic(scale=Vec3(1, 20, 20, ''),
-                            repeat_vector=Vec3(0.0, 1.6, 2.0, unit='cm'))
+        rcc = RepeaterCubic(scale=Vec3(1, 5, 5),
+                            repeat_vector=Vec3(0.0, 3.2, 4.0,'cm'))
     if crystal is None:
         crystal = Box('crystal', Vec3(30, 3, 3.8, 'mm'),
                       'Air', block, repeaters=[rcc])
@@ -44,17 +44,17 @@ def ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
         cylinder = Cylinder('ecat', rmax=44.2, rmin=41.2, height=15.52, material='Air',
                             mother=world, unit='cm')
     if rlb is None:
-        rlb = RepeaterLinear(number=4, repeat_vector=Vec3(0, 0, 38.8))
+        rlb = RepeaterLinear(number=4, repeat_vector=Vec3(0, 0, 38.8,'cm'))
     if rrb is None:
         rrb = RepeaterRing(number=72)
     if block is None:
-        block = Box('block', size=Vec3(30, 35.8594, 38.7), position=Vec3(427.0, 0.0, 0.0),
+        block = Box('block', size=Vec3(30, 35.8594, 38.7), position=Vec3(427.0, 0.0, 0.0,'mm'),
                     material='Air', mother=cylinder, repeaters=[rlb, rrb])
     if rcc is None:
         rcc = RepeaterCubic(scale=Vec3(1, 8, 8, ''),
-                            repeat_vector=Vec3(0, 4.4942, 4.85))
+                            repeat_vector=Vec3(0, 4.4942, 4.85,'mm'))
     if crystal is None:
-        crystal = Box('crystal', size=Vec3(30.0, 4.4, 4.75),
+        crystal = Box('crystal', size=Vec3(30.0, 4.4, 4.75,'mm'),
                       material='BGO', mother=block, repeaters=[rcc])
 
     sys = Ecat(block, crystal)

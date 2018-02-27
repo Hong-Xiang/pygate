@@ -1,0 +1,193 @@
+
+/gate/geometry/setMaterialDatabase    ./GateMaterials.db
+
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+/gate/world/geometry/setXLength         400 cm
+/gate/world/geometry/setYLength         400 cm
+/gate/world/geometry/setZLength         400 cm
+
+/gate/world/daughters/name            ecat
+/gate/world/daughters/insert          cylinder
+/gate/ecat/geometry/setRmin         41.2 mm
+/gate/ecat/geometry/setRmax         44.2 mm
+/gate/ecat/geometry/setHeight         15.52 mm
+/gate/ecat/setMaterial                 Air
+
+/gate/ecat/daughters/name            block
+/gate/ecat/daughters/insert          box
+/gate/block/placement/setTranslation    427.0 0.0 0.0 mm
+/gate/block/geometry/setXLength         30 mm
+/gate/block/geometry/setYLength         35.8594 mm
+/gate/block/geometry/setZLength         38.7 mm
+/gate/block/setMaterial                 Air
+
+/gate/block/daughters/name            crystal
+/gate/block/daughters/insert          box
+/gate/crystal/geometry/setXLength         30.0 mm
+/gate/crystal/geometry/setYLength         4.4 mm
+/gate/crystal/geometry/setZLength         4.75 mm
+/gate/crystal/setMaterial                 BGO
+/gate/crystal/repeaters/insert          cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX        1  
+/gate/crystal/cubicArray/setRepeatNumberY        8  
+/gate/crystal/cubicArray/setRepeatNumberZ        8  
+/gate/crystal/cubicArray/setRepeatVector         0 4.4942 4.85 mm 
+
+/gate/block/repeaters/insert          linear
+/gate/block/linear/setRepeatNumber 4
+/gate/block/linear/setRepeatVector 0 0 38.8 cm
+
+/gate/block/repeaters/insert          ring
+/gate/block/ring/setRepeatNumber 72
+
+
+/gate/world/daughters/name            voxelized_phantom
+/gate/world/daughters/insert          ImageRegularParametrisedVolume
+/gate/voxelized_phantom/geometry/setImage         phan.h33
+/gate/voxelized_phantom/geometry/setRangeToMaterialFile         mat_range.dat
+
+/gate/systems/ecat/block/attach   block
+/gate/systems/ecat/crystal/attach   crystal
+
+/gate/crystal/attachCrystalSD
+
+/gate/voxelized_phantom/attachPhantomSD
+
+
+
+#=====================================================
+# DIGITIZER
+#=====================================================
+/gate/physics/addProcess PhotoElectric
+/gate/physics/processes/PhotoElectric/setModel StandardModel
+
+
+/gate/physics/addProcess Compton
+/gate/physics/processes/Compton/setModel StandardModel
+
+
+/gate/physics/addProcess ElectronIonisation
+/gate/physics/processes/ElectronIonisation/setModel StandardModel e-
+
+/gate/physics/processes/ElectronIonisation/setModel StandardModel e+
+
+
+/gate/physics/addProcess RayleighScattering
+/gate/physics/processes/RayleighScattering/setModel LivermoreModel
+
+
+/gate/physics/addProcess Bremsstrahlung
+/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-
+
+/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+
+
+
+/gate/physics/addProcess PositronAnnihilation
+
+/gate/physics/addProcess RadioactiveDecay
+
+/gate/physics/addProcess MultipleScattering e+
+
+/gate/physics/addProcess MultipleScattering e-
+
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+/gate/physics/Gamma/SetCutInRegion      crystal 0.1 mm
+/gate/physics/Electron/SetCutInRegion      crystal 0.1 mm
+/gate/physics/Positron/SetCutInRegion      crystal 0.1 mm
+
+/gate/physics/Gamma/SetCutInRegion      voxelized_phantom 0.1 mm
+/gate/physics/Electron/SetCutInRegion      voxelized_phantom 0.1 mm
+/gate/physics/Positron/SetCutInRegion      voxelized_phantom 0.1 mm
+
+
+
+#=====================================================
+# DIGITIZER
+#=====================================================
+/gate/digitizer/Singles/insert adder
+
+/gate/digitizer/Singles/insert readout
+/gate/digitizer/Singles/readout/setPolicy TakeEnergyCentroid
+/gate/digitizer/Singles/readout/setDepth  1
+/gate/digitizer/Singles/insert blurring
+/gate/digitizer/Singles/blurring/setResolution 0.26
+/gate/digitizer/Singles/blurring/setEnergyOfReference 511.0 keV
+
+/gate/digitizer/Singles/insert thresholder
+/gate/digitizer/Singles/thresholder/setThreshold 250.0 keV
+
+/gate/digitizer/Singles/insert upholder
+/gate/digitizer/Singles/upholder/setUphold 750.0 keV
+
+/gate/digitizer/Singles/insert deadtime
+
+/gate/digitizer/Singles/deadtime/setDeadTime 3000.0 ns
+/gate/digitizer/Singles/deadtime/chooseDTVolume block
+
+
+/gate/digitizer/Coincidences/setWindow 10 ns
+/gate/digitizer/Coincidences/setOffset  0 ns
+
+/gate/digitizer/delay/setWindow 10 ns
+/gate/digitizer/delay/setOffset  500 ns
+
+/gate/digitizer/name finalCoinc
+/gate/digitizer/insert coincidenceChain
+/gate/digitizer/finalCoinc/addInputName Coincidences
+/gate/digitizer/finalCoinc/addInputName delay
+/gate/digitizer/finalCoinc/usePriority true
+#=====================================================
+# INITIALISATION
+#=====================================================
+/gate/run/initialize
+
+#=====================================================
+# SOURCE
+#=====================================================
+/gate/source/addSource voxelized_gamma voxel
+/gate/source/voxelized_gamma/reader/insert interfile
+/gate/source/voxelized_gamma/interfileReader/translator/insert range 
+/gate/source/voxelized_gamma/interfileReader/rangeTranslator/readTable act_range.dat
+/gate/source/voxelized_gamma/interfileReader/readFile  act.h33
+
+/gate/source/voxelized_gamma/gps/particle gamma 
+/gate/source/voxelized_gamma/setType backtoback
+/gate/source/voxelized_gamma/gps/monoenergy 511 keV
+/gate/source/voxelized_gamma/setForcedUnstableFlag true
+/gate/source/voxelized_gamma/setForcedHalfLife 6586.2 s
+
+/gate/source/voxelized_gamma/gps/angtype iso
+/gate/source/voxelized_gamma/gps/mintheta 0 deg 
+/gate/source/voxelized_gamma/gps/maxtheta 180 deg
+/gate/source/voxelized_gamma/gps/minphi   0 deg
+/gate/source/voxelized_gamma/gps/maxphi   360 deg
+
+
+/gate/source/list
+
+
+#=====================================================
+# PARAMETER
+#=====================================================
+/gate/random/setEngineName JamesRandom
+/gate/random/setEngineSeed auto
+
+/gate/output/root/enable
+/gate/output/root/setFileName pet
+/gate/output/root/setRootHitFlag 1
+/gate/output/root/setRootSinglesFlag 1
+/gate/output/root/setRootCoincidencesFlag 1
+/gate/output/root/setRootdelayFlag 1
+
+/gate/application/setTimeStart 0.0 s
+/gate/application/setTimeStop 1.0 s
+/gate/application/setTimeSlice 1.0 s
+/gate/application/startDAQ
+
+
+
+
