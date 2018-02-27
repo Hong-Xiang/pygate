@@ -1,33 +1,42 @@
 from .base import RoutineWithFS, Operation
+from ..utils.typing import JSONStr
+import json
+
+
+
 
 class OpMerge(Operation):
     merge_method = None
-    def __init__(self, sources, target):
+
+    def __init__(self, source, target):
         self.sources = sources
         self.target = target
 
-    def get_sources(self,)
-    
-    def dryrun(self, r:RoutineWithFS):
-        result = []
-        result.append('MERGE.{}.TARGET: {}.'.format(self.merge_method, self.target))
-        for s in self.sources:
+    def dryrun(self, r: RoutineWithFS)->JSONStr:
+        result = dict()
+        result['operation'] = __class__
+        result['target'] = self.target
+        result['sources'] = self.sources
+        return json.dumps(result)
 
-            print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
 
 class OpMergeHADD(Operation):
     pass
 
+
 class OpMergeCat(Operation):
     pass
 
+
 class OpMergeSum(Operation):
     def __init__(self, dtype, sources, target):
-        super()
-    pass
+        super().__init__(sources, target)
+        self.dtype = dtype
+
 
 class OpMergeCopy(Operation):
     pass
+
 
 class Merger:
     def __init__(self, fs, config):

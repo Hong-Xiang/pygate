@@ -23,3 +23,9 @@ class Routine:
             else:
                 result.append(o.apply(self))
         return tuple(result)
+
+
+class RoutineWithFS(Routine):
+    def __init__(self, fs, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
+        super().__init__(operations, dryrun, verbose)
+        self.fs = fs

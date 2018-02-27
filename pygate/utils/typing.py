@@ -1,0 +1,2 @@
+class JSONStr(str):
+    pass
