@@ -2,9 +2,8 @@ from typing import Tuple
 
 
 class Operation:
-    def __init__(self, work_func, msg_func):
-        self.work_func = work_func
-        self.msg_func = msg_func
+    work_func = None
+    msg_func = None
 
     def apply(self, routine):
         return self.work_func(routine)
@@ -14,9 +13,10 @@ class Operation:
 
 
 class Routine:
-    def __init__(self, operations: Tuple[Operation]=(), dryrun=False):
+    def __init__(self, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
         self.dryrun = dryrun
         self.ops = operations
+        self.verbose = verbose
 
     def work(self):
         result = []
