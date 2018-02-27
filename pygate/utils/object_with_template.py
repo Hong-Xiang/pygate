@@ -7,7 +7,22 @@ class EnvironmentOfPackage:
         from jinja2 import Environment, PackageLoader
         if self._env is None:
             self._env = Environment(loader=PackageLoader(self.name))
+            self._env.filters['default_suffix'] = default_suffix
+            self._env.filters['ds'] = default_suffix
         return self._env
+
+
+"""
+Custom filters
+"""
+
+
+def default_suffix(s: str, suffix: str, is_auto_add_point_prefix=True):
+    if is_auto_add_point_prefix and not suffix.startswith('.'):
+        suffix = '.' + suffix
+    if not s.endswith(suffix):
+        s += suffix
+    return s
 
 
 class ObjectWithTemplateBase:

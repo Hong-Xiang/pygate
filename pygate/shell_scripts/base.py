@@ -6,3 +6,5 @@ env = EnvironmentOfPackage(pkg_name)
 
 class ObjectWithTemplate(ObjectWithTemplateBase):
     pkg_env = env
+
+
