@@ -35,6 +35,8 @@ class Ecat(System):
     def __init__(self, block=None, crystal=None, sensitive_detectors=None):
         self.attach_systems = lambda:  {'block': block, 'crystal': crystal}
         super().__init__(sensitive_detectors)
+        
+
 
 
 class CylindricalPET(System):

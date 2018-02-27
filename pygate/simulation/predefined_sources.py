@@ -6,7 +6,7 @@ from pygate.components.source import *
 def voxelized_gamma(position, src_name='voxelized_gamma', read_table='act_range.dat', read_file='act.h33'):
     p = ParticleGamma()
     ang = AngularISO()
-    v = Voxelized('act_range.dat', 'act.h33', position)
+    v = Voxelized('act_range.dat', 'act.h33', position=position)
     src = Source(name=src_name, particle=p, angle=ang, shape=v)
     src_list = SourceList([src, ])
     return src_list

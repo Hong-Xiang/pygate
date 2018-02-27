@@ -46,7 +46,7 @@ def cylindricalPET_digitizer(rdr=None, blur=None,
     if coin is None:
         coin = CoincidenceSorter(window=10)
     if coin_delay is None:
-        coin_delay = CoincidenceSorter(name='delay', window=10, offset=500)
+        coin_delay = CoincidenceSorter(name='delay', window=10, offset=500,is_define_name=True, is_explicit_insert=False)
     digitizer = [singles, coin, coin_delay]
     return digitizer
 

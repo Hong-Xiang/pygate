@@ -1,5 +1,9 @@
 {% extends "digitizer/insertable.j2" -%}
 {% block detail -%}
+{% if not o.window is none -%}
 /gate/digitizer/{{ o.name }}/setWindow {{ o.window }} ns
+{% endif -%}
+{% if not o.offset is none -%}
 /gate/digitizer/{{ o.name }}/setOffset  {{ o.offset }} ns
+{% endif -%}
 {%- endblock -%}
