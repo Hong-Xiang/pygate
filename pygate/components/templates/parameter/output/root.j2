@@ -4,4 +4,5 @@
 {{ "{}/setRootHitFlag {}".format(prefix(o), o.hit) if not o.hit is none}}
 {{ "{}/setRootSinglesFlag {}".format(prefix(o), o.singles) if not o.singles is none }}
 {{ "{}/setRootCoincidencesFlag {}".format(prefix(o), o.coincidences) if not o.coincidences is none }}
+{{ "{}/setRootdelayFlag {}".format(prefix(o),o.delay) if not o.delay is none}}
 {% endblock detail -%}

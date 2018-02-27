@@ -14,3 +14,6 @@ class Surface(ObjectWithTemplate):
 
 class SurfacePerfectAPD(Surface):
     surface_type = 'perfect_apd'
+
+class SurfaceRoughTeflonWrapped(Surface):
+    surface_type  = 'rough_teflon_warpped'

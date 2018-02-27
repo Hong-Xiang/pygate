@@ -1,6 +1,6 @@
 from .base import ObjectWithTemplate
 from .geometry import Volume
-from .system import System
+from .geometry.camera.system import System
 from typing import Tuple
 
 
