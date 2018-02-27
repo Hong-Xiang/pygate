@@ -40,7 +40,7 @@ class Merge(Task):
 class ScriptRun(ObjectWithTemplate):
     template = 'run'
 
-    def __init__(self, work_directory, tasks: Tuple[Task], geant4_version, shell='bash', is_need_source_env=False):
+    def __init__(self, work_directory, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False):
         self.work_directory = work_directory
         self.geant4_version = geant4_version
         self.shell = shell
@@ -69,7 +69,7 @@ class ScriptRunLocal(ScriptRun):
 class ScriptPostRun(Script):
     template = 'post_run'
 
-    def __init__(self, tasks: Tuple[Task], shell='bash', is_need_source_env=False):
+    def __init__(self, tasks: Tuple[Task]=(), shell='bash', is_need_source_env=False):
         self.tasks = tasks
         self.shell = shell
         self.is_need_source_env = is_need_source_env
