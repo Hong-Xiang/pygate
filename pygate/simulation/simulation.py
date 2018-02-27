@@ -1,87 +1,62 @@
-from ..components import physics as phy
-from ..components import parameter as para
-from ..components import ObjectWithTemplate
-from ..components import geometry as geo
-from ..components.simulation import * 
-
+from ..components.simulation import *
+from ..components.geometry.volume import *
 from .predefined_cameras import *
-from .predefined_phantoms import*
+from .predefined_phantoms import *
+from .predefined_physics import *
 from .predefined_digitizers import *
-from .predefined_physics import*
-#from .predefined_parameters import*
+from .predefined_sources import * 
+from .predefined_parameters import *
 
+# for reference
+simu_list = ['PETscanner','cylindricalPET','ecat','multiPatchPET','SPECThead','OpticalSystem','OpticalGamma']
 
-
-
-
-def make_default_physics(simu_name, cut_pair_list):
-    # decide the cut pair list
-    if simu_name is 'PETscanner' or 'cylindricalPET' or 'ecat' or 'multiPatchPET':
-         return phy.PET(cut_pair_list)
-    elif simu_name is 'SPECThead':
-         physics = phy.SPECT(cut_pair_list)
-    elif f.camera.name is 'OpticalSystem':
-         .physics = phy.OpticalPhysics(cut_pair_list)
-    elif f.camera.name is 'OpticalGamma':
-         .physics = phy.OpticalGamma(cut_pair_list)
+def make_default_camera(simu_name, world:Volume):
+    if simu_name is 'cylindricalPET':
+        return cylindricalPET(world)
+    elif simu_name is 'ecat':
+        return ecat(world)
+    elif simu_name in ['OpticalSystem', 'OpticalGamma']:
+        return opticalsystem(world)
+    elif simu_name is 'multiPatchPET':
+        return multipatchPET(world)
     else:
-        raise ValueError(
-            "simulation<set_physics> invalid system name: {}".format(self.camera.name))
+        raise ValueError()
 
-def make_default_parameter():
-    if self.camera.name is 'OpticalSystem' or 'OpticalGamma':
-        self.parameter = para.Parameter(acquisition=para.AcquisitionPrimaries(), output=para.Ascii(file_name=self.camera.name),
-                                        random_engine=para.RandomEngine())
-    elif self.camera.name is 'PETscanner'
-        pass
-    else:
-        pass
-def make_default_digitizer(self):
+def make_default_surfaces(simu_name):
     pass
 
+def make_default_physics(simu_name,  cut_pair_list = None):
+    # decide the cut pair list
+    if cut_pair_list is None:
+        pass
+
+    if simu_name in ['PETscanner','cylindricalPET','ecat', 'multiPatchPET']:
+         return pet_physics(cut_pair_list)
+    elif simu_name is 'SPECThead':
+         return spect_physics(cut_pair_list)
+    elif simu_name is 'OpticalSystem':
+         return optical_physics(cut_pair_list)
+    elif simu_name is 'OpticalGamma':
+         return gamma_physics(cut_pair_list)
+    else:
+        raise ValueError(
+            "simulation<set_physics> invalid system name: {}".format(simu_name))
 
 
-def simu():
+def make_default_digitizer(simu_name, cam:Camera):
+    if simu_name is 'cylindricalPET':
+        return cylindricalPET_digitizer()
+    elif simu_name is 'ecat':
+        return ecat_digitizer(dtvolume = cam.system.attach_systems.block)
+    elif simu_name is 'OpticalSystem':
+        return optical_digitizer()
+    pass
+
+def make_default_parameter(simu_name):
+    if simu_name is 'OpticalSystem' or 'OpticalGamma':
+        return  optical_parameters()
+    elif simu_name is 'PETscanner':
+        pass
+    else:
+        pass
     
-
-if __name__ == '__main__':
-    
-    ## must be given parts
-    #####################
-    #####################
-    
-    # define the world volume
-    world = geo.Box(name='world',size = geo.Vec3(400,400,400,'cm'))
-    # define the camera
-    cam = Predefined_CylindricalPET(world)
-    # define the phantom
-    phan =  Predefined_Voxelized_Phantom(world)
-    # define the source
-    source = 
-
-    #####################
-    #####################
-
-    ##optional parts
-    #####################
-    #####################
-    
-    #phy = pet_physics()
-    digi = ecat_digitizer(cam)
-    
-
-
-
-
-    simu = Simulation(world,cam,phan,source)
-    
-            if physics is None:
-                self.set_physics_default()
-        if parameter is None:
-            self.set_parameter_default()
-        if digitizer is None:
-            self.set_digitizer_default()
-
-
-
-
