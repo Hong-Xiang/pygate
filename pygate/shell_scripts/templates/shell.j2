@@ -1,0 +1,12 @@
+{% macro header(shell) -%}
+{% if shell == 'bash' -%}
+#!/bin/bash
+{% elif shell == 'zsh' -%}
+#!/usr/bin/env zsh
+{% endif -%}
+{% endmacro -%}
+{% macro source(need_source, shell) -%}
+{% if need_source -%}
+source ~/.{{ shell }}rc
+{% endif -%}
+{% endmacro -%}

@@ -1,0 +1,15 @@
+{% from "shell.j2" import header, source -%}
+{{ header(o.shell) }}
+#SBATCH -o %J.out
+#SBATCH -e %J.err
+#SBATCH -p {{ o.partition | d('cpu') }}
+{{ source(o.is_need_source_env, o.shell) }}
+{% block prework scoped -%}
+{% endblock prework -%}
+echo 'Run on:' `hostname`
+echo 'Start at: ' `date`
+{% block work scoped -%}
+{% endblock work -%}
+echo 'Finish at: ' `date`
+{% block postwork scoped -%}
+{% endblock postwork -%}
