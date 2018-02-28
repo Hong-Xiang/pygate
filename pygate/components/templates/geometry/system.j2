@@ -2,9 +2,6 @@
 {% for l in o.levels -%}
 /gate/systems/{{ o.name }}/{{ l }}/attach   {{ o.levels[l].name }}
 {% endfor -%}
-{% for s in o.sds -%}
-/gate/{{ s.name }}/attachCrystalSD
-{% endfor -%}
 {% endmacro -%}
 {% if o -%}
 {{ system(o) }}
