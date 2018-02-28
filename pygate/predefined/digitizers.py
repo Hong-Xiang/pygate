@@ -23,7 +23,7 @@ def ecat_digitizer(dtvolume,
     if coin is None:
         coin = CoincidenceSorter(window=10, offset=0)
     if coin_delay is None:
-        coin_delay = CoincidenceSorter(name='delay', window=10, offset=500)
+        coin_delay = CoincidenceSorter(name='delay', window=10, offset=500, is_define_name=True, is_explicit_insert=True)
     if coin_chain is None:
         coin_chain = CoincidencesChain(
             input1=coin, input2=coin_delay, name='finalCoinc', use_priority='True')

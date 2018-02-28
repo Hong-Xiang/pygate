@@ -1,13 +1,13 @@
 {% extends "geometry/volume/volume.j2" %}
 {% block detail -%}
-/gate/{{ o.name }}/geometry/setRmin         {{ o.rmin }} mm
-/gate/{{ o.name }}/geometry/setRmax         {{ o.rmax }} mm
-/gate/{{ o.name }}/geometry/setHeight         {{ o.height }} mm
+/gate/{{ o.name }}/geometry/setRmin         {{ o.rmin }} {{ o.unit }}
+/gate/{{ o.name }}/geometry/setRmax         {{ o.rmax }} {{ o.unit }}
+/gate/{{ o.name }}/geometry/setHeight         {{ o.height }} {{ o.unit }}
 {% if o.phi_start -%}
-/gate/{{ o.name }}/geometry/setPhiStart         {{ o.phi_start }} mm
+/gate/{{ o.name }}/geometry/setPhiStart         {{ o.phi_start }} {{ o.unit }}
 {% endif -%}
 {% if o.delta_phi -%}
-/gate/{{ o.name }}/geometry/setDeltaPhi         {{ o.delta_phi }} mm
+/gate/{{ o.name }}/geometry/setDeltaPhi         {{ o.delta_phi }} {{ o.unit }}
 {% endif -%}
 {% endblock detail -%}
 

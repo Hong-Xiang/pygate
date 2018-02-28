@@ -48,7 +48,7 @@ def ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
     if rrb is None:
         rrb = RepeaterRing(number=72)
     if block is None:
-        block = Box('block', size=Vec3(30, 35.8594, 38.7), position=Vec3(427.0, 0.0, 0.0,'mm'),
+        block = Box('block', size=Vec3(30, 35.8594, 38.7 ,'mm'), position=Vec3(427.0, 0.0, 0.0,'mm'),
                     material='Air', mother=cylinder, repeaters=[rlb, rrb])
     if rcc is None:
         rcc = RepeaterCubic(scale=Vec3(1, 8, 8, ''),

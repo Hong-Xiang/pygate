@@ -22,7 +22,7 @@ class TestVolume(unittest.TestCase):
     def test_children(self):
         world = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
         cylinder = Cylinder('cylindricalPET', 52.0, 39.9, 40.2, material='Air',
-                            mother=world, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='cm')
+                            mother=world, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='mm')
         head = Box('head', Vec3(8, 32, 40, 'cm'), 'Air',
                    cylinder, Vec3(44, 0, 0, 'cm'))
         block = Box('block', Vec3(30, 16, 20, 'mm'), 'Air', head)
@@ -46,9 +46,16 @@ class TestCylinder(unittest.TestCase):
     def test_render(self):
         b = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
         c = Cylinder('cylindricalPET', 52.0, 39.9, 40.2, material='Air',
-                     mother=b, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='cm')
+                     mother=b, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='mm')
         self.assertEqual(c.render(),
                          '/gate/world/daughters/name            cylindricalPET\n/gate/world/daughters/insert          cylinder\n/gate/cylindricalPET/placement/setTranslation    0.0 0.0 0.0 cm\n/gate/cylindricalPET/geometry/setRmin         39.9 mm\n/gate/cylindricalPET/geometry/setRmax         52.0 mm\n/gate/cylindricalPET/geometry/setHeight         40.2 mm\n/gate/cylindricalPET/setMaterial                 Air\n')
+
+    def test_render_2(self):
+        b = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        c = Cylinder('cylindricalPET', 52.0, 39.9, 40.2, material='Air',
+                     mother=b, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='cm')
+        self.assertEqual(c.render(),
+                         '/gate/world/daughters/name            cylindricalPET\n/gate/world/daughters/insert          cylinder\n/gate/cylindricalPET/placement/setTranslation    0.0 0.0 0.0 cm\n/gate/cylindricalPET/geometry/setRmin         39.9 cm\n/gate/cylindricalPET/geometry/setRmax         52.0 cm\n/gate/cylindricalPET/geometry/setHeight         40.2 cm\n/gate/cylindricalPET/setMaterial                 Air\n')
 
 
 class TestRepeatCubic(unittest.TestCase):
@@ -118,7 +125,7 @@ class TestCamera(unittest.TestCase):
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
         system = CylindricalPET(head, block, crystal=crystal,
-                                 layer0=lso, layer1=bgo)
+                                layer0=lso, layer1=bgo)
         camera = Camera(system, [lso, bgo])
         ae(self, camera.render(),
            '/gate/systems/cylindricalPET/rsector/attach head\n/gate/systems/cylindricalPET/module/attach block\n/gate/systems/cylindricalPET/crystal/attach crystal\n/gate/systems/cylindricalPET/layer0/attach LSO\n/gate/systems/cylindricalPET/layer1/attach BGO\n/gate/LSO/attachCrystalSD\n/gate/BGO/attachCrystalSD')
@@ -162,7 +169,7 @@ class TestGeometry(unittest.TestCase):
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
         system = CylindricalPET(head, block, crystal=crystal,
-                                 layer0=lso, layer1=bgo)
+                                layer0=lso, layer1=bgo)
         camera = Camera(system, [lso, bgo])
         casper = Box('casper', Vec3(50.0, 50.0, 17.0, 'mm'), 'RhB', world)
         phantom = Phantom((casper,))
