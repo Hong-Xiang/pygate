@@ -1,5 +1,6 @@
 import unittest
 from pygate.components.source import *
+from pygate.utils.strs import assert_equal_ignoring_multiple_whitespaces as ae
 
 
 class TestParticlePositron(unittest.TestCase):
@@ -65,5 +66,5 @@ class TestSource(unittest.TestCase):
         p = ParticleGamma(halflife=1223,)
         a = AngularISO()
         src = Source('posiC11', p, 10000, a)
-        self.assertEqual(src.render(),
-                         '/gate/source/addSource posiC11\n/gate/source/posiC11/gps/particle gamma \n/gate/source/posiC11/setType backtoback\n/gate/source/posiC11/gps/monoenergy 511 keV\n/gate/source/posiC11/setForcedUnstableFlag true\n/gate/source/posiC11/setForcedHalfLife 1223 s\n\n/gate/source/posiC11/gps/angtype iso\n/gate/source/posiC11/gps/mintheta 0 deg \n/gate/source/posiC11/gps/maxtheta 180 deg\n/gate/source/posiC11/gps/minphi   0 deg\n/gate/source/posiC11/gps/maxphi   360 deg\n\n')
+        ae(self, src.render(),
+           '/gate/source/addSource posiC11\n/gate/source/posiC11/gps/particle gamma \n/gate/source/posiC11/setType backtoback\n/gate/source/posiC11/gps/monoenergy 511 keV\n/gate/source/posiC11/setForcedUnstableFlag true\n/gate/source/posiC11/setForcedHalfLife 1223 s\n/gate/source/posiC11/setActivity 10000 becquerel\n/gate/source/posiC11/gps/angtype iso\n/gate/source/posiC11/gps/mintheta 0 deg \n/gate/source/posiC11/gps/maxtheta 180 deg\n/gate/source/posiC11/gps/minphi   0 deg\n/gate/source/posiC11/gps/maxphi   360 deg\n\n')

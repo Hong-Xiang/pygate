@@ -2,6 +2,12 @@
 {{ o.world.render() }}
 {{ o.camera.render() }}
 {{ o.phantom.render() if o.phantom }}
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+/gate/run/initialize
+
 {% for s in o.surfaces -%}
 {{ s.render() }}
 {% endfor -%}
