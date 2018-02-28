@@ -5,7 +5,6 @@ from .misc import MaterialDatabaseLocal, Visualisation
 
 class Simulation(ObjectWithTemplate):
     template = 'simulation'
-    system_list = ["PETscanner","ecat","cylindricalPET","multiPatchPET","SPECThead","OpticalSystem"]
     def __init__(self,
                  geometry,
                  digitizer,
