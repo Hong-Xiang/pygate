@@ -9,7 +9,7 @@ def pet_parameters(acqu=AcquisitionPeriod(),
     return Parameter(rand,outputs, acqu)
 
 
-def optical_parameters(acqu=AcquisitionPrimaries(number=100),
+def optical_parameters(acqu=AcquisitionPrimaries(number=10000),
                                   outputs=None,
                                   rand=RandomEngineMersenneTwister(seed='auto')):
     if outputs is None:

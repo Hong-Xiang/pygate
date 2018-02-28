@@ -54,8 +54,8 @@ def cylindricalPET_digitizer(rdr=None, blur=None,
 def optical_digitizer(rdr = None):
     ad_op = AdderOptical()
     rdr = Readout(depth=1)
-    singles = Singles(ad_op, rdr)
-    digitizer = [singles]
+    singles = Singles([ad_op, rdr])
+    digitizer = [singles,]
     return digitizer
 
 

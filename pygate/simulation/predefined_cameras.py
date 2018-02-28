@@ -69,15 +69,15 @@ def opticalsystem(world: Volume, box = None, crystal = None,
         box = Box('OpticalSystem', size=Vec3(
             5.0, 5.0, 5.0, 'cm'), material='Air', mother=world)
     if crystal is None:
-        crystal = Box('crystal', Vec3(30, 30, 10), position=Vec3(
-            0.0, 0.0, 5.0), material='LYSO', mother=box)
+        crystal = Box('crystal', Vec3(30, 30, 10,'mm'), position=Vec3(
+            0.0, 0.0, 5.0, 'mm'), material='LYSO', mother=box)
     if rcp is None:
-        rcp = RepeaterCubic(Vec3(10, 10, 10), repeat_vector=Vec3(3.0, 3.0, 0.0))
+        rcp = RepeaterCubic(Vec3(10, 10, 10), repeat_vector=Vec3(3.0, 3.0, 0.0,'mm'))
     if pixel is None:
         pixel = Box('pixel', Vec3(3.0, 3.0, 1.0), position=Vec3(
-            0, 0, -0.5), material='G4_SILICON_DIOXIDE', mother=crystal, repeaters=[rcp])
+            0, 0, -0.5,'mm'), material='G4_SILICON_DIOXIDE', mother=crystal, repeaters=[rcp])
     sys = OpticalSystem(crystal, pixel)
-    sen_list = []
+    sen_list = [crystal,]
     cam = Camera(sys, sen_list)
     return cam
 
@@ -97,8 +97,13 @@ def multipatchPET(world: Volume):
     cam = Camera(sys, sen_list)
     return cam
 
-def optical_surfaces():
-    pass
+def optical_surfaces(cam:Camera):
+    surface1 = SurfaceRoughTeflonWrapped('surface1',cam.system.levels['crystal'],cam.system.levels['crystal'].mother)
+    surface2 = SurfaceRoughTeflonWrapped('surface2',cam.system.levels['crystal'].mother,cam.system.levels['crystal'])
+    Detection1 = SurfacePerfectAPD('Detection1', cam.system.levels['crystal'],cam.system.levels['pixel'])
+    Detection2 = SurfacePerfectAPD('Detection2',cam.system.levels['pixel'],cam.system.levels['crystal'])
+    surfaces =  [surface1,surface2,Detection1,Detection2]
+    return surfaces
 
 
 
