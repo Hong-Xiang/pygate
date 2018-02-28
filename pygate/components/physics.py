@@ -140,12 +140,6 @@ class PhysicsList(ObjectWithTemplate):
         self.pps = physics_processes
 
 
-def standard_physics_list():
-    return (PhotoElectric(), Compton(), RayleighScattering(),
-            ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
-            MultipleScattering('e-'), MultipleScattering('e+'))
-
-
 class Cuts(ObjectWithTemplate):
     template = 'physics/cuts'
     STD_PARTICLES = ('Gamma', 'Electron', 'Positron')

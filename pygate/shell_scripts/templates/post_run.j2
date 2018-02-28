@@ -1,0 +1,6 @@
+{% extends "sbatch.j2" -%}
+{% block work -%}
+{% for t in o.tasks -%}
+{{ t.render() }}
+{% endfor -%}
+{% endblock work -%}

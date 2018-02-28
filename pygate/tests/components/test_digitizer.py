@@ -87,6 +87,7 @@ class TestSingles(unittest.TestCase):
         to_compare = [unified(s) for s in to_compare]
         self.assertEqual(*to_compare)
 
+
 class TestCoincidenceSorter(unittest.TestCase):
     def test_render(self):
         cs = CoincidenceSorter(window=10, offset=0)
@@ -97,7 +98,7 @@ class TestCoincidenceSorter(unittest.TestCase):
 
     def test_render_add_new(self):
         cs = CoincidenceSorter(window=10, offset=500,
-                               name='delay', define_name=True, no_explicit_insert=False)
+                               name='delay', is_define_name=True, is_explicit_insert=True)
         to_compare = [cs.render(),
                       '/gate/digitizer/name delay\n/gate/digitizer/insert coincidenceSorter\n/gate/digitizer/delay/setWindow 10  ns\n/gate/digitizer/delay/setOffset 500  ns']
         to_compare = [unified(s) for s in to_compare]
@@ -108,8 +109,8 @@ class TestCoincidencesChain(unittest.TestCase):
     def test_render(self):
         cs0 = CoincidenceSorter(window=10, offset=0)
         cs1 = CoincidenceSorter(window=10, offset=500,
-                                name='delay', define_name=True)
-        cc = CoincidencesChain(cs0, cs1, name='finalcoin', )
+                                name='delay', is_define_name=True)
+        cc = CoincidencesChain(cs0, cs1, use_priority=True, name='finalcoin', )
         to_compare = [cc.render(),
                       '/gate/digitizer/name finalcoin\n/gate/digitizer/insert coincidenceChain\n/gate/digitizer/finalcoin/addInputName Coincidences\n/gate/digitizer/finalcoin/addInputName delay\n/gate/digitizer/finalcoin/usePriority true']
         to_compare = [unified(s) for s in to_compare]

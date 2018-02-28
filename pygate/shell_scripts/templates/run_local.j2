@@ -1,0 +1,13 @@
+{% extends "run.j2" -%}
+{% block prework -%}
+source /hqlf/softwares/module/simu{{ o.geant4_version }}.sh
+{% endblock prework -%}
+{% block work -%}
+if [ ! -d {{ o.work_directory }} ]; then
+    mkdir {{ o.work_directory }}
+fi
+cp {{ o.server_work_directory }}/* {{ o.work_directory }}
+{{ super () }}
+cp {{ o.work_directory }}/* {{ o.server_work_directory }}
+echo 'Finish copy back at: ' `date`
+{% endblock work -%}
