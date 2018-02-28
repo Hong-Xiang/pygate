@@ -27,6 +27,10 @@ class TestMultipleScattering(unittest.TestCase):
 
 class TestStandardPhysicsList(unittest.TestCase):
     def test_render(self):
+        def standard_physics_list():
+            return (PhotoElectric(), Compton(), RayleighScattering(),
+                    ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
+                    MultipleScattering('e-'), MultipleScattering('e+'))
         std_pl = standard_physics_list()
         ae(self, '\n'.join([p.render() for p in std_pl]),
            '/gate/physics/addProcess PhotoElectric\n/gate/physics/processes/PhotoElectric/setModel StandardModel\n/gate/physics/addProcess Compton\n/gate/physics/processes/Compton/setModel StandardModel\n/gate/physics/addProcess RayleighScattering\n/gate/physics/processes/RayleighScattering/setModel PenelopeModel\n/gate/physics/addProcess ElectronIonisation\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e-\n/gate/physics/processes/ElectronIonisation/setModel StandardModel e+\n/gate/physics/addProcess Bremsstrahlung\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-\n/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+\n/gate/physics/addProcess PositronAnnihilation\n/gate/physics/addProcess MultipleScattering e-\n/gate/physics/addProcess MultipleScattering e+')
@@ -82,6 +86,11 @@ class TestPhysics(unittest.TestCase):
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
         phantom = Box('phantom', Vec3(10, 10, 10, 'cm'), 'Water', world)
+
+        def standard_physics_list():
+            return (PhotoElectric(), Compton(), RayleighScattering(),
+                    ElectronIonisation(), Bremsstrahlung(), PositronAnnihilation(),
+                    MultipleScattering('e-'), MultipleScattering('e+'))
         std_pl = standard_physics_list()
         cuts_list = [Cuts(lso, 10.0), Cuts(bgo, 10.0),
                      Cuts(phantom, 0.1, 0.01)]
