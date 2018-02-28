@@ -126,6 +126,7 @@
 /gate/source/sphere_source/setForcedUnstableFlag true
 /gate/source/sphere_source/setForcedHalfLife 6586.2 s
 
+/gate/source/sphere_source/setActivity 1000 becquerel
 /gate/source/sphere_source/gps/angtype iso
 /gate/source/sphere_source/gps/mintheta 90 deg 
 /gate/source/sphere_source/gps/maxtheta 90 deg
