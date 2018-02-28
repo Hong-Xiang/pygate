@@ -138,6 +138,7 @@
 /gate/source/sphere_source/setForcedUnstableFlag true
 /gate/source/sphere_source/setForcedHalfLife 6586.2 s
 
+/gate/source/sphere_source/setActivity 1000 becquerel
 /gate/source/sphere_source/gps/angtype iso
 /gate/source/sphere_source/gps/mintheta 90 deg 
 /gate/source/sphere_source/gps/maxtheta 90 deg
@@ -161,7 +162,7 @@
 /gate/output/root/setRootCoincidencesFlag 0
 /gate/output/root/setRootdelayFlag 0
 
-/gate/application/setTotalNumberOfPrimaries 100
+/gate/application/setTotalNumberOfPrimaries 10000
 /gate/application/start
 
 

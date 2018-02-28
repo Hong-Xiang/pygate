@@ -63,3 +63,9 @@ def sphere_source(position = Vec3(0,0,0), src_name = 'sphere_source',sphere = No
     src = Source(src_name,particle,activity,angle,sphere,position)
     src_list = SourceList([src,])
     return src_list
+
+def make_default_source(simu_name):
+    if simu_name in ['OpticalSystem','OpticalGamma']:
+        return sphere_source()
+    else:
+        return cylinder_source()

@@ -17,6 +17,9 @@
 {% endif -%}
 {% endif -%}
 {{ o.particle.render() }}
+{% if o.activity -%}
+/gate/source/{{ o.name }}/setActivity {{ o.activity }}
+{% endif -%}
 {{ o.angle.render() }}
 {% endmacro -%}
 {% if o -%}

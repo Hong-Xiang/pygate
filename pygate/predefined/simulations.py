@@ -4,12 +4,12 @@ from ..components.geometry.camera import Camera
 from ..components.geometry.phantom import Phantom
 from ..components.geometry.surface import *
 from ..components.physics import Cuts
-from .predefined_cameras import *
-from .predefined_phantoms import *
-from .predefined_physics import *
-from .predefined_digitizers import *
-from .predefined_sources import * 
-from .predefined_parameters import *
+from .cameras import *
+from .phantoms import *
+from .physics import *
+from .digitizers import *
+from .sources import * 
+from .parameters import *
 
 # for reference
 # simu_list = ['PETscanner','cylindricalPET','ecat','multiPatchPET','SPECThead','OpticalSystem','OpticalGamma']
@@ -31,7 +31,7 @@ def make_default_surfaces(simu_name, cam:Camera):
     if simu_name in ['OpticalSystem', 'OpticalGamma']:
         surfaces = optical_surfaces(cam)
     else:
-        pass
+        surfaces = ()
     return surfaces
     
 
@@ -74,4 +74,43 @@ def make_default_parameter(simu_name):
         return pet_parameters()
     else:
         pass
+
+def make_simulation(simu_name, geo = None, phy = None, digi =None, src = None, para = None):
+       # for reference
+    # simu_list = ['PETscanner','cylindricalPET','ecat','multiPatchPET','SPECThead','OpticalSystem','OpticalGamma']
+    # simu_name = 'OpticalGamma'
+   
+   ## must be given parts
+    #####################
+    #####################
     
+    if geo is None:
+        world = Box(name='world',size = Vec3(400,400,400,'cm'))
+        cam = make_default_camera(simu_name,world)
+        surf =  make_default_surfaces(simu_name,cam)
+        phan = None
+        #build up the geometry
+        geo  = Geometry(world,cam,phan,surf)
+    
+    
+    ##optional parts
+    #####################
+    #####################
+    if phy is None:
+        phy = make_default_physics(simu_name,cam, phan)
+    if digi is None:
+        digi = make_default_digitizer(simu_name,cam)
+
+    # define the source
+    if src is None:
+        src = make_default_source(simu_name)
+    
+    # define the parameters
+    if para is None:
+        para = make_default_parameter(simu_name)
+
+    #create a simulation
+    simu = Simulation(geo,phy,digi,src,para)
+
+    return simu
+
