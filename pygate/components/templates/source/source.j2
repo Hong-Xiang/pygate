@@ -1,3 +1,4 @@
+{% from 'utils.j2' import vec3 -%}
 {% macro source(o) -%}
 {% if o.is_voxelized() -%}
 /gate/source/addSource {{ o.name }} voxel

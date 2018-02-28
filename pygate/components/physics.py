@@ -123,6 +123,15 @@ class MultipleScattering(PhysicsProcessWithoutModels):
     def content_in_adding(self):
         return "{} {}".format(self.name, self.p)
 
+class EMultipleScattering(PhysicsProcessWithoutModels):
+    name = 'eMultipleScattering'
+    
+    def __init__(self, particle):
+        super().__init__()
+        self.p = particle
+
+    def content_in_adding(self):
+        return "{} {}".format(self.name, self.p)
 
 class PhysicsList(ObjectWithTemplate):
     template = 'physics/list'

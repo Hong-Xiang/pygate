@@ -6,13 +6,10 @@ class System(ObjectWithTemplate):
     name = None
     attach_systems = None
 
-    def __init__(self, sensitive_detectors=None):
+    def __init__(self):
         self.levels = self.attach_systems()
         self.levels = {k: self.levels[k]
                        for k in self.levels if self.levels[k] is not None}
-        if sensitive_detectors is None:
-            sensitive_detectors = tuple()
-        self.sds = sensitive_detectors
 
 
 class PETscanner(System):
@@ -32,9 +29,9 @@ class PETscanner(System):
 class Ecat(System):
     name = 'ecat'
 
-    def __init__(self, block=None, crystal=None, sensitive_detectors=None):
+    def __init__(self, block=None, crystal=None):
         self.attach_systems = lambda:  {'block': block, 'crystal': crystal}
-        super().__init__(sensitive_detectors)
+        super().__init__()
         
 
 
@@ -44,8 +41,7 @@ class CylindricalPET(System):
 
     def __init__(self,
                  rsector=None, module=None, submodule=None, crystal=None,
-                 layer0=None, layer1=None, layer2=None, layer3=None,
-                 sensitive_detectors=None):
+                 layer0=None, layer1=None, layer2=None, layer3=None):
         self.attach_systems = lambda: {
             'rsector': rsector,
             'module': module,
@@ -56,23 +52,23 @@ class CylindricalPET(System):
             'layer2': layer2,
             'layer3': layer3,
         }
-        super().__init__(sensitive_detectors)
+        super().__init__()
 
 class MultiPatchPET(System):
     name = 'multiPatchPET'
-    def __init__(self, container, patch_list, sensitive_detectors = None):
+    def __init__(self, container, patch_list):
         self.attach_systems = lambda: {'contianer':container, 
         'patch_list':patch_list}
-        super().__init__(sensitive_detectors)
+        super().__init__()
 
 class SPECThead(System):
     name = 'SPECThead'
-    def __init__(self, crystal, pixel = None, sensitive_detectors = None):
+    def __init__(self, crystal, pixel = None):
         self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel }
-        super().__init__(sensitive_detectors)
+        super().__init__()
 
 class OpticalSystem(System):
     name = 'OpticalSystem'
-    def __init__(self,crystal, pixel = None, sensitive_detectors = None):
+    def __init__(self,crystal, pixel = None):
         self.attach_systems = lambda: {'crystal': crystal, 'pixel':pixel}
-        super().__init__(sensitive_detectors)
+        super().__init__()
