@@ -2,14 +2,18 @@ from .base import RoutineWithFS, Operation
 from ..utils.typing import JSONStr
 import json
 
-
+from rx import Observable
 
 
 class OpMerge(Operation):
     merge_method = None
 
-    def __init__(self, source, target):
-        self.sources = sources
+    def __init__(self, subdirs: Observable, source, target):
+        """
+        Merge all files fit subdir_name*/source to target.
+        """
+        self.sources = []
+        subdirs.map(lambda p: p.join(source)).subscribe(self.sources.append)
         self.target = target
 
     def dryrun(self, r: RoutineWithFS)->JSONStr:

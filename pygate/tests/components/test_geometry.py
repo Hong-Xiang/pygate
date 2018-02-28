@@ -117,7 +117,7 @@ class TestCamera(unittest.TestCase):
                   crystal, Vec3(-0.75, 0.0, 0.0, 'cm'))
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
-        system = CylindericalPET(head, block, crystal=crystal,
+        system = CylindricalPET(head, block, crystal=crystal,
                                  layer0=lso, layer1=bgo)
         camera = Camera(system, [lso, bgo])
         ae(self, camera.render(),
@@ -137,7 +137,7 @@ class TestCylindrical(unittest.TestCase):
                   crystal, Vec3(-0.75, 0.0, 0.0, 'cm'))
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
-        system = CylindericalPET(
+        system = CylindricalPET(
             head, block, crystal=crystal, layer0=lso, layer1=bgo)
         self.assertEqual(system.render(),
                          '/gate/systems/cylindricalPET/rsector/attach   head\n/gate/systems/cylindricalPET/module/attach   block\n/gate/systems/cylindricalPET/crystal/attach   crystal\n/gate/systems/cylindricalPET/layer0/attach   LSO\n/gate/systems/cylindricalPET/layer1/attach   BGO\n')
@@ -161,7 +161,7 @@ class TestGeometry(unittest.TestCase):
                   crystal, Vec3(-0.75, 0.0, 0.0, 'cm'))
         bgo = Box('BGO', Vec3(15, 3.0, 3.8), 'BGO',
                   crystal, Vec3(0.75, 0.0, 0.0, 'cm'))
-        system = CylindericalPET(head, block, crystal=crystal,
+        system = CylindricalPET(head, block, crystal=crystal,
                                  layer0=lso, layer1=bgo)
         camera = Camera(system, [lso, bgo])
         casper = Box('casper', Vec3(50.0, 50.0, 17.0, 'mm'), 'RhB', world)

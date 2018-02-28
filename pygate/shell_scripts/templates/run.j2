@@ -1,0 +1,12 @@
+{% extends "sbatch.j2" -%}
+{% block prework -%}
+source /hqlf/softwares/module/simu{{ o.geant4_version }}.sh
+{% endblock prework -%}
+{% block work -%}
+echo 'Start MC Simulation at: ' `date`
+cd {{ o.work_directory }}
+{% for t in o.tasks -%}
+{{ t.render() }}
+{% endfor -%}
+echo 'Finish MC Simulation at: ' `date`
+{% endblock work -%}
