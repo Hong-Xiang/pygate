@@ -72,7 +72,7 @@ def opticalsystem(world: Volume, box = None, crystal = None,
         crystal = Box('crystal', Vec3(30, 30, 10,'mm'), position=Vec3(
             0.0, 0.0, 5.0, 'mm'), material='LYSO', mother=box)
     if rcp is None:
-        rcp = RepeaterCubic(Vec3(10, 10, 10), repeat_vector=Vec3(3.0, 3.0, 0.0,'mm'))
+        rcp = RepeaterCubic(Vec3(10, 10, 1), repeat_vector=Vec3(3.0, 3.0, 0.0,'mm'))
     if pixel is None:
         pixel = Box('pixel', Vec3(3.0, 3.0, 1.0), position=Vec3(
             0, 0, -0.5,'mm'), material='G4_SILICON_DIOXIDE', mother=crystal, repeaters=[rcp])
