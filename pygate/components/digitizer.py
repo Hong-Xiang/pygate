@@ -43,7 +43,7 @@ class Readout(Insertable):
     template = 'digitizer/singles/readout'
     insertable_type = 'readout'
 
-    def __init__(self, policy='TakeEnergyCentroid', depth=1,
+    def __init__(self, policy=None, depth=1,
                  name='readout', is_define_name=False):
         super().__init__(name, is_define_name)
         self.policy = policy

@@ -1,6 +1,7 @@
 import unittest
 from pygate.utils.strs import join_multiple
 from pygate.components.digitizer import *
+from pygate.utils.strs import assert_equal_ignoring_multiple_whitespaces as ae
 
 
 def unified(s):
@@ -20,12 +21,18 @@ class TestAdder(unittest.TestCase):
 
 class TestReadout(unittest.TestCase):
     def test_render(self):
-        readout = Readout()
+        readout = Readout(policy='TakeEnergyCentroid')
         singles = Singles([readout])
         to_compare = [readout.render(),
                       '/gate/digitizer/Singles/insert readout\n/gate/digitizer/Singles/readout/setPolicy TakeEnergyCentroid\n/gate/digitizer/Singles/readout/setDepth  1\n']
         to_compare = [unified(s) for s in to_compare]
         self.assertEqual(*to_compare)
+
+    def test_without_policy(self):
+        rdout = Readout()
+        singles = Singles([rdout])
+        ae(self, rdout.render(),
+           '/gate/digitizer/Singles/insert readout\n/gate/digitizer/Singles/readout/setDepth  1\n')
 
 
 class TestBlurring(unittest.TestCase):
@@ -73,7 +80,7 @@ class TestDeadTime(unittest.TestCase):
 class TestSingles(unittest.TestCase):
     def test_render(self):
         ad = Adder()
-        rdr = Readout()
+        rdr = Readout(policy='TakeEnergyCentroid')
         blur = Blurring(resolution=0.1, eor=511)
         thres = ThresHolder(250)
         uph = UpHolder(750)

@@ -44,7 +44,7 @@ def ecat(world: Volume, cylinder=None, rlb=None, rrb=None,
         cylinder = Cylinder('ecat', rmax=44.2, rmin=41.2, height=15.52, material='Air',
                             mother=world, unit='cm')
     if rlb is None:
-        rlb = RepeaterLinear(number=4, repeat_vector=Vec3(0, 0, 38.8,'cm'))
+        rlb = RepeaterLinear(number=4, repeat_vector=Vec3(0, 0, 38.8,'mm'))
     if rrb is None:
         rrb = RepeaterRing(number=72)
     if block is None:
