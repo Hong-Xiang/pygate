@@ -126,6 +126,15 @@ class DeadTime(WithBuffer):
         self.t = t
         self.mode = mode
 
+class DeadTimeMulti(WithBuffer):
+    template = 'digitizer/singles/dead_time_multi'
+    insertable_type = 'deadtimeMulti'
+    def __init__(self, volume, t, mode=None, buffer_size=None, buffer_mode=None, name='deadtimeMulti', define_name=False):
+        super().__init__(buffer_size, buffer_mode, name, define_name)
+        self.volume = volume
+        self.t = t
+        self.mode = mode
+
 
 class SinglesChain(Singles):
     def __init__(self, name, define_name=True):
@@ -146,7 +155,7 @@ class CoincidenceSorter(Insertable):
 class CoincidencesChain(Insertable):
     template = 'digitizer/coincidence_chain'
     insertable_type = 'coincidenceChain'
-    def __init__(self, input1, input2, name, plugins = None, use_priority=True, conserve_all_event = True, define_name=True):
+    def __init__(self, input1, input2, name, plugins = None, use_priority=None, conserve_all_event = None, define_name=True):
         super().__init__(name, define_name)
         self.input1 = input1
         self.input2 = input2
