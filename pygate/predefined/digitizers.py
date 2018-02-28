@@ -60,4 +60,4 @@ def optical_digitizer(rdr = None):
 
 
 def spect_digitizer(blur = None, spblur = None, thres = None, uph = None):
-    pass
+    raise NotImplementedError

@@ -17,13 +17,13 @@ from .parameters import *
 
 
 class PredefinedSimulations(Enum):
-    PETScanner = 0
-    CylindricalPET = 1
-    ecat = 2
-    MultiPatchPET = 3
-    SPECTHead = 4
-    OpticalSystem = 5
-    OpticalGamma = 6
+    PETScanner = 'PETscanner'
+    CylindricalPET = 'cylindricalPET'
+    ECAT = 'ecat'
+    MultiPatchPET = 'multiPatchPET'
+    SPECTHead = 'SPECThead'
+    OpticalSystem = 'OpticalSystem'
+    OpticalGamma = 'OpticalGamma'
 
 
 def make_default_camera(simu_name, world: Volume):
@@ -130,4 +130,4 @@ def make_simulation(simu_name, geo=None, phy=None, digi=None, src=None, para=Non
 
 
 def simulation(simulation_name: PredefinedSimulations, geometry=None, physics=None, digitizer=None, source=None, parameter=None):
-    return make_simulation(simulation_name.name, geometry, physics, digitizer, source, parameter)
+    return make_simulation(simulation_name.value, geometry, physics, digitizer, source, parameter)
