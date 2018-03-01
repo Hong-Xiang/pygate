@@ -131,3 +131,23 @@ def make_simulation(simu_name, geo=None, phy=None, digi=None, src=None, para=Non
 
 def simulation(simulation_name: PredefinedSimulations, geometry=None, physics=None, digitizer=None, source=None, parameter=None):
     return make_simulation(simulation_name.value, geometry, physics, digitizer, source, parameter)
+
+
+def optical_gamma(source=None,
+                  world_size: Vec3=Vec3(400.0, 400.0, 400.0, 'cm'),
+                  crystal_size: Vec3=Vec3(30.0, 30.0, 30.0, 'mm'),
+                  crystal_position: Vec3=Vec3(0.0, 0.0, 5.0, 'mm'),
+                  crystal_material: str='LYSO',
+                  nb_primaries=10000):
+    from ..components.geometry import Box, Geometry
+    from . import cameras, digitizers, physics, parameters
+    world = Box('world', world_size)
+
+    def crystal(mother): return Box('crystal', crystal_size,
+                                    crystal_material, mother,
+                                    crystal_position)
+    return Simulation(Geometry(world, cameras.optical_gamma(world, crystal), None, ()),
+                      physics.gamma_physics(()),
+                      digitizers.optical_digitizer(),
+                      source,
+                      parameters.optical_gamma(nb_primaries))
