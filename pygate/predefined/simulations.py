@@ -136,7 +136,7 @@ def simulation(simulation_name: PredefinedSimulations, geometry=None, physics=No
 def optical_gamma(source=None,
                   world_size: Vec3=Vec3(400.0, 400.0, 400.0, 'cm'),
                   crystal_size: Vec3=Vec3(30.0, 30.0, 30.0, 'mm'),
-                  crystal_position: Vec3=Vec3(0.0, 0.0, 5.0, 'mm'),
+                  crystal_position: Vec3=Vec3(0.0, 0.0, 0.0, 'mm'),
                   crystal_material: str='LYSO',
                   nb_primaries=10000):
     from ..components.geometry import Box, Geometry

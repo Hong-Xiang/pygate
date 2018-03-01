@@ -1,9 +1,9 @@
-import pandas as pd
-from typing import Tuple
 from enum import Enum
-import numpy as np
-
 from functools import reduce
+from typing import Tuple
+
+import numpy as np
+import pandas as pd
 
 
 class ParticleID(Enum):
