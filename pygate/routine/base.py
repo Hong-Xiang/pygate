@@ -1,5 +1,7 @@
 from typing import Tuple
 
+from dxl.fs import Directory
+
 
 class Operation:
     def apply(self, routine):
@@ -25,7 +27,7 @@ class Routine:
         return tuple(result)
 
 
-class RoutineWithFS(Routine):
-    def __init__(self, fs, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
+class RoutineOnDirectory(Routine):
+    def __init__(self, directory: Directory, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
         super().__init__(operations, dryrun, verbose)
-        self.fs = fs
+        self.directory = directory
