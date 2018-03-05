@@ -1,28 +1,57 @@
-from .base import RoutineWithFS, Operation
-from dxl.fs import File
+from .base import RoutineOnDirectory, Operation
+from dxl.fs import Path, File, Directory
 from ..utils.typing import JSONStr
 import json
 
 from rx import Observable
+from typing import Iterable
 
+# def merge(target:File, sources:)
 
 class OpMerge(Operation):
     merge_method = None
 
-    def __init__(self, subdirs: Observable, source: 'Observable[File]', target: File):
+    def __init__(self,
+                 sub_dir_pattern: Iterable[str],
+                 source_pattern: Iterable[str]):
         """
         Merge all files fit subdir_name*/source to target.
         """
-        self.sources = []
-        subdirs.map(lambda p: p.join(source)).subscribe(self.sources.append)
-        self.target = target
+        self.dir_pattern = sub_dir_pattern
+        self.src_pattern = source_pattern
 
-    def dryrun(self, r: RoutineWithFS)->JSONStr:
-        result = dict()
-        result['operation'] = __class__
-        result['target'] = self.target
-        result['sources'] = self.sources
-        return json.dumps(result)
+    def source_files(self, r: RoutineOnDirectory):
+        return r.list_matched_files(self.src_pattern)
+
+    def sub_dirs(self, r: RoutineOnDirectory):
+        return r.list_matched_dirs(self.dir_pattern)
+
+    def process_observable(self,
+                           r: RoutineOnDirectory):
+        def combine_file_directory(file: File):
+            return (self.sub_dirs.map(lambda d: d.path / file.path.n)
+                    .map(lambda p: File(p, file.filesystem)))
+
+        def call_kernel_source(kernel, file: File):
+            return kernel((combine_file_directory(file)
+                           .to_list().to_blocking().first()),
+                          file)
+        return lambda k: self.source_files(r).map(lambda f: call_kernel_source(k, f))
+
+    def kernel_apply(self, sources: Iterable[File], target: File):
+        return {
+            'sources': [f.path.s for f in sources],
+            'target': target.path.s
+        }
+
+    def kernel_dryrun(self, sources: Iterable[File], target: File):
+        return self.kernel_apply(sources, target)
+
+    def apply(self, r: RoutineOnDirectory):
+        return self.process_observable(r)(self.kernel_apply)
+
+    def dryrun(self, r: RoutineOnDirectory)->JSONStr:
+        return self.process_observable(r)(self.kernel_dryrun)
 
 
 class OpMergeHADD(Operation):
