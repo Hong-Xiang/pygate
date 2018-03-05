@@ -20,8 +20,8 @@ class TestRoutine(unittest.TestCase):
         self.assertEqual(dummy_rout.work(), ('apply',))
 
 
-class TestGetSubDirectories(unittest.TestCase):
-    def test_apply(self):
+class TestRoutineOnDirectory(unittest.TestCase):
+    def test_match(self):
         from fs.memoryfs import MemoryFS
         from dxl.fs import Directory
         mfs = MemoryFS()
@@ -30,6 +30,7 @@ class TestGetSubDirectories(unittest.TestCase):
         for i in range(2):
             mfs.makedir('sub{}'.format(i))
         mfs.makedir('testdir')
+        mfs.touch('sub.txt')
         sub_dirs = (r.list_matched_dirs(['sub*'])
                     .to_list().to_blocking().first())
         self.assertEqual(len(sub_dirs), 2)

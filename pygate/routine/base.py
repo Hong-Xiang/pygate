@@ -36,3 +36,8 @@ class RoutineOnDirectory(Routine):
         from dxl.fs import match_directory
         return (self.directory.listdir_as_observable()
                 .filter(match_directory(pattern)))
+
+    def list_matched_files(self, pattern):
+        from dxl.fs import match_file
+        return (self.directory.listdir_as_observable()
+                .filter(match_file(pattern)))
