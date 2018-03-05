@@ -1,5 +1,5 @@
 import unittest
-from pygate.routine.base import Routine, Operation
+from pygate.routine.base import Routine, Operation, RoutineOnDirectory
 
 
 class TestRoutine(unittest.TestCase):
@@ -18,3 +18,21 @@ class TestRoutine(unittest.TestCase):
             def dryrun(cls, x): return 'dryrun'
         dummy_rout = Routine((DummyOp(), ))
         self.assertEqual(dummy_rout.work(), ('apply',))
+
+
+class TestGetSubDirectories(unittest.TestCase):
+    def test_apply(self):
+        from fs.memoryfs import MemoryFS
+        from dxl.fs import Directory
+        mfs = MemoryFS()
+        d = Directory('.', mfs)
+        r = RoutineOnDirectory(d)
+        for i in range(2):
+            mfs.makedir('sub{}'.format(i))
+        mfs.makedir('testdir')
+        sub_dirs = (r.list_matched_dirs(['sub*'])
+                    .to_list().to_blocking().first())
+        self.assertEqual(len(sub_dirs), 2)
+        paths = [d.path.s for d in sub_dirs]
+        self.assertIn('sub0', paths)
+        self.assertIn('sub1', paths)

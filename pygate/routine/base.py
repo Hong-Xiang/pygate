@@ -31,3 +31,8 @@ class RoutineOnDirectory(Routine):
     def __init__(self, directory: Directory, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
         super().__init__(operations, dryrun, verbose)
         self.directory = directory
+
+    def list_matched_dirs(self, pattern):
+        from dxl.fs import match_directory
+        return (self.directory.listdir_as_observable()
+                .filter(match_directory(pattern)))

@@ -1,4 +1,5 @@
 from .base import RoutineWithFS, Operation
+from dxl.fs import File
 from ..utils.typing import JSONStr
 import json
 
@@ -8,7 +9,7 @@ from rx import Observable
 class OpMerge(Operation):
     merge_method = None
 
-    def __init__(self, subdirs: Observable, source, target):
+    def __init__(self, subdirs: Observable, source: 'Observable[File]', target: File):
         """
         Merge all files fit subdir_name*/source to target.
         """
