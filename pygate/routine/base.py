@@ -71,3 +71,29 @@ class OperationOnSubdirectories(Operation):
         from dxl.fs import match_directory
         return (r.directory.listdir_as_observable()
                 .filter(match_directory(self.patterns)))
+
+
+class OpeartionWithShellCall(Operation):
+    def call_args(self, r: Routine):
+        raise NotImplementedError
+
+    def run_child_program(self, r: Routine):
+        import subprocess
+        import sys
+
+        with subprocess.Popen(self.call_args(r),
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE) as p:
+            out = p.stdout.read().decode()
+            err = p.stderr.read().decode()
+            sys.stdout.write(out)
+            sys.stderr.write(err)
+        return {'out': out, 'err': err}
+
+    def apply(self, r: Routine):
+        result = self.dryrun(r)
+        result.update(self.run_child_program(r))
+        return result
+
+    def dryrun(self, r: Routine) -> Dict[str, Iterable[str]]:
+        return {'call_args': self.call_args(r)}

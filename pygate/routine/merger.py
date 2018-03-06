@@ -1,4 +1,4 @@
-from .base import RoutineOnDirectory, OperationOnFile, OperationOnSubdirectories
+from .base import RoutineOnDirectory, OperationOnFile, OperationOnSubdirectories, OpeartionWithShellCall
 from dxl.fs import Path, File, Directory
 from ..utils.typing import JSONStr
 import json
@@ -55,10 +55,13 @@ class OpMerge(OperationOnFile, OperationOnSubdirectories):
 #         #                 .to_list().to_blocking.first())
 
 
-class OpMergeHADD(OpMerge):
+class OpMergeHADD(OpMerge, OpeartionWithShellCall):
     method = 'hadd'
 
-    def get_call_args(self, r: RoutineOnDirectory):
+    def __init__(self, filename: str, patterns: Iterable[str]):
+        OpMerge.__init__(self, filename, patterns)
+
+    def call_args(self, r: RoutineOnDirectory):
         target = self.target(r).system_path()
         sources = (self.sources(r)
                    .map(lambda f: f.system_path())
@@ -66,26 +69,18 @@ class OpMergeHADD(OpMerge):
         call_args = ['hadd', target] + sources
         return call_args
 
-    def apply(self, r: RoutineOnDirectory):
-        import subprocess
-        import sys
-
-        with subprocess.Popen(self.get_call_args(r),
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE) as p:
-            out = p.stdout.read().decode()
-            err = p.stderr.read().decode()
-            sys.stdout.write(out)
-            sys.stderr.write(err)
-            result = self.dryrun(r)
-            result.update({'out': out,
-                           'err': err})
-            return result
-
     def dryrun(self, r: RoutineOnDirectory):
-        result = {'call_args': self.get_call_args(r)}
-        result.update(super().dryrun(r))
+        result = OpMerge.dryrun(self, r)
+        result.update(OpeartionWithShellCall.dryrun(self, r))
         return result
+
+
+class OpMergeCat(OpMerge):
+    method = 'cat'
+
+
+class OpMergeSumBinary(OpMerge):
+    method = 'sum_bin'
 
 
 def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterable[str], dryrun=False):

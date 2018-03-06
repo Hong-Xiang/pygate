@@ -30,7 +30,7 @@ class TestMergeOperation(unittest.TestCase):
 
 
 class TestHadd(unittest.TestCase):
-    def test_get_call_args(self):
+    def test_call_args(self):
         from fs.memoryfs import MemoryFS
         from dxl.fs import Directory
         import rx
@@ -41,7 +41,7 @@ class TestHadd(unittest.TestCase):
         mfs.touch('test.txt')
         r = RoutineOnDirectory(d)
         o = OpMergeHADD('test.txt', ['sub*'])
-        args = o.get_call_args(r)
+        args = o.call_args(r)
         self.assertEqual(args[:2], ['hadd', 'test.txt'])
         self.assertEqual(args[2:].sort(),
                          ['sub1/test.txt', 'sub2/test.txt'].sort())
