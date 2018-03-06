@@ -61,7 +61,7 @@ class OpMergeHADD(OpMerge):
     def get_call_args(self, r: RoutineOnDirectory):
         target = self.target(r).system_path()
         sources = (self.sources(r)
-                   .map(lambda f: f.system_path)
+                   .map(lambda f: f.system_path())
                    .to_list().to_blocking().first())
         call_args = ['hadd', target] + sources
         return call_args

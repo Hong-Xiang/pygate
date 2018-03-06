@@ -6,3 +6,5 @@ pygate/template/ymls
 /dist
 /.cache
 /.vs
+.cache/
+.vs/
