@@ -94,6 +94,7 @@ class OpMergeSumBinary(OpMerge):
 def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterable[str], dryrun=False):
     ops = [OpMergeHADD(s, subdirectory) for s in source_filenames]
     return RoutineOnDirectory(work_directory, ops, dryrun)
+
     # class OpMergeCat(Operation):
     #     method = 'cat'
     #     def apply(self, r:RoutineOnDirectory):
@@ -127,33 +128,7 @@ def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterabl
     #             print('MERGE.{md}.TARGET:'.format(md=method), target)
     #             print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
 
-    #     def _hadd(self, task):
-    #         import subprocess
-    #         import sys
-    #         if not task['method'].lower() == 'hadd':
-    #             return
-    #         filename = task['filename']
-    #         sub_filenames = self._path_of_file_in_sub_dirs(filename)
-    #         path_target = self.fs.getsyspath(filename)
-    #         path_filenames = [self.fs.getsyspath(f)
-    #                           for f in sub_filenames if self.fs.exists(f)]
-    #         call_args = ['hadd', path_target] + path_filenames
-    #         self.msg('HADD', filename, sub_filenames)
-    #         if not self.c['dryrun']:
-    #             with subprocess.Popen(call_args,
-    #                                   stdout=subprocess.PIPE,
-    #                                   stderr=subprocess.PIPE) as p:
-    #                 sys.stdout.write(p.stdout.read().decode())
-    #                 sys.stderr.write(p.stderr.read().decode())
 
-    #     def _cat(self, task):
-    #         if not task['method'].lower() == 'cat':
-    #             return
-    #         target = task['filename']
-    #         sources = self._path_of_file_in_sub_dirs(target)
-    #         self.msg('cat', target, sources)
-    #         if not self.c['dryrun']:
-    #             )
 
     #     def _sum(self, task):
     #         import numpy as np

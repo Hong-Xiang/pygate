@@ -1,38 +1,48 @@
-from .base import RoutineWithFS, Operation
+from dxl.fs import Directory, match_file
+from .base import RoutineOnDirectory, OperationOnSubdirectories, Operation
+from typing import Iterable
 
 
-class OpCleanSubdir(Operation):
-    def get_dirs(self, r: RoutineWithFS):
-        from dxpy.batch import DirectoriesFilter
-        return DirectoriesFilter(['{}*'.format(r.split_name)]).lst(r.fs)
+class OpCleanSubdirectories(OperationOnSubdirectories):
+    def apply(self, r: RoutineOnDirectory):
+        result = self.dryrun(r)
+        (self.subdirectories(r).map(lambda d: d.remove())
+         .to_list().to_blocking().first())
+        return result
 
-    def apply(self, r: RoutineWithFS):
-        for d in self.get_dirs(r):
-            r.fs.removetree(d)
-        return self.dryrun(r)
-
-    def dryrun(self, r: RoutineWithFS):
-        return ['REMOVE: {}\n'.format(d) for d in self.get_dirs(r)]
+    def dryrun(self, r: RoutineOnDirectory):
+        return {'remove': (self.subdirectories(r).map(lambda d: d.system_path())
+                           .to_list().to_blocking().first())}
 
 
 class OpCleanSource(Operation):
-    def get_sources(self, r: RoutineWithFS):
-        from dxpy.batch import FilesFilter
-        files = FilesFilter(['*']).lst(r.fs)
+    def __init__(self, file_patterns: Iterable[str]):
+        self.file_patterns = file_patterns
+
+    def files(self, r: RoutineOnDirectory):
+        return (r.directory.listdir_as_observable()
+                .filter(match_file(self.file_patterns)))
+
+    def apply(self, r: RoutineOnDirectory):
+        result = self.dryrun(r)
+        self.files(r).map(lambda f: f.remove()).to_list().to_blocking().first()
+        return result
+
+    def dryrun(self, r: RoutineOnDirectory):
+        return {'remove': (self.files(r).map(lambda f: f.path.s)
+                           .to_list().to_blocking().first())}
 
 
-class Cleaner(RoutineWithFS):
-    def __init__(self, fs, is_clean_subdir, is_clean_source, split_name, dryrun=False):
-        ops = []
-        if is_clean_subdir:
-            ops.append(OpCleanSubdir())
-        if is_clean_source:
-            ops.append(OpCleanSource)
-        super().__init__(fs, tuple(ops), dryrun)
-        self.fs = fs
-        self.split_name = split_name
-        
-
+# class Cleaner(RoutineOnDirectory):
+#     def __init__(self, , is_clean_subdir, is_clean_source, split_name, dryrun=False):
+#         ops = []
+#         if is_clean_subdir:
+#             ops.append(OpCleanSubdir())
+#         if is_clean_source:
+#             ops.append(OpCleanSource)
+#         super().__init__(fs, tuple(ops), dryrun)
+#         self.fs = fs
+#         self.split_name = split_name
 
     # def clean(self):
     #     if self.c['sub_dirs']:

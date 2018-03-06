@@ -25,8 +25,8 @@ class TestMergeOperation(unittest.TestCase):
         subdirs: List[str] = (self.o.sources(self.r)
                               .map(lambda f: f.path.s)
                               .to_list().to_blocking().first())
-        self.assertEqual(subdirs.sort(), [
-                         'sub1/test.txt', 'sub2/test.txt'].sort())
+        self.assertEqual(sorted(subdirs),
+                         sorted(['sub1/test.txt', 'sub2/test.txt']))
 
 
 class TestHadd(unittest.TestCase):
@@ -43,8 +43,8 @@ class TestHadd(unittest.TestCase):
         o = OpMergeHADD('test.txt', ['sub*'])
         args = o.call_args(r)
         self.assertEqual(args[:2], ['hadd', 'test.txt'])
-        self.assertEqual(args[2:].sort(),
-                         ['sub1/test.txt', 'sub2/test.txt'].sort())
+        self.assertEqual(sorted(args[2:]),
+                         sorted(['sub1/test.txt', 'sub2/test.txt']))
 
     def test_work(self):
         from fs.memoryfs import MemoryFS
@@ -60,4 +60,3 @@ class TestHadd(unittest.TestCase):
         rh = hadd(d, ['sub*'], ['test.txt'], dryrun=True)
         result = rh.work()
         self.assertEqual(result[0]['merge_method'], 'hadd')
-        
