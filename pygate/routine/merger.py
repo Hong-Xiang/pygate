@@ -53,13 +53,18 @@ class OpMerge(OperationOnFile, OperationOnSubdirectories):
 #         #         return (self.get_sub_ops(r)
 #         #                 .map(lambda o: o.dryrun(r))
 #         #                 .to_list().to_blocking.first())
+class OpMergeWithShellCall(OpMerge, OpeartionWithShellCall):
+    def __init__(self, filename: str, patterns: Iterable[str]):
+        OpMerge.__init__(self, filename, patterns)
+
+    def dryrun(self, r: RoutineOnDirectory):
+        result = OpMerge.dryrun(self, r)
+        result.update(OpeartionWithShellCall.dryrun(self, r))
+        return result
 
 
 class OpMergeHADD(OpMerge, OpeartionWithShellCall):
     method = 'hadd'
-
-    def __init__(self, filename: str, patterns: Iterable[str]):
-        OpMerge.__init__(self, filename, patterns)
 
     def call_args(self, r: RoutineOnDirectory):
         target = self.target(r).system_path()
@@ -69,14 +74,17 @@ class OpMergeHADD(OpMerge, OpeartionWithShellCall):
         call_args = ['hadd', target] + sources
         return call_args
 
-    def dryrun(self, r: RoutineOnDirectory):
-        result = OpMerge.dryrun(self, r)
-        result.update(OpeartionWithShellCall.dryrun(self, r))
-        return result
-
 
 class OpMergeCat(OpMerge):
     method = 'cat'
+
+    def call_args(self, r: RoutineOnDirectory):
+        target = self.target(r).system_path()
+        sources = (self.sources(r)
+                   .map(lambda f: f.system_path())
+                   .to_list().to_blocking().first())
+        call_args = ['cat', target] + sources
+        return call_args
 
 
 class OpMergeSumBinary(OpMerge):
