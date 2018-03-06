@@ -69,14 +69,23 @@ class OpMergeHADD(OpMerge):
     def apply(self, r: RoutineOnDirectory):
         import subprocess
         import sys
+
         with subprocess.Popen(self.get_call_args(r),
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE) as p:
-            sys.stdout.write(p.stdout.read().decode())
-            sys.stderr.write(p.stderr.read().decode())
+            out = p.stdout.read().decode()
+            err = p.stderr.read().decode()
+            sys.stdout.write(out)
+            sys.stderr.write(err)
+            result = self.dryrun(r)
+            result.update({'out': out,
+                           'err': err})
+            return result
 
     def dryrun(self, r: RoutineOnDirectory):
-        return {'call_args': self.get_call_args(r)}.update(super().dryrun(r))
+        result = {'call_args': self.get_call_args(r)}
+        result.update(super().dryrun(r))
+        return result
 
 
 def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterable[str], dryrun=False):

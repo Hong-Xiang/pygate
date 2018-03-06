@@ -45,3 +45,19 @@ class TestHadd(unittest.TestCase):
         self.assertEqual(args[:2], ['hadd', 'test.txt'])
         self.assertEqual(args[2:].sort(),
                          ['sub1/test.txt', 'sub2/test.txt'].sort())
+
+    def test_work(self):
+        from fs.memoryfs import MemoryFS
+        from dxl.fs import Directory
+        from pygate.routine.base import RoutineOnDirectory
+        from pygate.routine.merger import OpMerge, hadd
+        import rx
+        mfs = MemoryFS()
+        d = Directory('.', mfs)
+        mfs.makedir('sub1')
+        mfs.makedir('sub2')
+        mfs.touch('test.txt')
+        rh = hadd(d, ['sub*'], ['test.txt'], dryrun=True)
+        result = rh.work()
+        self.assertEqual(result[0]['merge_method'], 'hadd')
+        
