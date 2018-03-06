@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import Iterable, Dict, Any
 
-from dxl.fs import Directory
+from dxl.fs import Directory, File
 
 
 class Operation:
@@ -12,7 +12,8 @@ class Operation:
 
 
 class Routine:
-    def __init__(self, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
+    def __init__(self, operations: Iterable[Operation]=(),
+                 dryrun=False, verbose=0):
         self.dryrun = dryrun
         self.ops = operations
         self.verbose = verbose
@@ -28,16 +29,45 @@ class Routine:
 
 
 class RoutineOnDirectory(Routine):
-    def __init__(self, directory: Directory, operations: Tuple[Operation]=(), dryrun=False, verbose=0):
+    def __init__(self,
+                 directory: Directory,
+                 operations: Iterable[Operation]=(),
+                 dryrun=False, verbose=0):
         super().__init__(operations, dryrun, verbose)
         self.directory = directory
 
-    def list_matched_dirs(self, pattern):
-        from dxl.fs import match_directory
-        return (self.directory.listdir_as_observable()
-                .filter(match_directory(pattern)))
+    # def list_matched_dirs(self, pattern):
+    #     return (self.directory.listdir_as_observable()
+    #             .filter(match_directory(pattern)))
 
-    def list_matched_files(self, pattern):
-        from dxl.fs import match_file
-        return (self.directory.listdir_as_observable()
-                .filter(match_file(pattern)))
+    # def list_matched_files(self, pattern):
+    #     from dxl.fs import match_file
+    #     return (self.directory.listdir_as_observable()
+    #             .filter(match_file(pattern)))
+
+    # def list_files_in_dirs(self, sub_dir_pattern, filename):
+    #     return self.list_matched_dirs().map(lambda d: d.attach(filename))
+
+
+class OperationOnFile(Operation):
+    def __init__(self, filename: str):
+        self.filename = filename
+
+    def target(self, r: RoutineOnDirectory)-> File:
+        return r.directory.attach_file(self.filename)
+
+    def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
+        return {'target': self.target(r).system_path()}
+
+    def apply(self, r: RoutineOnDirectory) -> Dict[str, Any]:
+        return self.dryrun(r)
+
+
+class OperationOnSubdirectories(Operation):
+    def __init__(self, patterns: Iterable[str]):
+        self.patterns = patterns
+
+    def subdirectories(self, r: RoutineOnDirectory) -> 'Observable[Directory]':
+        from dxl.fs import match_directory
+        return (r.directory.listdir_as_observable()
+                .filter(match_directory(self.patterns)))

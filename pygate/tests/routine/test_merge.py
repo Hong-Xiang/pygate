@@ -15,14 +15,14 @@ class TestMergeOperation(unittest.TestCase):
         mfs.makedir('sub2')
         mfs.touch('test.txt')
         self.r = RoutineOnDirectory(d)
-        self.o = OpMerge(['sub*'], ['test.txt'])
+        self.o = OpMerge('test.txt', ['sub*'])
 
     def tearDown(self):
         self.r = None
         self.o = None
 
     def test_basic(self):
-        subdirs: List[str] = (self.o.sub_dirs(self.r)
-                              .map(lambda d: d.path.s)
+        subdirs: List[str] = (self.o.sources(self.r)
+                              .map(lambda f: f.path.s)
                               .to_list().to_blocking().first())
-        self.assertEqual(subdirs.sort(), ['sub1', 'su2'].sort())
+        self.assertEqual(subdirs.sort(), ['sub1/test.txt', 'sub2/test.txt'].sort())
