@@ -6,3 +6,8 @@ env = EnvironmentOfPackage(pkg_name)
 
 class ObjectWithTemplate(ObjectWithTemplateBase):
     pkg_env = env
+
+
+class Renderable:
+    def render(self) -> str:
+        raise NotImplementedError

@@ -11,9 +11,9 @@
 {% if o.position -%}
 # Placement
 {% if o.is_voxelized() -%}
-/gate/source/{{ o.name }}/setPosition {{ vec3(o.position) }} {{ o.position.unit | d('mm', true)}}
+/gate/source/{{ o.name }}/setPosition {{ vec3(o.position) }} 
 {% else -%}
-/gate/source/{{ o.name }}/gps/centre {{ vec3(o.position) }} {{ o.position.unit | d('mm', true)}}
+/gate/source/{{ o.name }}/gps/centre {{ vec3(o.position) }} 
 {% endif -%}
 {% endif -%}
 {{ o.particle.render() }}

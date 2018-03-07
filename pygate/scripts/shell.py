@@ -1,6 +1,7 @@
 from .base import ObjectWithTemplate
 import random
 from typing import Tuple
+from warnings import warn
 
 
 class Script(ObjectWithTemplate):
@@ -41,6 +42,11 @@ class ScriptRun(ObjectWithTemplate):
     template = 'run'
 
     def __init__(self, work_directory, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False):
+        """
+        Parameters:
+
+        - is_need_source_env: switch whether add line `souce ~/.{shell}rc` to shell script generated.
+        """
         self.work_directory = work_directory
         self.geant4_version = geant4_version
         self.shell = shell
@@ -60,6 +66,7 @@ class ScriptRunLocal(ScriptRun):
                 random.randint(0, 1e8))
         super().__init__(local_work_directory, tasks,
                          geant4_version, shell, is_need_source_env)
+        warn(DeprecationWarning("No local run script is needed when using gluster."))
         self.server_work_directory = work_directory
 
     def add_task(self, task):

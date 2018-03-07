@@ -1,0 +1,8 @@
+{% macro geometry_post(o) -%}
+{% for s in o.surfaces -%}
+{{ s.render() }}
+{% endfor -%}
+{% endmacro -%}
+{% if o -%}
+{{ geometry_post(o) }}
+{%- endif %}

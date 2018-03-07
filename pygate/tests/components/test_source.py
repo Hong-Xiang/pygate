@@ -48,8 +48,8 @@ class TestSphere(unittest.TestCase):
     def test_render(self):
         s = Sphere(10.0, 'Surface')
         src = Source('src', shape=s)
-        self.assertEqual(s.render(),
-                         '/gate/source/src/gps/type Surface\n/gate/source/src/gps/shape Sphere\n/gate/source/src/gps/radius 10.0 mm\n')
+        ae(self, s.render(),
+           '/gate/source/src/gps/type Surface\n/gate/source/src/gps/shape Sphere\n/gate/source/src/gps/radius 10.0 mm\n')
 
 
 class TestSource(unittest.TestCase):

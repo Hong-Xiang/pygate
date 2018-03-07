@@ -1,4 +1,3 @@
-"""Shell scripts generator"""
-
-def foo():
-    print(__name__)
+"""
+Shell script builder classes.
+"""

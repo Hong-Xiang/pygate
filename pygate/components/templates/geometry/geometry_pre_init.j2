@@ -1,0 +1,8 @@
+{% macro geometry_pre(o) -%}
+{{ o.world.render() }}
+{{ o.camera.render() }}
+{{ o.phantom.render() if o.phantom }}
+{% endmacro -%}
+{% if o -%}
+{{ geometry_pre(o) }}
+{%- endif %}
