@@ -50,6 +50,12 @@ class RoutineOnDirectory(Routine):
 
 
 class OperationOnFile(Operation):
+    """
+    Methods:
+
+    - `self.target(r: RoutineOnDirectory)`: Return corresponding File object.
+    - `self.dryrun(r: RoutineOnDirectory)`: Return Dict['target', system path].
+    """
     def __init__(self, filename: str):
         self.filename = filename
 
