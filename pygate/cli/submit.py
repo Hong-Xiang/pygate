@@ -1,6 +1,8 @@
 import click
 
+from .main import pygate
 
-@click.group()
+
+@pygate.group()
 def submit():
     pass

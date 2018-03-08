@@ -1,8 +1,21 @@
 import click
+from .main import pygate
 
-@click.group()
-def init():
+
+@pygate.group()
+@click.pass_context
+def init(ctx):
     pass
+
+
+@init.command()
+@click.pass_context
+def mac(ctx):
+    if ctx.obj['config'] is None:
+        print('NONE')
+    else:
+        print(ctx.obj['config'])
+
 
 # @click.command()
 # @click.option('--config', '-c', type=str, default=c['pygate_config'], help='config YAML file name')
