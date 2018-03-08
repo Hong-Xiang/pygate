@@ -107,12 +107,12 @@ class OpSubdirectoriesMaker(Operation):
 
 
 class OpBroadcastFile(OperationOnSubdirectories):
-    def files_to_broadcase(self, r: RoutineOnDirectory):
+    def files_to_broadcast(self, r: RoutineOnDirectory):
         result = []
         for res in r.result:
             if res.get(KEYS.IS_TO_BROADCAST, False):
                 result.append(File(res[KEYS.TARGET], r.directory.filesystem))
         return result
-    
-    def dryrun(self, r:RoutineOnDirectory):
+
+    def dryrun(self, r: RoutineOnDirectory):
         pass

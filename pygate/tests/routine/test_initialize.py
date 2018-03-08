@@ -62,3 +62,19 @@ class TestOpAddToBroadcastFile(unittest.TestCase):
                                        ini.KEYS.IS_TO_BROADCAST: True})
         self.assertEqual(r.result[1], {ini.KEYS.TARGET: 'test2.txt',
                                        ini.KEYS.IS_TO_BROADCAST: True})
+
+
+class TestOpBroadcastFile(unittest.TestCase):
+    @patch('pygate.routine.initialize.OpGenerateFile.content', return_value='test text')
+    def test_files_to_broadcast(self, m):
+        mfs = MemoryFS()
+        d = Directory('.', mfs)
+        o0 = ini.OpAddToBroadcastFile('test1.txt')
+        o1 = ini.OpAddToBroadcastFile('test2.txt')
+        o2 = ini.OpGenerateFile('test3.txt')
+        o3 = ini.OpBroadcastFile(['sub*'])
+        r = RoutineOnDirectory(d, [o0, o1, o2], dryrun=True)
+        r.work()
+        result = [f.path.s for f in o3.files_to_broadcast(r)]
+        self.assertEqual(sorted(result),
+                         sorted(['test{}.txt'.format(i) for i in range(1, 4)]))
