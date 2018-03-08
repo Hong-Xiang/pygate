@@ -4,6 +4,8 @@ from typing import Callable, Iterable, Dict, Any
 from .base import RoutineOnDirectory
 from dxl.cluster import submit_slurm
 
+# TODO: Rework dicts to object, use ToSubmit Object replacing those dicts
+
 
 class KEYS:
     SUBMITTED = 'submitted'
@@ -37,8 +39,9 @@ def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
         for k in [KEYS.WORK_DIR, KEYS.SCRIPT_FILE]:
             if k in r:
                 result[k] = r[k].system_path()
-        if KEYS.SID in r:
-            result[KEYS.SID] = r[KEYS.SID]
+        for k in [KEYS.SID, KEYS.DEPENDENCIES]:
+            if k in r:
+                result[k] = r[k]
         return result
     except Exception as e:
         raise ValueError("Failed to parse paths from result {}.".format(r))
@@ -49,7 +52,7 @@ def submit_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
                        r[KEYS.SCRIPT_FILE],
                        r.get(KEYS.DEPENDENCIES, ()))
     result = dict(r)
-    r[KEYS.SID] = sid
+    result[KEYS.SID] = sid
     return result
 
 
@@ -85,5 +88,16 @@ class OpSubmitSingleFile(OperationOnFile):
     def __init__(self, filename: str):
         super().__init__(filename)
 
+    def to_submit(self, r: RoutineOnDirectory):
+        submit_dict = {KEYS.WORK_DIR: r.directory,
+                       KEYS.SCRIPT_FILE: self.target(r)}
+        submit_dict[KEYS.DEPENDENCIES] = depens_from_result_dict(
+            r.last_result())
+        return submit_dict
+
+    def apply(self, r: RoutineOnDirectory) -> Dict[str, Any]:
+        result = submit_from_dict(self.to_submit(r))
+        return {KEYS.SUBMITTED: parse_paths_from_dict(result)}
+
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
-        result = {'depens': self.depens(r)}
+        return {KEYS.SUBMITTED: parse_paths_from_dict(self.to_submit(r))}

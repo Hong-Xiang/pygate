@@ -20,6 +20,8 @@ class Routine:
         self.result = []
 
     def last_result(self):
+        if len(self.result) == 0:
+            return {} 
         return self.result[-1]
 
     def work(self):
