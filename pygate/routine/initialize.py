@@ -13,6 +13,7 @@ class KEYS:
     TARGET = 'target'
     IS_TO_BROADCAST = 'is_to_broadcast'
     CONTENT = 'content'
+    TO_BROADCAST_FILES = 'to_broadcast_files'
 
 
 class TargetFileWithContent:
@@ -115,4 +116,9 @@ class OpBroadcastFile(OperationOnSubdirectories):
         return result
 
     def dryrun(self, r: RoutineOnDirectory):
-        pass
+        dirs = self.subdirectories(r).to_list().to_blocking().first()
+        dirs = [d.path.s for d in dirs]
+        files = self.files_to_broadcast(r)
+        files = [f.path.s for f in files]
+        return {KEYS.SUBDIRECTORIES: dirs,
+                KEYS.TO_BROADCAST_FILES: files}

@@ -78,3 +78,21 @@ class TestOpBroadcastFile(unittest.TestCase):
         result = [f.path.s for f in o3.files_to_broadcast(r)]
         self.assertEqual(sorted(result),
                          sorted(['test{}.txt'.format(i) for i in range(1, 4)]))
+
+    def test_dryrun(self):
+        mfs = MemoryFS()
+        subs = ['sub.{}'.format(i) for i in range(3)]
+        for d in subs:
+            mfs.makedir(d)
+        d = Directory('.', mfs)
+        o0 = ini.OpAddToBroadcastFile('test1.txt')
+        o1 = ini.OpAddToBroadcastFile('test2.txt')
+        obc = ini.OpBroadcastFile(['sub*'])
+        r = RoutineOnDirectory(d, [o0, o1], dryrun=True)
+        r.work()
+        files = ['test{}.txt'.format(i) for i in range(1, 3)]
+        result = obc.dryrun(r)
+        self.assertEqual(sorted(result[ini.KEYS.SUBDIRECTORIES]),
+                         sorted(subs))
+        self.assertEqual(sorted(result[ini.KEYS.TO_BROADCAST_FILES]),
+                         sorted(files))
