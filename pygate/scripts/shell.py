@@ -7,6 +7,9 @@ from warnings import warn
 class Script(ObjectWithTemplate):
     template = None
 
+    def add_task(self, task):
+        raise NotImplementedError
+
 
 class Task:
     def render():
@@ -38,7 +41,7 @@ class Merge(Task):
         return "pygate merge"
 
 
-class ScriptRun(ObjectWithTemplate):
+class ScriptRun(Script):
     template = 'run'
 
     def __init__(self, work_directory, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False):

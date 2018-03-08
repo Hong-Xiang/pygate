@@ -17,15 +17,20 @@ class Routine:
         self.dryrun = dryrun
         self.ops = operations
         self.verbose = verbose
+        self.result = []
+
+    def last_result(self):
+        if len(self.result) == 0:
+            return {}
+        return self.result[-1]
 
     def work(self):
-        result = []
         for o in self.ops:
             if self.dryrun:
-                result.append(o.dryrun(self))
+                self.result.append(o.dryrun(self))
             else:
-                result.append(o.apply(self))
-        return tuple(result)
+                self.result.append(o.apply(self))
+        return tuple(self.result)
 
 
 class RoutineOnDirectory(Routine):
@@ -56,6 +61,7 @@ class OperationOnFile(Operation):
     - `self.target(r: RoutineOnDirectory)`: Return corresponding File object.
     - `self.dryrun(r: RoutineOnDirectory)`: Return Dict['target', system path].
     """
+
     def __init__(self, filename: str):
         self.filename = filename
 
@@ -63,7 +69,7 @@ class OperationOnFile(Operation):
         return r.directory.attach_file(self.filename)
 
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
-        return {'target': self.target(r).system_path()}
+        return {'target': self.target(r).path.s}
 
     def apply(self, r: RoutineOnDirectory) -> Dict[str, Any]:
         return self.dryrun(r)
