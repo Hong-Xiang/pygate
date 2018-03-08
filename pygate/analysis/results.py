@@ -48,6 +48,12 @@ class Results(ResultBase):
     def first(self) -> ResultBase:
         return self.d[0]
 
+    def flatten(self) -> 'Results':
+        if not isinstance(self.d[0], Results):
+            raise TypeError(
+                "Flatten requires Results of Results, got {}.".format(type(self.d[0])))
+        return Results(tuple(sum([list(d.d) for d in self.d], [])))
+
     def merge(self) -> ResultBase:
         result = None
         for o in self.d:
