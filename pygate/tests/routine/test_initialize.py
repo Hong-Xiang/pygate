@@ -48,3 +48,17 @@ class TestOpGenerateFile(unittest.TestCase):
         with mfs.open('test.txt', 'r') as fin:
             result = fin.readlines()
         self.assertEqual(result, ['test text'])
+
+
+class TestOpAddToBroadcastFile(unittest.TestCase):
+    def test_dryrun(self):
+        mfs = MemoryFS()
+        d = Directory('.', mfs)
+        o0 = ini.OpAddToBroadcastFile('test1.txt')
+        o1 = ini.OpAddToBroadcastFile('test2.txt')
+        r = RoutineOnDirectory(d, [o0, o1], dryrun=True)
+        r.work()
+        self.assertEqual(r.result[0], {ini.KEYS.TARGET: 'test1.txt',
+                                       ini.KEYS.IS_TO_BROADCAST: True})
+        self.assertEqual(r.result[1], {ini.KEYS.TARGET: 'test2.txt',
+                                       ini.KEYS.IS_TO_BROADCAST: True})

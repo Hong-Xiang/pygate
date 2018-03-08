@@ -5,10 +5,14 @@ from dxl.fs import Directory, File
 from typing import TypeVar, Iterable
 from pygate.components.simulation import Simulation
 from pygate.scripts.shell import Script
+import rx
 
 
 class KEYS:
     SUBDIRECTORIES = 'subdirectories'
+    TARGET = 'target'
+    IS_TO_BROADCAST = 'is_to_broadcast'
+    CONTENT = 'content'
 
 
 class TargetFileWithContent:
@@ -21,14 +25,26 @@ class TargetFileWithContent:
         self.content = content
 
     def to_dict(self):
-        return {'target': self.target.path.s,
-                'is_to_broadcast': self.is_to_broadcast,
-                'content': self.content}
+        return {KEYS.TARGET: self.target.path.s,
+                KEYS.IS_TO_BROADCAST: self.is_to_broadcast,
+                KEYS.CONTENT: self.content}
 
     def save(self):
         if self.content is None:
             raise TypeError("None content to save.")
         self.target.save(self.content)
+
+
+class OpAddToBroadcastFile(OperationOnFile):
+    def __init__(self, filename):
+        super().__init__(filename)
+
+    def apply(self, r: RoutineOnDirectory):
+        return self.dryrun(r)
+
+    def dryrun(self, r: RoutineOnDirectory):
+        return {KEYS.TARGET: self.target(r).path.s,
+                KEYS.IS_TO_BROADCAST: True}
 
 
 class OpGenerateFile(OperationOnFile):
@@ -90,5 +106,13 @@ class OpSubdirectoriesMaker(Operation):
         return {KEYS.SUBDIRECTORIES: tuple([self.fmt.format(i) for i in range(self.nb_split)])}
 
 
-class OpBroadcastFile(OperationOnFile):
-    pass
+class OpBroadcastFile(OperationOnSubdirectories):
+    def files_to_broadcase(self, r: RoutineOnDirectory):
+        result = []
+        for res in r.result:
+            if res.get(KEYS.IS_TO_BROADCAST, False):
+                result.append(File(res[KEYS.TARGET], r.directory.filesystem))
+        return result
+    
+    def dryrun(self, r:RoutineOnDirectory):
+        pass
