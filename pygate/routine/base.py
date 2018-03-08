@@ -17,12 +17,12 @@ class Routine:
         self.dryrun = dryrun
         self.ops = operations
         self.verbose = verbose
-        self.result = None
+        self.result = []
+
+    def last_result(self):
+        return self.result[-1]
 
     def work(self):
-        if self.result is not None:
-            raise TypeError("Result is expected to be None.")
-        self.result = []
         for o in self.ops:
             if self.dryrun:
                 self.result.append(o.dryrun(self))

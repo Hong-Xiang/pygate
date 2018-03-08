@@ -84,10 +84,6 @@ class OpSubmitBroadcast(OperationOnSubdirectories, OperationOnFile):
 class OpSubmitSingleFile(OperationOnFile):
     def __init__(self, filename: str):
         super().__init__(filename)
-        self.depens = depens
-
-    def parse_depens(self, r: RoutineOnDirectory):
-        pass
 
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
         result = {'depens': self.depens(r)}
