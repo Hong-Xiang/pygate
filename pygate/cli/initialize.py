@@ -1,20 +1,16 @@
 import click
 from .main import pygate
-
+from ..conf import config
 
 @pygate.group()
-@click.pass_context
-def init(ctx):
+def init():
     pass
 
 
 @init.command()
-@click.pass_context
-def mac(ctx):
-    if ctx.obj['config'] is None:
-        print('NONE')
-    else:
-        print(ctx.obj['config'])
+def mac():
+    print(config.get('mac'))
+    print(config.get('dryrun'))
 
 
 # @click.command()
