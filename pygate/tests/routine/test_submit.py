@@ -20,3 +20,7 @@ class TestSubmitBroadcast(unittest.TestCase):
                            'script_file': 'run.sh'},
                           {'work_directory': 'sub2',
                            'script_file': 'run.sh'}, ])
+
+class TestSubmitSingleFile(unittest.TestCase):
+    def test_parse_depens(self):
+        pass
