@@ -5,17 +5,52 @@ from .base import RoutineOnDirectory
 from dxl.cluster import submit_slurm
 
 
-class OpSubmit(Operation):
-    def to_submit(self):
-        pass
+class KEYS:
+    SUBMITTED = 'submitted'
+    WORK_DIR = 'work_directory'
+    SCRIPT_FILE = 'script_file'
+    SID = 'sid'
+    DEPENDENCIES = 'depens'
 
-    def dependencies(self):
-        pass
 
-    def dryrun(self):
-        return {
-            'to_submit': self.to_submit()
-        }
+def depens_from_result_dict(r: Dict[str, Any]) -> Iterable[int]:
+    try:
+        result = []
+        if KEYS.SUBMITTED in r:
+            for t in r[KEYS.SUBMITTED]:
+                if t.get(KEYS.SID) is not None:
+                    result.append(int(t[KEYS.SID]))
+        return result
+    except Exception as e:
+        raise ValueError("Failed to parse depens from result {}.".format(r))
+
+
+def append_depens_to_dict(to_submit: Dict[str, Any], previous_result: Dict[str, Any]):
+    result = dict(to_submit)
+    result[KEYS.DEPENDENCIES] = depens_from_result(previous_result)
+    return result
+
+
+def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
+    try:
+        result = dict(r)
+        for k in [KEYS.WORK_DIR, KEYS.SCRIPT_FILE]:
+            if k in r:
+                result[k] = r[k].system_path()
+        if KEYS.SID in r:
+            result[KEYS.SID] = r[KEYS.SID]
+        return result
+    except Exception as e:
+        raise ValueError("Failed to parse paths from result {}.".format(r))
+
+
+def submit_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
+    sid = submit_slurm(r[KEYS.WORK_DIR],
+                       r[KEYS.SCRIPT_FILE],
+                       r.get(KEYS.DEPENDENCIES, ()))
+    result = dict(r)
+    r[KEYS.SID] = sid
+    return result
 
 
 class OpSubmitBroadcast(OperationOnSubdirectories, OperationOnFile):
@@ -29,32 +64,29 @@ class OpSubmitBroadcast(OperationOnSubdirectories, OperationOnFile):
 
     def to_submit(self, r: RoutineOnDirectory) -> 'Observable[Dict[str, Any]]':
         return (self.subdirectories(r)
-                .map(lambda d: {'work_directory': d,
-                                'script_file': self.target(r)}))
+                .map(lambda d: {KEYS.WORK_DIR: d,
+                                KEYS.SCRIPT_FILE: self.target(r)}))
 
     def apply(self, r: RoutineOnDirectory) -> Dict[str, Iterable[Dict[str, str]]]:
-        result = self.dryrun(r)
-        (self.to_submit(r)
-         .map(lambda dct: {'sid': submit_slurm(dct['work_directory'],
-                                               dct['script_file']),
-                           'work_dicectory': dct['work_directory'].system_path(),
-                           'script_file': dct['script_file'].system_path()})
-         .to_list().to_blocking().first())
-        return result
+        result = (self.to_submit(r)
+                  .map(submit_from_dict)
+                  .map(parse_paths_from_dict)
+                  .to_list().to_blocking().first())
+        return {KEYS.SUBMITTED: result}
 
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Iterable[Dict[str, str]]]:
         result = (self.to_submit(r)
-                  .map(lambda dct: {k: v.system_path() for k, v in dct.items()})
+                  .map(parse_paths_from_dict)
                   .to_list().to_blocking().first())
-        return {'submitted': result}
+        return {KEYS.SUBMITTED: result}
 
 
 class OpSubmitSingleFile(OperationOnFile):
-    def __init__(self, filename: str, depens: Callable[[RoutineOnDirectory], Iterable[int]]):
+    def __init__(self, filename: str):
         super().__init__(filename)
         self.depens = depens
 
-    def parse_depens(self):
+    def parse_depens(self, r: RoutineOnDirectory):
         pass
 
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
