@@ -70,6 +70,14 @@ class Results(ResultBase):
         return list(self.d)
 
 
+    
+
+
+
+class ResultsNamedTuple(ResultBase):
+    pass
+
+
 class ResultsWithKeys(Results):
     def __init__(self, data: Tuple[Tuple[str, ResultBase]]):
         super().__init__(data)
@@ -159,11 +167,11 @@ class EnergyDeposit(ResultBase):
 
     @property
     def position(self):
-        return self.position
+        return self.d[0]
 
     @property
     def energy(self):
-        return self.energy
+        return self.d[1]
 
 
 class Event(DataFrame):
