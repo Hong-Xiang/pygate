@@ -3,7 +3,7 @@
 from .base import OperationOnFile, Operation
 
 
-class OpGenerator(OperationOnFile):
+class OpGenerateFile(OperationOnFile):
     def __init__(self, filename: str):
         super().__init__(filename)
 
@@ -11,7 +11,7 @@ class OpGenerator(OperationOnFile):
         pass
 
 
-class OpGeneratorMac(OperationOnFile):
+class OpGeneratorMac(OpGenerateFile):
     def __init__(self, filename: str):
         super.__init__(filename)
 

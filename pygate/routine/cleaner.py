@@ -33,6 +33,17 @@ class OpCleanSource(Operation):
                            .to_list().to_blocking().first())}
 
 
+def routine_clean(source_patterns: Iterable[str]=(), is_subdir: bool=False, dryrun: bool=False):
+    """
+    Helper function for clean in current directory.
+    """
+    ops = []
+    if len(source_patterns) > 0:
+        ops.append(OpCleanSource(source_patterns))
+    if is_subdir:
+        ops.append(OpCleanSubdirectories())
+    return RoutineOnDirectory(Directory('.'), ops, dryrun)
+
 # class Cleaner(RoutineOnDirectory):
 #     def __init__(self, , is_clean_subdir, is_clean_source, split_name, dryrun=False):
 #         ops = []
