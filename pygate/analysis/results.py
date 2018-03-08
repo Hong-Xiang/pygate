@@ -45,6 +45,9 @@ class Results(ResultBase):
     def call(self, func_name) -> 'Results':
         return Results(map(self.d, lambda x: getattr(x, 'func_name')()))
 
+    def zip(self, r: 'Results'):
+        return Results(zip(self.d, r.d))
+
     def first(self) -> ResultBase:
         return self.d[0]
 
