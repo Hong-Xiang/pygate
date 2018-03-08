@@ -96,3 +96,24 @@ class TestOpBroadcastFile(unittest.TestCase):
                          sorted(subs))
         self.assertEqual(sorted(result[ini.KEYS.TO_BROADCAST_FILES]),
                          sorted(files))
+
+    def test_apply(self):
+        mfs = MemoryFS()
+        subs = ['sub.{}'.format(i) for i in range(3)]
+        for d in subs:
+            mfs.makedir(d)
+        d = Directory('.', mfs)
+        mfs.touch('test1.txt')
+        mfs.touch('test2.txt')
+        o0 = ini.OpAddToBroadcastFile('test1.txt')
+        o1 = ini.OpAddToBroadcastFile('test2.txt')
+        obc = ini.OpBroadcastFile(['sub*'])
+        r = RoutineOnDirectory(d, [o0, o1, obc])
+        r.work()
+        target_files = []
+        for d in subs:
+            for f in ['test1.txt', 'test2.txt']:
+                target_files.append(d+'/'+f)
+        for i, t in enumerate(target_files):
+            with self.subTest(i):
+                self.assertTrue(mfs.exists(t))

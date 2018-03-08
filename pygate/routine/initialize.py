@@ -122,3 +122,10 @@ class OpBroadcastFile(OperationOnSubdirectories):
         files = [f.path.s for f in files]
         return {KEYS.SUBDIRECTORIES: dirs,
                 KEYS.TO_BROADCAST_FILES: files}
+
+    def apply(self, r: RoutineOnDirectory):
+        result = self.dryrun(r)
+        files = self.files_to_broadcast(r)
+        (self.subdirectories(r).map(lambda d: d.sync(files))
+         .to_list().to_blocking().first())
+        return result
