@@ -11,7 +11,7 @@ class OpCleanSubdirectories(OperationOnSubdirectories):
         return result
 
     def dryrun(self, r: RoutineOnDirectory):
-        return {'remove': (self.subdirectories(r).map(lambda d: d.system_path())
+        return {'remove': (self.subdirectories(r).map(lambda d: d.path.s)
                            .to_list().to_blocking().first())}
 
 

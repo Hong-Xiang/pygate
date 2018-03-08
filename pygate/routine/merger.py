@@ -20,7 +20,7 @@ class OpMerge(OperationOnFile, OperationOnSubdirectories):
 
     def dryrun(self, r: RoutineOnDirectory):
         sources_system_path = (self.sources(r)
-                               .map(lambda f: f.system_path())
+                               .map(lambda f: f.path.s)
                                .to_list().to_blocking().first())
         result = {
             'merge_method': self.method,
@@ -67,9 +67,9 @@ class OpMergeHADD(OpMerge, OpeartionWithShellCall):
     method = 'hadd'
 
     def call_args(self, r: RoutineOnDirectory):
-        target = self.target(r).system_path()
+        target = self.target(r).path.s
         sources = (self.sources(r)
-                   .map(lambda f: f.system_path())
+                   .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
         call_args = ['hadd', target] + sources
         return call_args
@@ -79,9 +79,9 @@ class OpMergeCat(OpMerge):
     method = 'cat'
 
     def call_args(self, r: RoutineOnDirectory):
-        target = self.target(r).system_path()
+        target = self.target(r).path.s
         sources = (self.sources(r)
-                   .map(lambda f: f.system_path())
+                   .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
         call_args = ['cat', target] + sources
         return call_args

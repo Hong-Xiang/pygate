@@ -21,7 +21,7 @@ class TargetFileWithContent:
         self.content = content
 
     def to_dict(self):
-        return {'target': self.target.system_path(),
+        return {'target': self.target.path.s,
                 'is_to_broadcast': self.is_to_broadcast,
                 'content': self.content}
 

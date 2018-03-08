@@ -21,7 +21,7 @@ class Routine:
 
     def last_result(self):
         if len(self.result) == 0:
-            return {} 
+            return {}
         return self.result[-1]
 
     def work(self):
@@ -69,7 +69,7 @@ class OperationOnFile(Operation):
         return r.directory.attach_file(self.filename)
 
     def dryrun(self, r: RoutineOnDirectory) -> Dict[str, Any]:
-        return {'target': self.target(r).system_path()}
+        return {'target': self.target(r).path.s}
 
     def apply(self, r: RoutineOnDirectory) -> Dict[str, Any]:
         return self.dryrun(r)

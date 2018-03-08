@@ -38,7 +38,7 @@ def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
         result = dict(r)
         for k in [KEYS.WORK_DIR, KEYS.SCRIPT_FILE]:
             if k in r:
-                result[k] = r[k].system_path()
+                result[k] = r[k].path.s
         for k in [KEYS.SID, KEYS.DEPENDENCIES]:
             if k in r:
                 result[k] = r[k]
