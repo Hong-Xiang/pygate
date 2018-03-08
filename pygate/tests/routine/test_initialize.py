@@ -37,3 +37,14 @@ class TestOpGenerateFile(unittest.TestCase):
         self.assertEqual(o.dryrun(r),
                          ini.TargetFileWithContent(File('test.txt', mfs),
                                                    content='test text').to_dict())
+
+    @patch('pygate.routine.initialize.OpGenerateFile.content', return_value='test text')
+    def test_apply(self, m):
+        mfs = MemoryFS()
+        d = Directory('.', mfs)
+        o = ini.OpGenerateFile('test.txt')
+        r = RoutineOnDirectory(d, [o])
+        o.apply(r)
+        with mfs.open('test.txt', 'r') as fin:
+            result = fin.readlines()
+        self.assertEqual(result, ['test text'])
