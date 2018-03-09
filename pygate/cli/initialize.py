@@ -121,6 +121,43 @@ def subdir(nb_split, sub_format):
     click.echo(r.echo())
 
 
+def broadcast_kernel(files, subdirectory_patterns, dryrun):
+    from pygate.routine.initialize import OpAddToBroadcastFile, OpBroadcastFile, RoutineOnDirectory
+    d = Directory('.')
+    ops = [OpAddToBroadcastFile(f) for f in files]
+    ops.append(OpBroadcastFile(subdirectory_patterns))
+    r = RoutineOnDirectory(d, ops, dryrun)
+    r.work()
+    return r.echo()
+
+
+@init.command()
+@click.option('--target', '-t', type=int, help='Files to broadcast to subdirectories.', multiple=True)
+@click.option('--add-ext', '-e', help='Include all external files.', is_flag=True)
+def bcast(target, add_ext):
+    from ..conf import BROADCAST_KEYS
+    files = config.get(KEYS.BROADCAST, {}).get(BROADCAST_KEYS.TARGETS, ())
+    if config.get(KEYS.BROADCAST, {}).get(BROADCAST_KEYS.ADD_EXT):
+        files = list(files) + [e[1] for e in external_to_copy()]
+    click.echo(broadcast_kernel(files, config.get(KEYS.SUB_PATTERNS),
+                                config.get(KEYS.DRYRUN)))
+
+
+def external_to_copy():
+    from dxl.fs import Path
+    inic = config.get(KEYS.INIT)
+    tasks = inic.get(INIT_KEYS.EXTERNAL)
+    if tasks is None:
+        return ()
+    result = []
+    for t in tasks:
+        source = t[INIT_KEYS.EXTERNAL_KEYS.SOURCE]
+        target = t.get(INIT_KEYS.EXTERNAL_KEYS.TARGET,
+                       './' + Path(source).n)
+        result.append((source, target))
+    return result
+
+
 @init.command()
 def ext():
     """
@@ -130,16 +167,13 @@ def ext():
     tasks = inic.get(INIT_KEYS.EXTERNAL)
     import shutil
     import json
-    from dxl.fs import Path
     results = []
-    if tasks is not None:
-        for t in tasks:
-            source = t[INIT_KEYS.EXTERNAL_KEYS.SOURCE]
-            target = t.get(INIT_KEYS.EXTERNAL_KEYS.TARGET,
-                           './' + Path(source).n)
-            shutil.copyfile(source, target)
-            results.append({INIT_KEYS.EXTERNAL_KEYS.SOURCE: source,
-                            INIT_KEYS.EXTERNAL_KEYS.TARGET: target})
+    for t in external_to_copy():
+        source = t[0]
+        target = t[1]
+        shutil.copyfile(source, target)
+        results.append({INIT_KEYS.EXTERNAL_KEYS.SOURCE: source,
+                        INIT_KEYS.EXTERNAL_KEYS.TARGET: target})
     results = json.dumps(results, indent=4, separators=(',', ': '))
     click.echo(results)
 

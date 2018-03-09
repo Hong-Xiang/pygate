@@ -8,6 +8,12 @@ class KEYS:
     ANALYSIS = 'analysis'
     INIT = 'init'
     NB_SPLIT = 'nb_split'
+    BROADCAST = 'broadcast'
+
+
+class BROADCAST_KEYS:
+    TARGETS = 'targets'
+    ADD_EXT = 'add_ext'
 
 
 class SUBMIT_KEYS:
@@ -115,6 +121,11 @@ config = {
     },
     KEYS.INIT: init_config,
     KEYS.NB_SPLIT: 10,
+    KEYS.BROADCAST: {
+        BROADCAST_KEYS.TARGETS:[],
+        BROADCAST_KEYS.ADD_EXT:True,
+    }
+
 
 
 }
