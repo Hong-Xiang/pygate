@@ -6,6 +6,8 @@ Note many configurations is done by config file.
 import click
 from .main import pygate
 from ..conf import config, KEYS, INIT_KEYS
+import json
+import yaml
 
 
 @pygate.group()
@@ -31,6 +33,26 @@ def shell(script, mac_config, target, no_broadcast):
     Generate shell script, pre run or post run.
     """
     pass
+
+
+@init.command()
+@click.option('--target', '-t', help='Config file name.')
+@click.option('--format', '-f', help='Format of config file, json or yml')
+def makeconfig(target, format):
+    from dxl.fs import Path
+    if target is None and format is None:
+        target = 'pygate.yml'
+    if format is None:
+        format = Path(target).e
+    if target is None:
+        target = 'pygate.{}'.format(format)
+    if format.startswith('.'):
+        format = format[1:]
+    with open(target, 'w') as fout:
+        if format.lower() == 'yml':
+            yaml.dump(config, fout)
+        elif format.lower() == 'json':
+            json.dump(config, fout, indent=4, sort_keys=True)
 
 
 @init.command()
