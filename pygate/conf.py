@@ -37,18 +37,49 @@ class INIT_KEYS:
     MAC = 'mac'
 
     class MAC_KEYS:
-        SIMULATION_CONF = 'simulation_conf'
+        SIMULATION_DEMO = 'simulation_demo'
 
     SHELL = 'shell'
 
     class SHELL_KEYS:
-        pass
+        RUN = 'run'
+        POST_RUN = 'post_run'
+        TASK = 'task'
+        TASK_NAME = 'task_name'
+        TARGET = 'target'
+        GATE_SIMULATION = 'gate_simulation'
+        ROOT_ANALYSIS = 'root_analysis'
+        ROOT_C_FILE = 'root_c_file'
+        MERGE = 'merge'
+        SOURCE = 'source'
+        METHOD = 'method'
+        GATE_VERSION = 'gate_version'
+        SHELL_TYPE = 'shell_type'
 
     PHANTOM = 'phantom'
 
     class PHANTOM_KEYS:
         pass
 
+
+shell_run_config = {
+    INIT_KEYS.SHELL_KEYS.GATE_VERSION: '8.0',
+    INIT_KEYS.SHELL_KEYS.SHELL_TYPE: 'bash',
+    INIT_KEYS.SHELL_KEYS.TASK: [
+        {INIT_KEYS.SHELL_KEYS.TASK_NAME: INIT_KEYS.SHELL_KEYS.GATE_SIMULATION,
+         INIT_KEYS.SHELL_KEYS.TARGET: 'main.mac'},
+    ],
+    INIT_KEYS.SHELL_KEYS.TARGET: 'run.sh',
+}
+
+shell_post_run_config = {
+    INIT_KEYS.SHELL_KEYS.TASK: [
+        {INIT_KEYS.SHELL_KEYS.TASK_NAME:  INIT_KEYS.SHELL_KEYS.MERGE,
+         INIT_KEYS.SHELL_KEYS.TARGET: 'result.root'},
+        # {INIT_KEYS.SHELL_KEYS.ROOT_ANALYSIS: }
+    ],
+    INIT_KEYS.SHELL_KEYS.TARGET: 'post.sh'
+}
 
 init_config = {
     INIT_KEYS.EXTERNAL: [
@@ -58,8 +89,9 @@ init_config = {
         {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/HitsConverter.C'},
     ],
     INIT_KEYS.SHELL: {
-
-    }
+        INIT_KEYS.SHELL_KEYS.RUN: shell_run_config,
+        INIT_KEYS.SHELL_KEYS.POST_RUN: shell_post_run_config,
+    },
 }
 
 

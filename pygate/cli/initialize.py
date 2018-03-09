@@ -8,6 +8,7 @@ from .main import pygate
 from ..conf import config, KEYS, INIT_KEYS
 import json
 import yaml
+from dxl.fs import File, Directory
 
 
 @pygate.group()
@@ -27,18 +28,42 @@ def mac(script, mac_config, target, no_broadcast):
     pass
 
 
+def shell_run(filename, tasks, gate_version, shell):
+    from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis
+    SKS = INIT_KEYS.SHELL_KEYS
+    task_list = []
+    for t in tasks:
+        name = t[SKS.TASK_NAME]
+        if name == SKS.GATE_SIMULATION:
+            task_list.append(GateSimulation(t[SKS.TARGET]))
+        else:
+            raise ValueError("Unknown task name {}.".format(name))
+
+    shell_script = ScriptRun(Directory('.').system_path(), task_list,
+                             gate_version, shell)
+    with open(filename, 'w') as fout:
+        print(shell_script.render(), file=fout)
+
+
 @init.command()
-def shell(script, mac_config, target, no_broadcast):
+def shell():
     """
     Generate shell script, pre run or post run.
     """
-    pass
+    SKS = INIT_KEYS.SHELL_KEYS
+    shellc = config.get(KEYS.INIT, {}).get(INIT_KEYS.SHELL)
+    src = shellc.get(SKS.RUN)
+    shell_run(src[SKS.TARGET], src[SKS.TASK],
+              src[SKS.GATE_VERSION], src[SKS.SHELL_TYPE])
 
 
 @init.command()
 @click.option('--target', '-t', help='Config file name.')
 @click.option('--format', '-f', help='Format of config file, json or yml')
 def makeconfig(target, format):
+    """
+    Generate initial config file.
+    """
     from dxl.fs import Path
     if target is None and format is None:
         target = 'pygate.yml'
