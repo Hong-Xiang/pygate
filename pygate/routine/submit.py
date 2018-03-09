@@ -48,9 +48,11 @@ def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def submit_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
+    print(r.get(KEYS.DEPENDENCIES))
     sid = submit_slurm(r[KEYS.WORK_DIR],
                        r[KEYS.SCRIPT_FILE],
                        r.get(KEYS.DEPENDENCIES, ()))
+
     result = dict(r)
     result[KEYS.SID] = sid
     return result
