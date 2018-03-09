@@ -16,7 +16,12 @@ def init():
     pass
 
 
-@init.command()
+@pygate.group()
+def generate():
+    pass
+
+
+@generate.command()
 @click.option('--script', '-s', help="Filename of script to run to generate mac file.")
 @click.option('--mac-config', '-c', help="Config filename to generate predefined macs.")
 @click.option('--target', '-t', help="MAC filename.")
@@ -62,7 +67,7 @@ def shell_post_run(filename, tasks, shell):
         print(shell_script.render(), file=fout)
 
 
-@init.command()
+@generate.command()
 def shell():
     """
     Generate shell script, pre run or post run.
@@ -77,10 +82,10 @@ def shell():
                    sprc[SKS.SHELL_TYPE])
 
 
-@init.command()
+@generate.command()
 @click.option('--target', '-t', help='Config file name.')
 @click.option('--format', '-f', help='Format of config file, json or yml')
-def makeconfig(target, format):
+def cfg(target, format):
     """
     Generate initial config file.
     """
@@ -98,6 +103,22 @@ def makeconfig(target, format):
             yaml.dump(config, fout)
         elif format.lower() == 'json':
             json.dump(config, fout, indent=4, sort_keys=True)
+
+
+@init.command()
+@click.option('--nb-split', '-n', type=int, help='Number of subdirectories.')
+@click.option('--sub-format', '-f', help='Subdirectories format str.')
+def subdir(nb_split, sub_format):
+    from pygate.routine.initialize import OpSubdirectoriesMaker, RoutineOnDirectory
+    if nb_split is None:
+        nb_split = config.get(KEYS.NB_SPLIT)
+    if sub_format is None:
+        sub_format = config.get(KEYS.SUB_FORMAT)
+    d = Directory('.')
+    op = OpSubdirectoriesMaker(nb_split, sub_format)
+    r = RoutineOnDirectory(d, [op], config.get(KEYS.DRYRUN))
+    r.work()
+    click.echo(r.echo())
 
 
 @init.command()

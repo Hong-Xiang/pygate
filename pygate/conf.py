@@ -7,6 +7,7 @@ class KEYS:
     CLEAN = 'clean'
     ANALYSIS = 'analysis'
     INIT = 'init'
+    NB_SPLIT = 'nb_split'
 
 
 class SUBMIT_KEYS:
@@ -112,8 +113,8 @@ config = {
         CLEAN_KEYS.IS_SLURM_OUTPUTS: False,
         CLEAN_KEYS.ROOT_FILES: (),
     },
-    KEYS.INIT: init_config
-
+    KEYS.INIT: init_config,
+    KEYS.NB_SPLIT: 10,
 
 
 }
