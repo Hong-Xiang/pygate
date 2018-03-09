@@ -10,17 +10,17 @@ class Task:
         self.single = single
 
 
-def submit_kernel(tasks: Iterable[Task]):
+def submit_kernel(tasks: Iterable[Task], subdir_patterns: Iterable[str], dryrun):
     from pygate.routine import submit
     d = submit.Directory('.')
     ops = []
     for t in tasks:
         if t.broadcast is not None:
             ops.append(submit.OpSubmitBroadcast(t.broadcast,
-                                                config.get(KEYS.SUB_PATTERNS)))
+                                                subdir_patterns))
         if t.single is not None:
             ops.append(submit.OpSubmitSingleFile(t.single))
-    r = submit.RoutineOnDirectory(d, ops, config.get(KEYS.DRYRUN))
+    r = submit.RoutineOnDirectory(d, ops, dryrun)
     r.work()
     return r.echo()
 
@@ -34,4 +34,5 @@ def submit(broadcast, single):
         broadcast = submit_conf.get(SUBMIT_KEYS.BROADCAST)
         single = submit_conf.get(SUBMIT_KEYS.SINGLE)
         tasks = [Task(b, s) for b, s in zip(broadcast, single)]
-        click.echo(submit_kernel(tasks))
+        click.echo(submit_kernel(tasks, config.get(KEYS.SUB_PATTERNS),
+                                 config.get(KEYS.DRYRUN)))

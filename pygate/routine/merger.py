@@ -57,13 +57,18 @@ class OpMergeWithShellCall(OpMerge, OpeartionWithShellCall):
     def __init__(self, filename: str, patterns: Iterable[str]):
         OpMerge.__init__(self, filename, patterns)
 
+    def apply(self, r: RoutineOnDirectory):
+        result = OpMerge.apply(self, r)
+        result.update(OpeartionWithShellCall.apply(self, r))
+        return result
+
     def dryrun(self, r: RoutineOnDirectory):
         result = OpMerge.dryrun(self, r)
         result.update(OpeartionWithShellCall.dryrun(self, r))
         return result
 
 
-class OpMergeHADD(OpMerge, OpeartionWithShellCall):
+class OpMergeHADD(OpMergeWithShellCall):
     method = 'hadd'
 
     def call_args(self, r: RoutineOnDirectory):
@@ -75,7 +80,7 @@ class OpMergeHADD(OpMerge, OpeartionWithShellCall):
         return call_args
 
 
-class OpMergeCat(OpMerge):
+class OpMergeCat(OpMergeWithShellCall):
     method = 'cat'
 
     def call_args(self, r: RoutineOnDirectory):
@@ -83,7 +88,8 @@ class OpMergeCat(OpMerge):
         sources = (self.sources(r)
                    .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
-        call_args = ['cat', target] + sources
+        call_args = ['cat {} > {}'.format(' '.join(sorted(sources)), target)]
+        # call_args = ['cat'] + sources + ['>', target]
         return call_args
 
 
@@ -127,8 +133,6 @@ def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterabl
     #         if self.c.get('verbose') is not None and self.c['verbose'] > 0:
     #             print('MERGE.{md}.TARGET:'.format(md=method), target)
     #             print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
-
-
 
     #     def _sum(self, task):
     #         import numpy as np
