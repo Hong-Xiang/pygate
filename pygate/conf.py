@@ -75,10 +75,15 @@ shell_run_config = {
 shell_post_run_config = {
     INIT_KEYS.SHELL_KEYS.TASK: [
         {INIT_KEYS.SHELL_KEYS.TASK_NAME:  INIT_KEYS.SHELL_KEYS.MERGE,
-         INIT_KEYS.SHELL_KEYS.TARGET: 'result.root'},
+         INIT_KEYS.SHELL_KEYS.TARGET: 'result.root',
+         INIT_KEYS.SHELL_KEYS.METHOD: 'hadd'},
+        {INIT_KEYS.SHELL_KEYS.TASK_NAME: INIT_KEYS.SHELL_KEYS.ROOT_ANALYSIS,
+         INIT_KEYS.SHELL_KEYS.TARGET: 'result.root',
+         INIT_KEYS.SHELL_KEYS.ROOT_C_FILE: 'HitsConverter.C'}
         # {INIT_KEYS.SHELL_KEYS.ROOT_ANALYSIS: }
     ],
-    INIT_KEYS.SHELL_KEYS.TARGET: 'post.sh'
+    INIT_KEYS.SHELL_KEYS.TARGET: 'post.sh',
+    INIT_KEYS.SHELL_KEYS.SHELL_TYPE: 'bash'
 }
 
 init_config = {

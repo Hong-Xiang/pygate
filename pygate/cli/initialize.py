@@ -45,6 +45,23 @@ def shell_run(filename, tasks, gate_version, shell):
         print(shell_script.render(), file=fout)
 
 
+def shell_post_run(filename, tasks, shell):
+    from pygate.scripts.shell import ScriptPostRun, Merge, RootAnalysis
+    SKS = INIT_KEYS.SHELL_KEYS
+    task_list = []
+    for t in tasks:
+        name = t[SKS.TASK_NAME]
+        if name == SKS.MERGE:
+            task_list.append(Merge(t[SKS.TARGET], t[SKS.METHOD]))
+        elif name == SKS.ROOT_ANALYSIS:
+            task_list.append(RootAnalysis(t[SKS.TARGET]))
+        else:
+            raise ValueError("Unknown task name {}.".format(name))
+    shell_script = ScriptPostRun(task_list, shell)
+    with open(filename, 'w') as fout:
+        print(shell_script.render(), file=fout)
+
+
 @init.command()
 def shell():
     """
@@ -55,6 +72,9 @@ def shell():
     src = shellc.get(SKS.RUN)
     shell_run(src[SKS.TARGET], src[SKS.TASK],
               src[SKS.GATE_VERSION], src[SKS.SHELL_TYPE])
+    sprc = shellc.get(SKS.POST_RUN)
+    shell_post_run(sprc[SKS.TARGET], sprc[SKS.TASK],
+                   sprc[SKS.SHELL_TYPE])
 
 
 @init.command()

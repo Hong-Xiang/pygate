@@ -36,13 +36,13 @@ class Clean(Task):
         return "pygate clean --subdirectories"
 
 
-class Merge(Task):
-    def __init__(self, target, method):
-        self.target = target
+class Merge(TaskWithFileArg):
+    def __init__(self, filename, method):
+        super().__init__(filename)
         self.method = method
 
     def render(self):
-        return "pygate merge --target {} --method {}".format(self.target, self.method)
+        return "pygate merge --target {} --method {}".format(self.fn, self.method)
 
 
 class ScriptRun(Script):
