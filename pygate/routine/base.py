@@ -35,7 +35,7 @@ class Routine:
     def echo(self):
         import json
         return json.dumps(self.result, sort_keys=True, indent=4,
-                          separators=('\n', ': '))
+                          separators=(',', ': '))
 
 
 class RoutineOnDirectory(Routine):
