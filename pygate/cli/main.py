@@ -10,10 +10,16 @@ def auto_sub():
 
 def load_config(filename, is_no_config, dryrun):
     from ..conf import config, KEYS
+    import yaml
+    import json
     if dryrun is not None:
         config['dryrun'] = dryrun
     if not is_no_config:
-        pass
+        with open(filename, 'r') as fin:
+            if filename.endswith('yml'):
+                config.update(yaml.load(fin))
+            else:
+                config.update(json.load(fin))
     auto_sub()
 
 
