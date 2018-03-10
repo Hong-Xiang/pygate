@@ -15,7 +15,7 @@ class AnalysisType(Enum):
     GAMMA_ENERGY_DEPOSIT_DISTRIBUTION = 'gamma_edep'
 
 
-class OpearationAnalysis(OperationOnFile):
+class OperationAnalysis(OperationOnFile):
     def __init__(self, source_csv_filename, target_h5_filename,
                  analysis_type: AnalysisType=None):
         super().__init__(target_h5_filename)

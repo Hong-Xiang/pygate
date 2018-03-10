@@ -27,6 +27,7 @@ class ANALYSIS_KEYS:
     ANALYSIS_TYPE = 'analysis_type'
 
 
+
 class INIT_KEYS:
 
     BROADCAST = 'broadcast'
@@ -62,6 +63,7 @@ class INIT_KEYS:
         METHOD = 'method'
         GATE_VERSION = 'gate_version'
         SHELL_TYPE = 'shell_type'
+        PYGATE_ANALYSIS = 'pygate_analysis'
 
     PHANTOM = 'phantom'
 
@@ -86,8 +88,11 @@ shell_post_run_config = {
          INIT_KEYS.SHELL_KEYS.METHOD: 'hadd'},
         {INIT_KEYS.SHELL_KEYS.TASK_NAME: INIT_KEYS.SHELL_KEYS.ROOT_ANALYSIS,
          INIT_KEYS.SHELL_KEYS.TARGET: 'result.root',
-         INIT_KEYS.SHELL_KEYS.ROOT_C_FILE: 'HitsConverter.C'}
-        # {INIT_KEYS.SHELL_KEYS.ROOT_ANALYSIS: }
+         INIT_KEYS.SHELL_KEYS.ROOT_C_FILE: 'Hits2CSV.C'},
+        {INIT_KEYS.SHELL_KEYS.TASK_NAME: INIT_KEYS.SHELL_KEYS.PYGATE_ANALYSIS,
+         ANALYSIS_KEYS.SOURCE: 'optical.csv',
+         ANALYSIS_KEYS.TARGET: 'optical.h5',
+         ANALYSIS_KEYS.ANALYSIS_TYPE: 'gamma_edep'}
     ],
     INIT_KEYS.SHELL_KEYS.TARGET: 'post.sh',
     INIT_KEYS.SHELL_KEYS.SHELL_TYPE: 'bash'
@@ -125,7 +130,11 @@ config = {
     },
     KEYS.INIT: init_config,
     KEYS.NB_SPLIT: 10,
-
+    KEYS.ANALYSIS: {
+        ANALYSIS_KEYS.SOURCE: 'result.csv',
+        ANALYSIS_KEYS.TARGET: 'result.h5',
+        ANALYSIS_KEYS.ANALYSIS_TYPE: 'gamma_edep'
+    }
 
 
 

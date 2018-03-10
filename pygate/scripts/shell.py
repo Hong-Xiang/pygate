@@ -35,6 +35,17 @@ class RootAnalysis(TaskWithFileArg):
         return "root -q -b {} {}".format(self.fn, self.c_file_name)
 
 
+class PygateAnalysis(TaskWithFileArg):
+    def __init__(self, source, target, analysis_type):
+        super().__init__(target)
+        self.source = source
+        self.analysis_type = analysis_type
+
+    def render(self):
+        fmt = "pygate analysis --source {} --target {} --analysis-type {}"
+        return fmt.format(self.source, self.fn, self.analysis_type)
+
+
 class Clean(Task):
     def render(self):
         return "pygate clean --subdirectories"

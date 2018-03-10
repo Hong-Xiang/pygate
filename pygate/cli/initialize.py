@@ -1,7 +1,7 @@
 """
 Initialization CLI support.
 
-Note many configurations is done by config file. 
+Note many configurations is done by config file.
 """
 import click
 from .main import pygate
@@ -43,18 +43,32 @@ def mac_template(filename):
     # click.echo(json.dumps(r.echo(), indent=4, separators=(',', ': ')))
 
 
-def shell_run(filename, tasks, gate_version, shell):
-    from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis
+def shell_task_list(tasks):
+    from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis, Merge, PygateAnalysis
+    from ..conf import ANALYSIS_KEYS
+    result = []
     SKS = INIT_KEYS.SHELL_KEYS
-    task_list = []
     for t in tasks:
         name = t[SKS.TASK_NAME]
         if name == SKS.GATE_SIMULATION:
-            task_list.append(GateSimulation(t[SKS.TARGET]))
+            result.append(GateSimulation(t[SKS.TARGET]))
+        elif name == SKS.MERGE:
+            result.append(Merge(t[SKS.TARGET], t[SKS.METHOD]))
+        elif name == SKS.ROOT_ANALYSIS:
+            result.append(RootAnalysis(t[SKS.TARGET], t[SKS.ROOT_C_FILE]))
+        elif name == SKS.PYGATE_ANALYSIS:
+            result.append(PygateAnalysis(t[ANALYSIS_KEYS.SOURCE],
+                                         t[ANALYSIS_KEYS.TARGET],
+                                         t[ANALYSIS_KEYS.ANALYSIS_TYPE]))
         else:
             raise ValueError("Unknown task name {}.".format(name))
+    return result
 
-    shell_script = ScriptRun(Directory('.').system_path(), task_list,
+
+def shell_run(filename, tasks, gate_version, shell):
+    from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis
+    SKS = INIT_KEYS.SHELL_KEYS
+    shell_script = ScriptRun(Directory('.').system_path(), shell_task_list(tasks),
                              gate_version, shell)
     with open(filename, 'w') as fout:
         print(shell_script.render(), file=fout)
@@ -63,16 +77,7 @@ def shell_run(filename, tasks, gate_version, shell):
 def shell_post_run(filename, tasks, shell):
     from pygate.scripts.shell import ScriptPostRun, Merge, RootAnalysis
     SKS = INIT_KEYS.SHELL_KEYS
-    task_list = []
-    for t in tasks:
-        name = t[SKS.TASK_NAME]
-        if name == SKS.MERGE:
-            task_list.append(Merge(t[SKS.TARGET], t[SKS.METHOD]))
-        elif name == SKS.ROOT_ANALYSIS:
-            task_list.append(RootAnalysis(t[SKS.TARGET], t[SKS.ROOT_C_FILE]))
-        else:
-            raise ValueError("Unknown task name {}.".format(name))
-    shell_script = ScriptPostRun(task_list, shell)
+    shell_script = ScriptPostRun(shell_task_list(tasks), shell)
     with open(filename, 'w') as fout:
         print(shell_script.render(), file=fout)
 
