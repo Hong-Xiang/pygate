@@ -27,14 +27,13 @@ class ANALYSIS_KEYS:
     ANALYSIS_TYPE = 'analysis_type'
 
 
-
 class INIT_KEYS:
 
     BROADCAST = 'broadcast'
 
     class BROADCAST_KEYS:
         TARGETS = 'targets'
-        ADD_EXT = 'add_ext'
+        NO_EXT = 'no_ext'
 
     EXTERNAL = 'external'
 
@@ -110,8 +109,8 @@ init_config = {
         INIT_KEYS.SHELL_KEYS.POST_RUN: shell_post_run_config,
     },
     INIT_KEYS.BROADCAST: {
-        INIT_KEYS.BROADCAST_KEYS.TARGETS: [],
-        INIT_KEYS.BROADCAST_KEYS.ADD_EXT: True,
+        INIT_KEYS.BROADCAST_KEYS.TARGETS: ['main.mac'],
+        INIT_KEYS.BROADCAST_KEYS.NO_EXT: False,
     },
 }
 

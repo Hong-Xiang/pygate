@@ -148,11 +148,18 @@ def broadcast_kernel(files, subdirectory_patterns, dryrun):
 
 @init.command()
 @click.option('--target', '-t', type=int, help='Files to broadcast to subdirectories.', multiple=True)
-@click.option('--add-ext', '-e', help='Include all external files.', is_flag=True)
-def bcast(target, add_ext):
-    from ..conf import BROADCAST_KEYS
-    files = config.get(KEYS.BROADCAST, {}).get(BROADCAST_KEYS.TARGETS, ())
-    if config.get(KEYS.BROADCAST, {}).get(BROADCAST_KEYS.ADD_EXT):
+@click.option('--no-ext', '-e', help='Include all external files.', is_flag=True)
+def bcast(target, no_ext):
+    if no_ext is None:
+        no_ext = (config.get(INIT_KEYS.BROADCAST, {})
+                  .get(INIT_KEYS.BROADCAST_KEYS.ADD_EXT))
+    if target is None:
+        target = (config.get(INIT_KEYS.BROADCAST, {})
+                  .get(INIT_KEYS.BROADCAST_KEYS.TARGETS, ()))
+    files = list(target)
+    fmt = 'pygate init bcast called with: target: {} no-ext: {}.'
+    click.echo(fmt.format(target, no_ext))
+    if not no_ext:
         files = list(files) + [e[1] for e in external_to_copy()]
     click.echo(broadcast_kernel(files, config.get(KEYS.SUB_PATTERNS),
                                 config.get(KEYS.DRYRUN)))
