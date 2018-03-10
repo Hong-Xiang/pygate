@@ -27,8 +27,12 @@ class GateSimulation(TaskWithFileArg):
 
 
 class RootAnalysis(TaskWithFileArg):
+    def __init__(self, root_filename, c_file_name):
+        super().__init__(root_filename)
+        self.c_file_name = c_file_name
+
     def render(self):
-        return "root -q -b {}".format(self.fn)
+        return "root -q -b {} {}".format(self.fn, self.c_file_name)
 
 
 class Clean(Task):

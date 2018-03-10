@@ -98,7 +98,7 @@ init_config = {
         {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/GateMaterials.db'},
         {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/Materials.xml'},
         {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/Surfaces.xml'},
-        {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/HitsConverter.C'},
+        {INIT_KEYS.EXTERNAL_KEYS.SOURCE: '/mnt/gluster_NoGPU/share/pygate/Hits2CSV.C'},
     ],
     INIT_KEYS.SHELL: {
         INIT_KEYS.SHELL_KEYS.RUN: shell_run_config,
@@ -121,7 +121,7 @@ config = {
     KEYS.CLEAN: {
         CLEAN_KEYS.IS_SUBDIRECTORIES: True,
         CLEAN_KEYS.IS_SLURM_OUTPUTS: False,
-        CLEAN_KEYS.ROOT_FILES: (),
+        CLEAN_KEYS.ROOT_FILES: [],
     },
     KEYS.INIT: init_config,
     KEYS.NB_SPLIT: 10,

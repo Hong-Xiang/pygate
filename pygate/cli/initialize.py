@@ -33,7 +33,7 @@ def mac(script, mac_config, target, no_broadcast):
 
 
 @generate.command()
-@click.option('--filename', '-f', default='make_python.py')
+@click.option('--filename', '-f', default='make_mac.py')
 def mac_template(filename):
     d = Directory('.')
     from pygate.routine.initialize import OpGenerateMacTemplate, RoutineOnDirectory
@@ -69,7 +69,7 @@ def shell_post_run(filename, tasks, shell):
         if name == SKS.MERGE:
             task_list.append(Merge(t[SKS.TARGET], t[SKS.METHOD]))
         elif name == SKS.ROOT_ANALYSIS:
-            task_list.append(RootAnalysis(t[SKS.TARGET]))
+            task_list.append(RootAnalysis(t[SKS.TARGET], t[SKS.ROOT_C_FILE]))
         else:
             raise ValueError("Unknown task name {}.".format(name))
     shell_script = ScriptPostRun(task_list, shell)
