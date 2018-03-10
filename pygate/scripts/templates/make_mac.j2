@@ -1,0 +1,19 @@
+import click
+
+def kernel(config):
+    from pygate.predefined.simulations import optical_gamma, simulation, PredefinedSimulations
+    from pygate.predefined.sources import sphere, Vec3
+    mac = optical_gamma(sphere(0.1, Vec3(150.0, 0.0, 0.0, 'mm'))).render()
+    return mac
+
+@click.command()
+@click.option('--config', '-c', help="mac maker config.", default="mac.yml")
+@click.option('--target', '-t', help="output mac filename", default="main.mac")
+def cli(config, target):
+    content = kernel(config)
+    with open(target, 'w') as fout:
+        print(content, file=fout)
+
+if __name__ == '__main__':
+    cli()
+

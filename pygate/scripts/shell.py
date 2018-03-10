@@ -90,3 +90,7 @@ class ScriptPostRun(Script):
 
     def add_task(self, task):
         return ScriptPostRun(tuple(list(self.tasks) + [task]), self.shell, self.is_need_source_env)
+
+
+class ScriptMacTemplate(ObjectWithTemplate):
+    template = 'make_mac'

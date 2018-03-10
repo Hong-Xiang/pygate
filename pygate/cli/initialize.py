@@ -25,12 +25,22 @@ def generate():
 @click.option('--script', '-s', help="Filename of script to run to generate mac file.")
 @click.option('--mac-config', '-c', help="Config filename to generate predefined macs.")
 @click.option('--target', '-t', help="MAC filename.")
-@click.option('--no-broadcast', '-n', help="Do not add broadcast flag of mac to pygate config.", is_flag=True)
 def mac(script, mac_config, target, no_broadcast):
     """
     Generate mac file.
     """
     pass
+
+
+@generate.command()
+@click.option('--filename', '-f', default='make_python.py')
+def mac_template(filename):
+    d = Directory('.')
+    from pygate.routine.initialize import OpGenerateMacTemplate, RoutineOnDirectory
+    o = OpGenerateMacTemplate(filename)
+    r = RoutineOnDirectory(d, [o])
+    r.work()
+    # click.echo(json.dumps(r.echo(), indent=4, separators=(',', ': ')))
 
 
 def shell_run(filename, tasks, gate_version, shell):
@@ -179,6 +189,9 @@ def ext():
 
 
 @init.command()
+@click.option('--mac-auto', 'mac', flag_value='auto', default=True)
+@click.option('--mac-no-create', 'mac', flag_value='no_create', default=True)
+@click.option('--mac-force-create', 'mac', flag_value='force_create', default=True)
 def auto():
     pass
 

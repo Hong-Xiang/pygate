@@ -8,12 +8,6 @@ class KEYS:
     ANALYSIS = 'analysis'
     INIT = 'init'
     NB_SPLIT = 'nb_split'
-    BROADCAST = 'broadcast'
-
-
-class BROADCAST_KEYS:
-    TARGETS = 'targets'
-    ADD_EXT = 'add_ext'
 
 
 class SUBMIT_KEYS:
@@ -34,6 +28,12 @@ class ANALYSIS_KEYS:
 
 
 class INIT_KEYS:
+
+    BROADCAST = 'broadcast'
+
+    class BROADCAST_KEYS:
+        TARGETS = 'targets'
+        ADD_EXT = 'add_ext'
 
     EXTERNAL = 'external'
 
@@ -104,6 +104,10 @@ init_config = {
         INIT_KEYS.SHELL_KEYS.RUN: shell_run_config,
         INIT_KEYS.SHELL_KEYS.POST_RUN: shell_post_run_config,
     },
+    INIT_KEYS.BROADCAST: {
+        INIT_KEYS.BROADCAST_KEYS.TARGETS: [],
+        INIT_KEYS.BROADCAST_KEYS.ADD_EXT: True,
+    },
 }
 
 
@@ -121,10 +125,7 @@ config = {
     },
     KEYS.INIT: init_config,
     KEYS.NB_SPLIT: 10,
-    KEYS.BROADCAST: {
-        BROADCAST_KEYS.TARGETS:[],
-        BROADCAST_KEYS.ADD_EXT:True,
-    }
+
 
 
 
