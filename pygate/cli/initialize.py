@@ -65,19 +65,20 @@ def shell_task_list(tasks):
     return result
 
 
-def shell_run(filename, tasks, gate_version, shell):
+def shell_run(filename, tasks, gate_version, shell, partition):
     from pygate.scripts.shell import ScriptRun, GateSimulation, RootAnalysis
     SKS = INIT_KEYS.SHELL_KEYS
     shell_script = ScriptRun(Directory('.').system_path(), shell_task_list(tasks),
-                             gate_version, shell)
+                             gate_version, shell, partition=partition)
     with open(filename, 'w') as fout:
         print(shell_script.render(), file=fout)
 
 
-def shell_post_run(filename, tasks, shell):
+def shell_post_run(filename, tasks, shell, partition):
     from pygate.scripts.shell import ScriptPostRun, Merge, RootAnalysis
     SKS = INIT_KEYS.SHELL_KEYS
-    shell_script = ScriptPostRun(shell_task_list(tasks), shell)
+    shell_script = ScriptPostRun(
+        shell_task_list(tasks), shell, partition=partition)
     with open(filename, 'w') as fout:
         print(shell_script.render(), file=fout)
 
@@ -91,10 +92,12 @@ def shell():
     shellc = config.get(KEYS.INIT, {}).get(INIT_KEYS.SHELL)
     src = shellc.get(SKS.RUN)
     shell_run(src[SKS.TARGET], src[SKS.TASK],
-              src[SKS.GATE_VERSION], src[SKS.SHELL_TYPE])
+              src[SKS.GATE_VERSION], src[SKS.SHELL_TYPE],
+              src[SKS.PARTITION])
     sprc = shellc.get(SKS.POST_RUN)
     shell_post_run(sprc[SKS.TARGET], sprc[SKS.TASK],
-                   sprc[SKS.SHELL_TYPE])
+                   sprc[SKS.SHELL_TYPE],
+                   sprc[SKS.PARTITION])
 
 
 @generate.command()

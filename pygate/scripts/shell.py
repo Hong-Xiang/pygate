@@ -63,7 +63,7 @@ class Merge(TaskWithFileArg):
 class ScriptRun(Script):
     template = 'run'
 
-    def __init__(self, work_directory, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False):
+    def __init__(self, work_directory, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False, partition='cpu'):
         """
         Parameters:
 
@@ -74,6 +74,7 @@ class ScriptRun(Script):
         self.shell = shell
         self.is_need_source_env = is_need_source_env
         self.tasks = tasks
+        self.partition = partition
 
     def add_task(self, task):
         return ScriptRun(self.work_directory, tuple(list(self.tasks) + [task]), self.geant4_version, self.shell, self.is_need_source_env)
@@ -82,7 +83,7 @@ class ScriptRun(Script):
 class ScriptRunLocal(ScriptRun):
     template = 'run_local'
 
-    def __init__(self, work_directory, tasks: Tuple[Task], geant4_version, shell='bash', is_need_source_env=False, local_work_directory=None):
+    def __init__(self, work_directory, tasks: Tuple[Task], geant4_version, shell='bash', is_need_source_env=False, local_work_directory=None, partition='cpu'):
         if local_work_directory is None:
             local_work_directory = '/tmp/pygate_temp_{}'.format(
                 random.randint(0, 1e8))
@@ -90,6 +91,7 @@ class ScriptRunLocal(ScriptRun):
                          geant4_version, shell, is_need_source_env)
         warn(DeprecationWarning("No local run script is needed when using gluster."))
         self.server_work_directory = work_directory
+        self.partition = partition
 
     def add_task(self, task):
         return ScriptRunLocal(self.work_directory, tuple(list(self.tasks) + [task]), self.geant4_version, self.shell, self.is_need_source_env, self.local_work_directory)
@@ -98,7 +100,7 @@ class ScriptRunLocal(ScriptRun):
 class ScriptPostRun(Script):
     template = 'post_run'
 
-    def __init__(self, tasks: Tuple[Task]=(), shell='bash', is_need_source_env=False):
+    def __init__(self, tasks: Tuple[Task]=(), shell='bash', is_need_source_env=False, partition='cpu'):
         self.tasks = tasks
         self.shell = shell
         self.is_need_source_env = is_need_source_env

@@ -63,6 +63,7 @@ class INIT_KEYS:
         GATE_VERSION = 'gate_version'
         SHELL_TYPE = 'shell_type'
         PYGATE_ANALYSIS = 'pygate_analysis'
+        PARTITION = 'partition'
 
     PHANTOM = 'phantom'
 
@@ -78,6 +79,7 @@ shell_run_config = {
          INIT_KEYS.SHELL_KEYS.TARGET: 'main.mac'},
     ],
     INIT_KEYS.SHELL_KEYS.TARGET: 'run.sh',
+    INIT_KEYS.SHELL_KEYS.PARTITION: 'cpu',
 }
 
 shell_post_run_config = {
@@ -94,7 +96,8 @@ shell_post_run_config = {
          ANALYSIS_KEYS.ANALYSIS_TYPE: 'gamma_edep'}
     ],
     INIT_KEYS.SHELL_KEYS.TARGET: 'post.sh',
-    INIT_KEYS.SHELL_KEYS.SHELL_TYPE: 'bash'
+    INIT_KEYS.SHELL_KEYS.SHELL_TYPE: 'bash',
+    INIT_KEYS.SHELL_KEYS.PARTITION: 'cpu',
 }
 
 init_config = {
