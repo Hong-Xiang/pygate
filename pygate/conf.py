@@ -83,6 +83,7 @@ shell_run_config = {
 }
 
 shell_post_run_config = {
+    INIT_KEYS.SHELL_KEYS.GATE_VERSION: '8.0',
     INIT_KEYS.SHELL_KEYS.TASK: [
         {INIT_KEYS.SHELL_KEYS.TASK_NAME:  INIT_KEYS.SHELL_KEYS.MERGE,
          INIT_KEYS.SHELL_KEYS.TARGET: 'result.root',

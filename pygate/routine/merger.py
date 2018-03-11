@@ -77,6 +77,7 @@ class OpMergeHADD(OpMergeWithShellCall):
                    .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
         call_args = ['hadd', target] + sources
+        call_args = [' '.join(call_args)]
         return call_args
 
 

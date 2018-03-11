@@ -74,11 +74,11 @@ def shell_run(filename, tasks, gate_version, shell, partition):
         print(shell_script.render(), file=fout)
 
 
-def shell_post_run(filename, tasks, shell, partition):
+def shell_post_run(filename, tasks, gate_version, shell, partition):
     from pygate.scripts.shell import ScriptPostRun, Merge, RootAnalysis
     SKS = INIT_KEYS.SHELL_KEYS
     shell_script = ScriptPostRun(
-        shell_task_list(tasks), shell, partition=partition)
+        shell_task_list(tasks), gate_version, shell, partition=partition)
     with open(filename, 'w') as fout:
         print(shell_script.render(), file=fout)
 
@@ -95,7 +95,7 @@ def shell():
               src[SKS.GATE_VERSION], src[SKS.SHELL_TYPE],
               src[SKS.PARTITION])
     sprc = shellc.get(SKS.POST_RUN)
-    shell_post_run(sprc[SKS.TARGET], sprc[SKS.TASK],
+    shell_post_run(sprc[SKS.TARGET], sprc[SKS.TASK], src[SKS.GATE_VERSION],
                    sprc[SKS.SHELL_TYPE],
                    sprc[SKS.PARTITION])
 

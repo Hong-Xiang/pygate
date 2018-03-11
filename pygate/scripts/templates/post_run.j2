@@ -1,4 +1,7 @@
 {% extends "sbatch.j2" -%}
+{% block prework -%}
+source /hqlf/softwares/module/simu{{ o.geant4_version }}.sh
+{% endblock prework -%}
 {% block work -%}
 {% for t in o.tasks -%}
 {{ t.render() }}

@@ -100,10 +100,12 @@ class ScriptRunLocal(ScriptRun):
 class ScriptPostRun(Script):
     template = 'post_run'
 
-    def __init__(self, tasks: Tuple[Task]=(), shell='bash', is_need_source_env=False, partition='cpu'):
+    def __init__(self, tasks: Tuple[Task]=(), geant4_version='8.0', shell='bash', is_need_source_env=False, partition='cpu'):
         self.tasks = tasks
         self.shell = shell
+        self.geant4_version = geant4_version
         self.is_need_source_env = is_need_source_env
+        self.partition = partition
 
     def add_task(self, task):
         return ScriptPostRun(tuple(list(self.tasks) + [task]), self.shell, self.is_need_source_env)
