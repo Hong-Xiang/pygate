@@ -151,10 +151,12 @@ def broadcast_kernel(files, subdirectory_patterns, dryrun):
 @click.option('--no-ext', '-e', help='Include all external files.', is_flag=True)
 def bcast(target, no_ext):
     if no_ext is None:
-        no_ext = (config.get(INIT_KEYS.BROADCAST, {})
+        no_ext = (config.get(KEYS.INIT)
+                  .get(INIT_KEYS.BROADCAST, {})
                   .get(INIT_KEYS.BROADCAST_KEYS.ADD_EXT))
-    if target is None:
-        target = (config.get(INIT_KEYS.BROADCAST, {})
+    if len(target) == 0:
+        target = (config.get(KEYS.INIT, {})
+                  .get(INIT_KEYS.BROADCAST, {})
                   .get(INIT_KEYS.BROADCAST_KEYS.TARGETS, ()))
     files = list(target)
     fmt = 'pygate init bcast called with: target: {} no-ext: {}.'
