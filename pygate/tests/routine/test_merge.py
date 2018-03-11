@@ -42,9 +42,9 @@ class TestHadd(unittest.TestCase):
         r = RoutineOnDirectory(d)
         o = OpMergeHADD('test.txt', ['sub*'])
         args = o.call_args(r)
-        self.assertEqual(args[:2], ['hadd', 'test.txt'])
-        self.assertEqual(sorted(args[2:]),
-                         sorted(['sub1/test.txt', 'sub2/test.txt']))
+        self.assertEqual(args, ['hadd test.txt sub1/test.txt sub2/test.txt'])
+        # self.assertEqual(sorted(args),
+                        #  sorted(['sub1/test.txt', 'sub2/test.txt']))
 
     def test_work(self):
         from fs.memoryfs import MemoryFS

@@ -9,16 +9,19 @@ from functools import partial
 
 
 class OpMerge(OperationOnFile, OperationOnSubdirectories):
+    """
+    Operation merge files with same name in different subdirectories.
+    """
     method = 'dryrun'
 
     def __init__(self, filename: str, patterns: Iterable[str]):
         OperationOnFile.__init__(self, filename)
         OperationOnSubdirectories.__init__(self, patterns)
 
-    def sources(self, r: RoutineOnDirectory):
+    def sources(self, r: RoutineOnDirectory) -> JSONStr:
         return self.subdirectories(r).map(lambda d: d.attach_file(self.filename))
 
-    def dryrun(self, r: RoutineOnDirectory):
+    def dryrun(self, r: RoutineOnDirectory) -> JSONStr:
         sources_system_path = (self.sources(r)
                                .map(lambda f: f.path.s)
                                .to_list().to_blocking().first())
@@ -98,8 +101,12 @@ class OpMergeSumBinary(OpMerge):
     method = 'sum_bin'
 
 
-def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterable[str], dryrun=False):
-    ops = [OpMergeHADD(s, subdirectory) for s in source_filenames]
+def hadd(work_directory: Directory, subdirectory_patterns: Iterable[str],
+         source_filenames: Iterable[str], dryrun=False):
+    """
+    Helper function of fast create routine with only hadd task.
+    """
+    ops = [OpMergeHADD(s, subdirectory_patterns) for s in source_filenames]
     return RoutineOnDirectory(work_directory, ops, dryrun)
 
     # class OpMergeCat(Operation):
