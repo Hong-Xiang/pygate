@@ -18,7 +18,7 @@ class OpMerge(OperationOnFile, OperationOnSubdirectories):
         OperationOnFile.__init__(self, filename)
         OperationOnSubdirectories.__init__(self, patterns)
 
-    def sources(self, r: RoutineOnDirectory) -> JSONStr:
+    def sources(self, r: RoutineOnDirectory):
         return self.subdirectories(r).map(lambda d: d.attach_file(self.filename))
 
     def dryrun(self, r: RoutineOnDirectory) -> JSONStr:
@@ -95,6 +95,32 @@ class OpMergeCat(OpMergeWithShellCall):
         call_args = ['cat {} > {}'.format(' '.join(sorted(sources)), target)]
         # call_args = ['cat'] + sources + ['>', target]
         return call_args
+
+
+class OpMergePandasConcatenate(OpMerge):
+    method = 'pandas_concatenate'
+
+    def apply(self, r: RoutineOnDirectory):
+        result = self.dryrun(r)
+        sources = self.sources().to_list().to_blocking().first()
+        import pandas as pd
+        tables = []
+        for s in sources:
+            if s.endswith('.csv'):
+                tables.append(pd.read_csv(s.path.s))
+            elif s.endswith('.h5'):
+                tables.append(pd.read_hdf(s.path.s))
+            else:
+                raise ValueError("Unknown file type {}".format(s.path.s))
+        merged = pd.concat(tables, axis=0)
+        target_path = self.target(r).path.s
+        if target_path.endswith('.csv'):
+            merged.to_csv(target_path)
+        elif target_path.endswith('.h5'):
+            merged.to_hdf(target_path)
+        else:
+            raise ValueError("Unknown file type {}".format(target_path))
+        return result
 
 
 class OpMergeSumBinary(OpMerge):
