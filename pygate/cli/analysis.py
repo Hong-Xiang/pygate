@@ -1,6 +1,7 @@
 import click
 from .main import pygate
 from ..conf import config, KEYS
+from ..utils.syscall import shell_call
 
 
 def analysis_kernel(source, target, analysis_type, dryrun):
@@ -10,12 +11,26 @@ def analysis_kernel(source, target, analysis_type, dryrun):
     d = Directory('.')
     o = OperationAnalysis(source, target, analysis_type)
     r = RoutineOnDirectory(d, [o])
+    r.work()
+    return r.echo()
 
 
-@pygate.command()
-@click.option('--analysis-type', '-a', help="Predifined analysis workflow.")
+@pygate.group()
+def analysis():
+    pass
+
+
+@analysis.command()
+@click.option('--name', '-n', help="Predefined analysis type name.")
 @click.option('--source', '-s', help="Analysis source data filename.")
-@click.option('--target', '-t', help="Analysis target data filename.")
-def analysis(analysis_type, source, target):
-    analysis_type = analysis_type or conf.KEYS.AN
-    analysis_kernel()
+@click.option('--output', '-o', help="Analysis target data filename.")
+def predefined(name, source, output):
+    click.echo(analysis_kernel(source, output, name, config.get(KEYS.DRYRUN)))
+
+
+@analysis.command()
+@click.option('--target', '-t', help="Analysis .py filename.")
+@click.option('--source', '-s', help="Analysis source data filename.")
+@click.option('--output', '-o', help="Output filename.")
+def script(target, source, output):
+    shell_call('python {} --source {} --output {}'.format(target, source, output))
