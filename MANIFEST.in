@@ -1,2 +1,2 @@
-include pygate/scripts/*
-include pygate/components/templates/*
+recursive-include pygate/scripts/templates/ *.j2
+recursive-include pygate/components/templates/ *.j2
