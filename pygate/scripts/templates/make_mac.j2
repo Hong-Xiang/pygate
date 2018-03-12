@@ -8,10 +8,10 @@ def kernel(config):
 
 @click.command()
 @click.option('--config', '-c', help="mac maker config.", default="mac.yml")
-@click.option('--target', '-t', help="output mac filename", default="main.mac")
-def cli(config, target):
+@click.option('--output', '-o', help="output mac filename", default="main.mac")
+def cli(config, output):
     content = kernel(config)
-    with open(target, 'w') as fout:
+    with open(output, 'w') as fout:
         print(content, file=fout)
 
 if __name__ == '__main__':

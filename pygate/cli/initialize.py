@@ -10,6 +10,7 @@ import json
 import yaml
 from dxl.fs import File, Directory
 
+from ..utils.syscall import shell_call
 
 @pygate.group()
 def init():
@@ -20,17 +21,7 @@ def init():
 def generate():
     pass
 
-
-@generate.command()
-@click.option('--script', '-s', help="Filename of script to run to generate mac file.")
-@click.option('--mac-config', '-c', help="Config filename to generate predefined macs.")
-@click.option('--target', '-t', help="MAC filename.")
-def mac(script, mac_config, target, no_broadcast):
-    """
-    Generate mac file.
-    """
-    pass
-
+from .mac_generate import mac
 
 @generate.command()
 @click.option('--filename', '-f', default='make_mac.py')
