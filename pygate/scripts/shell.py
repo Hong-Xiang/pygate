@@ -36,14 +36,23 @@ class RootAnalysis(TaskWithFileArg):
 
 
 class PygateAnalysis(TaskWithFileArg):
-    def __init__(self, source, target, analysis_type):
+    def __init__(self, source=None, target=None, output=None, name=None, analysis_type=None):
         super().__init__(target)
         self.source = source
+        self.target = target
+        self.output = output
+        self.name = name
         self.analysis_type = analysis_type
 
     def render(self):
-        fmt = "pygate analysis --source {} --target {} --analysis-type {}"
-        return fmt.format(self.source, self.fn, self.analysis_type)
+        if self.analysis_type == 'script':
+            fmt = "pygate analysis script --source {} --target {} --output {}"
+            return fmt.format(self.source, self.fn, self.output)
+        elif self.analysis_type == 'predefined':
+            fmt = "pygate analysis predefined --source {} --output {} --name {}"
+            return fmt.format(self.source, self.output, self.name)
+        else:
+            raise ValueError("Unknown analysis subcommand {}.".format(self.analysis_type))
 
 
 class Clean(Task):

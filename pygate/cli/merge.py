@@ -18,6 +18,7 @@ def merge_kernel(tasks: Iterable[Task], subdir_pattern: Iterable[str], dryrun):
         'hadd': merge.OpMergeHADD,
         'cat': merge.OpMergeCat,
         'sum_bin': merge.OpMergeSumBinary,
+        'catpdh5': merge.OpMergePandasConcatenate
     }
     ops = [op_map[t.method.lower()](t.filename, subdir_pattern) for t in tasks]
     r = merge.RoutineOnDirectory(d, ops, dryrun)

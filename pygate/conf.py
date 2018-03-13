@@ -24,7 +24,9 @@ class CLEAN_KEYS:
 class ANALYSIS_KEYS:
     SOURCE = 'source'
     TARGET = 'target'
-    ANALYSIS_TYPE = 'analysis_type'
+    NAME = 'name'
+    OUTPUT = 'output'
+    ANALYSIS_TYPE = 'subcommand'
 
 
 class INIT_KEYS:

@@ -48,9 +48,11 @@ def shell_task_list(tasks):
         elif name == SKS.ROOT_ANALYSIS:
             result.append(RootAnalysis(t[SKS.TARGET], t[SKS.ROOT_C_FILE]))
         elif name == SKS.PYGATE_ANALYSIS:
-            result.append(PygateAnalysis(t[ANALYSIS_KEYS.SOURCE],
-                                         t[ANALYSIS_KEYS.TARGET],
-                                         t[ANALYSIS_KEYS.ANALYSIS_TYPE]))
+            result.append(PygateAnalysis(t.get(ANALYSIS_KEYS.SOURCE),
+                                         t.get(ANALYSIS_KEYS.TARGET),
+                                         t.get(ANALYSIS_KEYS.OUTPUT),
+                                         t.get(ANALYSIS_KEYS.NAME),
+                                         t.get(ANALYSIS_KEYS.ANALYSIS_TYPE)))
         else:
             raise ValueError("Unknown task name {}.".format(name))
     return result

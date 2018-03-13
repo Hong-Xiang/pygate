@@ -102,14 +102,15 @@ class OpMergePandasConcatenate(OpMerge):
 
     def apply(self, r: RoutineOnDirectory):
         result = self.dryrun(r)
-        sources = self.sources().to_list().to_blocking().first()
+        sources = self.sources(r).to_list().to_blocking().first()
         import pandas as pd
         tables = []
         for s in sources:
-            if s.endswith('.csv'):
-                tables.append(pd.read_csv(s.path.s))
-            elif s.endswith('.h5'):
-                tables.append(pd.read_hdf(s.path.s))
+            p_ = s.path.s
+            if p_.endswith('.csv'):
+                tables.append(pd.read_csv(p_))
+            elif p_.endswith('.h5'):
+                tables.append(pd.read_hdf(p_))
             else:
                 raise ValueError("Unknown file type {}".format(s.path.s))
         merged = pd.concat(tables, axis=0)
