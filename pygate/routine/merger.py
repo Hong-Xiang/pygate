@@ -118,7 +118,7 @@ class OpMergePandasConcatenate(OpMerge):
         if target_path.endswith('.csv'):
             merged.to_csv(target_path)
         elif target_path.endswith('.h5'):
-            merged.to_hdf(target_path)
+            merged.to_hdf(target_path, 'data')
         else:
             raise ValueError("Unknown file type {}".format(target_path))
         return result

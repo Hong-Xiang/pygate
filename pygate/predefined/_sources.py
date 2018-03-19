@@ -85,8 +85,8 @@ def sphere(radius,
     """
     Parameters:
         - `radius`: radius of source
-        - `position`:  
-        - `angle`: default to the positive x direction
+        - `position`: Vec3 or list/tuple which is used to construct Vec3 by Vec3(*l) 
+        - `angle`: [theta_0, theta1, phi0, phi1], default to the positive x direction ([90, 90, 0, 0])
         - `activity`:
 
     Returns:
@@ -95,8 +95,13 @@ def sphere(radius,
     sphere = Sphere(radius, dimension='Volume')
     if position is None:
         position = Vec3(0.0, 0.0, 0.0, 'mm')
+    if isinstance(position, (list, tuple)):
+        position = Vec3(*position)
     if particle is None:
-        particle = ParticleGamma(unstable=False, halflife=None, back2back=False)
+        particle = ParticleGamma(
+            unstable=False, halflife=None, back2back=False)
     if angle is None:
         angle = AngularISO([90, 90, 0, 0])
+    if isinstance(angle, (list, tuple)):
+        angle = AngularISO(angle)
     return SourceList((Source(name, particle, activity, angle, sphere, position),))
