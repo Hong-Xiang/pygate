@@ -4,6 +4,9 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
+import dask.dataframe as ddf
+import dask
+from dask.dataframe.groupby import DataFrameGroupBy
 
 
 class ParticleID(Enum):
@@ -45,8 +48,17 @@ class Results(ResultBase):
     def call(self, func_name) -> 'Results':
         return Results(map(self.d, lambda x: getattr(x, 'func_name')()))
 
+    def zip(self, r: 'Results'):
+        return Results(zip(self.d, r.d))
+
     def first(self) -> ResultBase:
         return self.d[0]
+
+    def flatten(self) -> 'Results':
+        if not isinstance(self.d[0], Results):
+            raise TypeError(
+                "Flatten requires Results of Results, got {}.".format(type(self.d[0])))
+        return Results(tuple(sum([list(d.d) for d in self.d], [])))
 
     def merge(self) -> ResultBase:
         result = None
@@ -59,6 +71,17 @@ class Results(ResultBase):
 
     def to_list(self):
         return list(self.d)
+
+class ResultsDask(ResultBase):
+    def map(self, func) -> 'ResultsDask':
+        return Results(dask.delayed(map)(func, self.d))
+    
+
+
+class ResultsNamedTuple(ResultBase):
+    pass
+
+
 
 
 class ResultsWithKeys(Results):
@@ -76,6 +99,14 @@ class ResultsWithKeys(Results):
             if o[0] == key:
                 return o[1]
         raise KeyError("Key {} not found.".format(key))
+
+
+class ResultsWithUnknownKeys(ResultsDask):
+    def select(self, key):
+        return DataFrame(self.d.get_group(key))
+
+    def drop_keys(self) -> ResultsDask:
+        return self.map(lambda x: x[1])
 
 
 class Series(ResultBase):
@@ -108,7 +139,10 @@ class DataFrame(ResultBase):
 
     def split_by(self, column: str) -> ResultsWithKeys:
         groups = self.d.groupby(column)
-        return ResultsWithKeys(((k, DataFrame(groups.get_group(k).drop([column], axis=1))) for k in groups.groups))
+        if isinstance(groups, DataFrameGroupBy):
+            return ResultsWithUnknownKeys(groups)
+        else:
+            return ResultsWithKeys(((k, DataFrame(groups.get_group(k).drop([column], axis=1))) for k in groups.groups))
 
     def split_row(self) -> Results:
         return Results((Series(self.d.iloc[i]) for i in range(self.d.shape[0])))
@@ -122,6 +156,8 @@ class DataFrame(ResultBase):
     def to_event(self) -> 'Event':
         if not ColumnNames.Event in self.d.columns:
             return Event(self.d)
+
+
 
 
 class Vec3(ResultBase):
@@ -150,11 +186,11 @@ class EnergyDeposit(ResultBase):
 
     @property
     def position(self):
-        return self.position
+        return self.d[0]
 
     @property
     def energy(self):
-        return self.energy
+        return self.d[1]
 
 
 class Event(DataFrame):

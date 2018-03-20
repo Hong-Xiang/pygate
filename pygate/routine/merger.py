@@ -9,6 +9,9 @@ from functools import partial
 
 
 class OpMerge(OperationOnFile, OperationOnSubdirectories):
+    """
+    Operation merge files with same name in different subdirectories.
+    """
     method = 'dryrun'
 
     def __init__(self, filename: str, patterns: Iterable[str]):
@@ -18,7 +21,7 @@ class OpMerge(OperationOnFile, OperationOnSubdirectories):
     def sources(self, r: RoutineOnDirectory):
         return self.subdirectories(r).map(lambda d: d.attach_file(self.filename))
 
-    def dryrun(self, r: RoutineOnDirectory):
+    def dryrun(self, r: RoutineOnDirectory) -> JSONStr:
         sources_system_path = (self.sources(r)
                                .map(lambda f: f.path.s)
                                .to_list().to_blocking().first())
@@ -57,13 +60,18 @@ class OpMergeWithShellCall(OpMerge, OpeartionWithShellCall):
     def __init__(self, filename: str, patterns: Iterable[str]):
         OpMerge.__init__(self, filename, patterns)
 
+    def apply(self, r: RoutineOnDirectory):
+        result = OpMerge.apply(self, r)
+        result.update(OpeartionWithShellCall.apply(self, r))
+        return result
+
     def dryrun(self, r: RoutineOnDirectory):
         result = OpMerge.dryrun(self, r)
         result.update(OpeartionWithShellCall.dryrun(self, r))
         return result
 
 
-class OpMergeHADD(OpMerge, OpeartionWithShellCall):
+class OpMergeHADD(OpMergeWithShellCall):
     method = 'hadd'
 
     def call_args(self, r: RoutineOnDirectory):
@@ -72,10 +80,11 @@ class OpMergeHADD(OpMerge, OpeartionWithShellCall):
                    .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
         call_args = ['hadd', target] + sources
+        call_args = [' '.join(call_args)]
         return call_args
 
 
-class OpMergeCat(OpMerge):
+class OpMergeCat(OpMergeWithShellCall):
     method = 'cat'
 
     def call_args(self, r: RoutineOnDirectory):
@@ -83,16 +92,48 @@ class OpMergeCat(OpMerge):
         sources = (self.sources(r)
                    .map(lambda f: f.path.s)
                    .to_list().to_blocking().first())
-        call_args = ['cat', target] + sources
+        call_args = ['cat {} > {}'.format(' '.join(sorted(sources)), target)]
+        # call_args = ['cat'] + sources + ['>', target]
         return call_args
+
+
+class OpMergePandasConcatenate(OpMerge):
+    method = 'pandas_concatenate'
+
+    def apply(self, r: RoutineOnDirectory):
+        result = self.dryrun(r)
+        sources = self.sources(r).to_list().to_blocking().first()
+        import pandas as pd
+        tables = []
+        for s in sources:
+            p_ = s.path.s
+            if p_.endswith('.csv'):
+                tables.append(pd.read_csv(p_))
+            elif p_.endswith('.h5'):
+                tables.append(pd.read_hdf(p_))
+            else:
+                raise ValueError("Unknown file type {}".format(s.path.s))
+        merged = pd.concat(tables, axis=0)
+        target_path = self.target(r).path.s
+        if target_path.endswith('.csv'):
+            merged.to_csv(target_path)
+        elif target_path.endswith('.h5'):
+            merged.to_hdf(target_path, 'data')
+        else:
+            raise ValueError("Unknown file type {}".format(target_path))
+        return result
 
 
 class OpMergeSumBinary(OpMerge):
     method = 'sum_bin'
 
 
-def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterable[str], dryrun=False):
-    ops = [OpMergeHADD(s, subdirectory) for s in source_filenames]
+def hadd(work_directory: Directory, subdirectory_patterns: Iterable[str],
+         source_filenames: Iterable[str], dryrun=False):
+    """
+    Helper function of fast create routine with only hadd task.
+    """
+    ops = [OpMergeHADD(s, subdirectory_patterns) for s in source_filenames]
     return RoutineOnDirectory(work_directory, ops, dryrun)
 
     # class OpMergeCat(Operation):
@@ -127,8 +168,6 @@ def hadd(work_directory: Directory, subdirectory: str, source_filenames: Iterabl
     #         if self.c.get('verbose') is not None and self.c['verbose'] > 0:
     #             print('MERGE.{md}.TARGET:'.format(md=method), target)
     #             print('MERGE.{md}.SOURCE:'.format(md=method), *sources, sep='\n')
-
-
 
     #     def _sum(self, task):
     #         import numpy as np

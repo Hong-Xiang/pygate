@@ -1,6 +1,6 @@
 """
 """
-from .base import Operation, OperationOnFile, OperationOnSubdirectories, RoutineOnDirectory
+from .base import Operation, OperationOnFile, OperationOnSubdirectories, OpeartionWithShellCall, RoutineOnDirectory
 from dxl.fs import Directory, File
 from typing import TypeVar, Iterable
 from pygate.components.simulation import Simulation
@@ -69,13 +69,29 @@ class OpGenerateFile(OperationOnFile):
         return self.target_file_with_content(r).to_dict()
 
 
-class OpGeneratorMac(OpGenerateFile):
-    def __init__(self, filename: str, simulation: Simulation):
+class OpGeneratorMac(OpGenerateFile, OpeartionWithShellCall):
+    def __init__(self, script_filename: str, mac_config: str=None, mac_filename: str=None):
         super.__init__(filename)
-        self.simulation = simulation
+        self.mac_config = mac_config
+        self.mac_filename = mac_filename
 
-    def content(self, r: RoutineOnDirectory)->str:
-        return self.simulation.render()
+    def call_args(self, r: RoutineOnDirectory):
+        result = ['python', self.target(r).path.s]
+        if self.mac_config is not None:
+            result += ['--config', self.mac_config]
+        if self.mac_filename is not None:
+            result += ['--target', self.mac_filename]
+        return result
+
+
+class OpGenerateMacTemplate(OpGenerateFile):
+    def __init__(self, filename):
+        super().__init__(filename)
+        from ..scripts.shell import ScriptMacTemplate
+        self.script = ScriptMacTemplate()
+
+    def content(self, r: RoutineOnDirectory) -> str:
+        return self.script.render()
 
 
 class OpGeneratorShell(OperationOnFile):

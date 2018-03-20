@@ -32,6 +32,11 @@ class Routine:
                 self.result.append(o.apply(self))
         return tuple(self.result)
 
+    def echo(self):
+        import json
+        return json.dumps(self.result, sort_keys=True, indent=4,
+                          separators=(',', ': '))
+
 
 class RoutineOnDirectory(Routine):
     def __init__(self,
@@ -89,13 +94,17 @@ class OpeartionWithShellCall(Operation):
     def call_args(self, r: Routine):
         raise NotImplementedError
 
+    def stdout(self, r: Routine):
+        return None
+
     def run_child_program(self, r: Routine):
         import subprocess
         import sys
 
         with subprocess.Popen(self.call_args(r),
                               stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE) as p:
+                              stderr=subprocess.PIPE,
+                              shell=True) as p:
             out = p.stdout.read().decode()
             err = p.stderr.read().decode()
             sys.stdout.write(out)

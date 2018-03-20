@@ -4,7 +4,7 @@ source /hqlf/softwares/module/simu{{ o.geant4_version }}.sh
 {% endblock prework -%}
 {% block work -%}
 echo 'Start MC Simulation at: ' `date`
-cd {{ o.work_directory }}
+# cd {{ o.work_directory }}
 {% for t in o.tasks -%}
 {{ t.render() }}
 {% endfor -%}
