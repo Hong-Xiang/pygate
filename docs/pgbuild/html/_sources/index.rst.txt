@@ -6,13 +6,30 @@
 Welcome to Pygate's documentation!
 ==================================
 
+This is the master page of *pygate*  documentation
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
    
-   example
-   
    pygate
+   install
+   first
+   file index <example>
+   
+
+
+API
+===
+.. automodule: __init__
+
+
+.. toctree::
+   :titlesonly:
+   
+   file
+   clist
+
 
 
 Indices and tables
