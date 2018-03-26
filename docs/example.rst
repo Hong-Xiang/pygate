@@ -2,19 +2,24 @@ pygate
 ===============
    *pygate docomentions' index*
 
-analysis
---------
+:ref:`pygate`
+-------------
+
+
+
+:ref:`analysis`
+---------------
     * _init_.py
     * results.py
-api
----
+:ref:`api`
+----------
     * cli
         + _init_.py
         + base.py
         + commands.py
     * _init_.py
-archive
--------
+:ref:`archive`
+--------------
     * macs
         + mct2d_source.mac
     * _init_.py 
@@ -25,8 +30,8 @@ archive
     * merge_bash.sh
     * merge_bash_zsh.sh
     * pygate.yml
-componets
----------
+:ref:`components`
+----------------
     * geometry
         + camera
             - _init_.py
@@ -47,8 +52,8 @@ componets
     * simulation.py
     * source.py
     * utils.py
-predefined
-----------
+:ref:`predefined`
+-----------------
     * _init_.py
     * _camaera.py
     * _sources.py
@@ -59,8 +64,8 @@ predefined
     * physice.py
     * simulations.py
     * source.py
-routine
--------
+:ref:`routine`
+--------------
     * _init_.py
     * analysis.py
     * base.py
@@ -69,15 +74,15 @@ routine
     * merger.py
     * submit.py
     * utils.py
-scripts
--------
+:ref:`scripts`
+--------------
     * templates
     * _init_.py
     * base.py
     * helper.py
     * shell.py
-tests
------
+:ref:`tests`
+------------
     * components
     * predifined
     * routine
@@ -85,8 +90,8 @@ tests
     * _init_.py
     * test_methods.py
     * test_shell.py
-utils
------
+:ref:`utils`
+------------
     * _init_.py
     * object_with_template.py
     * strs.py

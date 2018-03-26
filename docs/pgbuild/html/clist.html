@@ -1,0 +1,650 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Here is the command list of pygate &#8212; Pygate 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="for each file" href="file.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="here-is-the-command-list-of-pygate">
+<span id="command-list"></span><h1>Here is the command list of <em>pygate</em><a class="headerlink" href="#here-is-the-command-list-of-pygate" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">pygate</span></code></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">analysis</span></code></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">predefined</span></code></li>
+<li><code class="docutils literal"><span class="pre">script</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><code class="docutils literal"><span class="pre">clean</span></code></li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">generate</span></code></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">cfg</span></code></li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">mac</span></code></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">predefined</span></code></li>
+<li><code class="docutils literal"><span class="pre">script</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><code class="docutils literal"><span class="pre">mac_template</span></code></li>
+<li><code class="docutils literal"><span class="pre">shell</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">init</span></code></dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">auto</span></code></li>
+<li><code class="docutils literal"><span class="pre">bcast</span></code></li>
+<li><code class="docutils literal"><span class="pre">ext</span></code></li>
+<li><code class="docutils literal"><span class="pre">subdir</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><code class="docutils literal"><span class="pre">merge</span></code></li>
+<li><code class="docutils literal"><span class="pre">submit</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="section" id="pygate">
+<h2>$ pygate<a class="headerlink" href="#pygate" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate [OPTIONS] COMMAND [ARGS]…</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c</span>, <span class="option">--config <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>config file name</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--no-config</span></kbd></td>
+<td>ignore config file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--dryrun</span></kbd></td>
+<td>Do not do anything, just show expected results.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">analysis</span>
+<span class="n">clean</span>
+<span class="n">generate</span>
+<span class="n">init</span>
+<span class="n">merge</span>
+<span class="n">submit</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pygate-analysis">
+<h2>$ pygate analysis<a class="headerlink" href="#pygate-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate analysis [OPTIONS] COMMAND [ARGS]…</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">predefined</span>
+<span class="n">script</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pygate-analysis-predefined">
+<h2>$ pygate analysis predefined<a class="headerlink" href="#pygate-analysis-predefined" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate analysis predefined [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-n</span>, <span class="option">--name <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Predefined analysis type name.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s</span>, <span class="option">--source <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Analysis source data filename.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--output <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Analysis target data filename.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-analysis-script">
+<h2>$ pygate analysis script<a class="headerlink" href="#pygate-analysis-script" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate analysis script [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Analysis .py filename.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s</span>, <span class="option">--source <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Analysis source data filename.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--output <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Output filename.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-clean">
+<h2>$ pygate clean<a class="headerlink" href="#pygate-clean" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate clean [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-d</span>, <span class="option">--subdirectories</span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>remove subdirectories</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f</span>, <span class="option">--root-files <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>remove files in work directory</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s</span>, <span class="option">--slurm-outputs</span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>remove <a href="#id1"><span class="problematic" id="id2">*</span></a>.out <a href="#id3"><span class="problematic" id="id4">*</span></a>.err files</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-generate">
+<h2>$ pygate generate<a class="headerlink" href="#pygate-generate" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate [OPTIONS] COMMAND [ARGS]…</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cfg</span>           <span class="n">Generate</span> <span class="n">initial</span> <span class="n">config</span> <span class="n">file</span><span class="o">.</span>
+<span class="n">mac</span>           <span class="n">Generate</span> <span class="n">mac</span> <span class="n">file</span><span class="o">.</span>
+<span class="n">mac_template</span>
+<span class="n">shell</span>         <span class="n">Generate</span> <span class="n">shell</span> <span class="n">script</span><span class="p">,</span> <span class="n">pre</span> <span class="n">run</span> <span class="ow">or</span> <span class="n">post</span> <span class="n">run</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pygate-generate-cfg">
+<h2>$ pygate generate cfg<a class="headerlink" href="#pygate-generate-cfg" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate cfg [OPTIONS]</p>
+<blockquote>
+<div>Generate initial config file.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Config file name.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f</span>, <span class="option">--format <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Format of config file, json or yml</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-generate-mac">
+<h2>$ pygate generate mac<a class="headerlink" href="#pygate-generate-mac" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate mac [OPTIONS] COMMAND [ARGS]…</p>
+<blockquote>
+<div>Generate mac file.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">predefined</span>  <span class="n">Generate</span> <span class="n">mac</span> <span class="n">file</span> <span class="n">by</span> <span class="n">predefined</span> <span class="n">system</span><span class="o">.</span>
+<span class="n">script</span>      <span class="n">Generate</span> <span class="n">mac</span> <span class="n">file</span> <span class="n">by</span> <span class="n">running</span> <span class="n">a</span> <span class="o">.</span><span class="n">py</span> <span class="n">file</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pygate-generate-mac-predefined">
+<h2>$ pygate generate mac predefined<a class="headerlink" href="#pygate-generate-mac-predefined" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate mac predefined [OPTIONS]</p>
+<blockquote>
+<div>Generate mac file by predefined system.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p</span>, <span class="option">--predefined <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Name of predefined system to generate mac file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c</span>, <span class="option">--config <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>config filename to generate macs.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>MAC filename, will passed to script or predefined
+method.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-generate-mac-script">
+<h2>$ pygate generate mac script<a class="headerlink" href="#pygate-generate-mac-script" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate mac script [OPTIONS]</p>
+<blockquote>
+<div>Generate mac file by running a .py file.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Filename of script to run to generate mac file.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c</span>, <span class="option">--config <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>config filename to generate macs.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-o</span>, <span class="option">--output <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>MAC filename, will passed to script or predefined method.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-generate-mac-template">
+<h2>$ pygate generate mac_template<a class="headerlink" href="#pygate-generate-mac-template" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Usage: pygate generate mac_template [OPTIONS]</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f</span>, <span class="option">--filename <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Show the file name.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-generate-shell">
+<h2>$ pygate generate shell<a class="headerlink" href="#pygate-generate-shell" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate generate shell [OPTIONS]</p>
+<blockquote>
+<div>Generate shell script, pre run or post run.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-init">
+<h2>$ pygate init<a class="headerlink" href="#pygate-init" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate init [OPTIONS] COMMAND [ARGS]…</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Commands:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">auto</span>
+<span class="n">bcast</span>
+<span class="n">ext</span>     <span class="n">Copy</span> <span class="n">external</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">subdir</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pygate-init-auto">
+<h2>$ pygate init auto<a class="headerlink" href="#pygate-init-auto" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate init auto [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd>–mac-auto
+–mac-no-create
+–mac-force-create
+–help              Show this message and exit.</dd>
+</dl>
+</div>
+<div class="section" id="pygate-init-bcast">
+<h2>$ pygate init bcast<a class="headerlink" href="#pygate-init-bcast" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate init bcast [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Files to broadcast to subdirectories.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-e</span>, <span class="option">--no-ext</span></kbd></td>
+<td>Include all external files.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-init-ext">
+<h2>$ pygate init ext<a class="headerlink" href="#pygate-init-ext" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate init ext [OPTIONS]</p>
+<blockquote>
+<div>Copy external files.</div></blockquote>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-init-subdir">
+<h2>$ pygate init subdir<a class="headerlink" href="#pygate-init-subdir" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate init subdir [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-n</span>, <span class="option">--nb-split <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Number of subdirectories.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f</span>, <span class="option">--sub-format <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Subdirectories format str.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-merge">
+<h2>$ pygate merge<a class="headerlink" href="#pygate-merge" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate merge [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-t</span>, <span class="option">--target <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Target str.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-m</span>, <span class="option">--method <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Method str.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="pygate-submit">
+<h2>$ pygate submit<a class="headerlink" href="#pygate-submit" title="Permalink to this headline">¶</a></h2>
+<p>Usage: pygate submit [OPTIONS]</p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-b</span>, <span class="option">--broadcast <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Broadcast file str.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-s</span>, <span class="option">--single <var>TEXT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Single str.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>Show this message and exit.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Here is the command list of <em>pygate</em></a><ul>
+<li><a class="reference internal" href="#pygate">$ pygate</a></li>
+<li><a class="reference internal" href="#pygate-analysis">$ pygate analysis</a></li>
+<li><a class="reference internal" href="#pygate-analysis-predefined">$ pygate analysis predefined</a></li>
+<li><a class="reference internal" href="#pygate-analysis-script">$ pygate analysis script</a></li>
+<li><a class="reference internal" href="#pygate-clean">$ pygate clean</a></li>
+<li><a class="reference internal" href="#pygate-generate">$ pygate generate</a></li>
+<li><a class="reference internal" href="#pygate-generate-cfg">$ pygate generate cfg</a></li>
+<li><a class="reference internal" href="#pygate-generate-mac">$ pygate generate mac</a></li>
+<li><a class="reference internal" href="#pygate-generate-mac-predefined">$ pygate generate mac predefined</a></li>
+<li><a class="reference internal" href="#pygate-generate-mac-script">$ pygate generate mac script</a></li>
+<li><a class="reference internal" href="#pygate-generate-mac-template">$ pygate generate mac_template</a></li>
+<li><a class="reference internal" href="#pygate-generate-shell">$ pygate generate shell</a></li>
+<li><a class="reference internal" href="#pygate-init">$ pygate init</a></li>
+<li><a class="reference internal" href="#pygate-init-auto">$ pygate init auto</a></li>
+<li><a class="reference internal" href="#pygate-init-bcast">$ pygate init bcast</a></li>
+<li><a class="reference internal" href="#pygate-init-ext">$ pygate init ext</a></li>
+<li><a class="reference internal" href="#pygate-init-subdir">$ pygate init subdir</a></li>
+<li><a class="reference internal" href="#pygate-merge">$ pygate merge</a></li>
+<li><a class="reference internal" href="#pygate-submit">$ pygate submit</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="file.html" title="previous chapter">for each file</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/clist.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, vince.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/clist.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

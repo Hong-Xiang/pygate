@@ -1,0 +1,182 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation &#8212; Pygate 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="First step of pygate" href="first.html" />
+    <link rel="prev" title="pygate introduction" href="pygate.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-get-pygate-and-configuration">
+<h2>How to get pygate and configuration<a class="headerlink" href="#how-to-get-pygate-and-configuration" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">if you want to run <em>pygate</em> locally,you should following the steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">We put the source on the <a class="reference external" href="https://github.com/Hong-Xiang/pygate.git">Github</a>.You may need an Github account to clone or downoald the files.Here is the <a class="reference external" href="https://guides.github.com/activities/hello-world">Github Guides</a>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Ensure your python3 version is the most current version.</dt>
+<dd><ul class="first last simple">
+<li>We recommand <em>Anaconda</em> to get <cite>python3</cite>.Here is the <a class="reference external" href="https://www.anaconda.com/download/#linux">Anaconda</a>.</li>
+<li>The Anaconda should be set into syspath.</li>
+<li><code class="docutils literal"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> or reboot the terminal to update bashrc.</li>
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">--version</span></code> and get the output <code class="docutils literal"><span class="pre">Python</span> <span class="pre">3.6.4</span> <span class="pre">::</span> <span class="pre">Anaconda</span> <span class="pre">custom(64-bit)</span></code> (for now).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Install <em>pygate</em></p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">dxl-pygate</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Ensure <em>GATE</em> is installed and configured already.</p>
+</li>
+<li><p class="first">You have already installed <em>pygate</em>.Go to the <a class="reference internal" href="first.html#first-step-of-pygate"><span class="std std-ref">First step of pygate</span></a>.</p>
+</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">if you are an external member(you haven gotten an account),you can run on the server:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Install <em>Anaconda</em> to get latest <cite>python3</cite> in your work folder.The recommanded path with high performance is <code class="docutils literal"><span class="pre">/mnt/Gluster_NoGPU/usr</span></code>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Ensure your python3 version is the most current version.</dt>
+<dd><ul class="first last simple">
+<li>We recommand <em>Anaconda</em> to get <cite>python3</cite>.Here is the <a class="reference external" href="https://www.anaconda.com/download/#linux">Anaconda</a>.</li>
+<li>The Anaconda should be set into syspath.</li>
+<li><code class="docutils literal"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> or reboot the terminal to update bashrc.</li>
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">--version</span></code> and get the output <code class="docutils literal"><span class="pre">Python</span> <span class="pre">3.6.4</span> <span class="pre">::</span> <span class="pre">Anaconda</span> <span class="pre">custom(64-bit)</span></code> (for now).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Install <em>pygate</em></p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">dxl-pygate</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Configured <em>GATE</em></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">soure/hqlf/softewares/moudle/simu8.0.sh</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">You have made <em>pygate</em> ready.Go to the <a class="reference internal" href="first.html#first-step-of-pygate"><span class="std std-ref">First step of pygate</span></a>.</p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We will get the environment set up and configured on each node of the server.
+You need to install and configure the environment in your own work folder at present.</p>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#how-to-get-pygate-and-configuration">How to get pygate and configuration</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pygate.html" title="previous chapter">pygate introduction</a></li>
+      <li>Next: <a href="first.html" title="next chapter">First step of pygate</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/install.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, vince.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/install.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

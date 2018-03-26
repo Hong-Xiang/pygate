@@ -1,0 +1,182 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>First step of pygate &#8212; Pygate 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pygate" href="example.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="first-step-of-pygate">
+<span id="id1"></span><h1>First step of pygate<a class="headerlink" href="#first-step-of-pygate" title="Permalink to this headline">¶</a></h1>
+<p>In this page,we will run a example consists of two steps;</p>
+<div class="section" id="file-main-mac-generates">
+<span id="file-generators"></span><h2>1. File <code class="docutils literal"><span class="pre">main.mac</span></code> generates.<a class="headerlink" href="#file-main-mac-generates" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Before a <em>GATE</em> process,we generally need to make a file of <code class="docutils literal"><span class="pre">main.mac</span></code> ,</li>
+</ul>
+<p>in which we can set the compomnents( <em>world,system,phantom,soure and digitizer etc.</em> ) for <em>GATE</em> simulation.</p>
+<ul class="simple">
+<li>The question is that the definition of compomnents is too heavy and complicated.
+A lot of time and ennergy wastes on this.</li>
+<li><em>Pygate</em> offers a function of <strong>File Gnetators</strong> .Users can confirured the compomnents easily
+by set several arguments of neccessary compomnents you want in a file of <code class="docutils literal"><span class="pre">make_mac.py</span></code> (you can name it freely).
+A file of <code class="docutils literal"><span class="pre">mac.yml</span></code> may needed containing some default settings of the <code class="docutils literal"><span class="pre">main.mac</span></code> ,or you can set these in <code class="docutils literal"><span class="pre">make_mac.py</span></code> directly.</li>
+<li><dl class="first docutils">
+<dt>The command for <code class="docutils literal"><span class="pre">main.mac</span></code> generating is:</dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">generate</span> <span class="pre">mac</span> <span class="pre">script</span> <span class="pre">-t</span> <span class="pre">make_mac.py</span> <span class="pre">-o</span> <span class="pre">main.mac</span> <span class="pre">-c</span> <span class="pre">mac.yml</span></code> .</li>
+<li><code class="docutils literal"><span class="pre">make_mac.py</span></code> and <code class="docutils literal"><span class="pre">mac.yml</span></code> should be included in current work folder.</li>
+<li>Then you will find the <code class="docutils literal"><span class="pre">main.mac</span></code> in the folder.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>The main work for this step is to code <code class="docutils literal"><span class="pre">make_mac.py</span></code> .Usres can modify on the template for first time.</li>
+</ul>
+<p>:ref:make_mac.py</p>
+</div>
+<div class="section" id="submit-a-task-to-subsystem">
+<span id="subsystem"></span><h2>2. Submit a task to subsystem<a class="headerlink" href="#submit-a-task-to-subsystem" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Usually there are hundreds of millions,even billions events occuring during a <em>GATE</em> simulation,which is the reason why the process take a long time.</li>
+<li>However,it a repetable work for a <em>GATE</em> program to generate an event.*Pygate* offers a method to speed up the process.*Pygate* divides the task into a lot of parts,</li>
+<li>then submits these parts to server.Each part of the original task will be distributed to no-wroking machine of the net by <em>SLurm</em>.Thus,we get a very high speed for <em>GATE</em> simulation.</li>
+<li><dl class="first docutils">
+<dt>Users should know the following steps to archive it:</dt>
+<dd><ol class="first last arabic">
+<li><dl class="first docutils">
+<dt>Users should get the needed configured files by excuting this command: <code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">ini</span> <span class="pre">ext</span></code> .You will get the files in folder:</dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">main.mac</span></code> ,you get it last in the fomer.</li>
+<li><code class="docutils literal"><span class="pre">GateMaterials.db</span></code> ,significant file for <em>GATE</em> configuration,can’t be lack.</li>
+<li><code class="docutils literal"><span class="pre">Hits2CSV.C</span></code> ,may needed if you want the data of <em>csv</em> format.</li>
+<li><code class="docutils literal"><span class="pre">Materials.xml</span></code></li>
+<li><code class="docutils literal"><span class="pre">Surface.xml</span></code> ,set the surface rendering.Or you can seclect volume rendering.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>When you get the neccessary files in the work folder,you need to divide the task into parts.</dt>
+<dd><ul class="first last">
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">init</span> <span class="pre">subdir</span> <span class="pre">-n</span> <span class="pre">--INTGER</span> <span class="pre">-f</span> <span class="pre">--STR</span></code> ,you can set the number of parts and the name of subdirectories as you want.The default option is “sub.[10]” and you will get 10 subdirectories of “sub.[x]”(x~[0-10]).</li>
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">init</span> <span class="pre">bcast</span></code> ,broadcast the files to subdirectories maken last step.</li>
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">generate</span> <span class="pre">shell</span></code> ,generate <em>run.sh</em> for <em>SLurm</em> to distribute the task and <em>post.sh</em> to merge the results of each parts.</li>
+<li><code class="docutils literal"><span class="pre">$</span> <span class="pre">pygate</span> <span class="pre">submit</span></code> ,submit the task to subsystem. <em>SLurm</em> will do the disribution.The details information of disribution will print on the screen.You can easily know which machine each part run.</li>
+<li><dl class="first docutils">
+<dt>There are two procedures before getting results:</dt>
+<dd><ul class="first last">
+<li>First,the machines absorbs the mission and complete it,then feedback the results to subdirectories. <code class="docutils literal"><span class="pre">run.sh</span></code> is for this step.</li>
+<li>Then the results from subdirectories are merged into one file of <code class="docutils literal"><span class="pre">optical.root</span></code> ,containing all collected data of Hits. <code class="docutils literal"><span class="pre">post.sh</span></code> is for this.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+</li>
+</ul>
+<p>You can refer the detail of commands in <a class="reference internal" href="clist.html#command-list"><span class="std std-ref">Here is the command list of pygate</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">First step of pygate</a><ul>
+<li><a class="reference internal" href="#file-main-mac-generates">1. File <code class="docutils literal"><span class="pre">main.mac</span></code> generates.</a></li>
+<li><a class="reference internal" href="#submit-a-task-to-subsystem">2. Submit a task to subsystem</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="example.html" title="next chapter">pygate</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/first.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, vince.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/first.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
