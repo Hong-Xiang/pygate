@@ -21,7 +21,7 @@ This is the master page of *pygate*  documentation
 
 API
 ===
-.. automodule: __init__
+.. autofunction:: __init__
 
 
 .. toctree::
@@ -29,7 +29,7 @@ API
    
    file
    clist
-
+   make-mac
 
 
 Indices and tables
