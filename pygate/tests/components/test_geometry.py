@@ -1,7 +1,9 @@
 import unittest
+import math
 
 from pygate.components.geometry import *
 from pygate.utils.strs import assert_equal_ignoring_multiple_whitespaces as ae
+from dxl.shape.data import CartesianRepeater, RingRepeater
 
 
 class TestVec3(unittest.TestCase):
@@ -38,11 +40,18 @@ class TestVolume(unittest.TestCase):
 class TestBox(unittest.TestCase):
     def test_render(self):
         b = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        #br1 = b.render()
         self.assertEqual(b.render(),
                          "/gate/world/geometry/setXLength         400.0 cm\n/gate/world/geometry/setYLength         400.0 cm\n/gate/world/geometry/setZLength         400.0 cm\n")
+    
+    def test_render_box_from_shape(self):
+        b = Box('world', unit='cm', box_from_shape = Box_from_shape(shape = [400.0, 400.0, 400.0]))
+        #br = b.render()
+        self.assertEqual(b.render(),
+                         "/gate/world/placement/setTranslation    0.0 0.0 0.0 cm\n/gate/world/geometry/setXLength         400.0 cm\n/gate/world/geometry/setYLength         400.0 cm\n/gate/world/geometry/setZLength         400.0 cm\n")
 
 
-class TestCylinder(unittest.TestCase):
+class TestCylindertCylinder(unittest.TestCase):
     def test_render(self):
         b = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
         c = Cylinder('cylindricalPET', 52.0, 39.9, 40.2, material='Air',
@@ -56,8 +65,7 @@ class TestCylinder(unittest.TestCase):
                      mother=b, position=Vec3(0.0, 0.0, 0.0, 'cm'), unit='cm')
         self.assertEqual(c.render(),
                          '/gate/world/daughters/name            cylindricalPET\n/gate/world/daughters/insert          cylinder\n/gate/cylindricalPET/placement/setTranslation    0.0 0.0 0.0 cm\n/gate/cylindricalPET/geometry/setRmin         39.9 cm\n/gate/cylindricalPET/geometry/setRmax         52.0 cm\n/gate/cylindricalPET/geometry/setHeight         40.2 cm\n/gate/cylindricalPET/setMaterial                 Air\n')
-
-
+    
 class TestRepeatCubic(unittest.TestCase):
     maxDiff = None
 
@@ -68,6 +76,15 @@ class TestRepeatCubic(unittest.TestCase):
                 'Air', w, repeaters=[r])
         ae(self, r.render(),
            '/gate/crystal/repeaters/insert          cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX        1  \n/gate/crystal/cubicArray/setRepeatNumberY        5  \n/gate/crystal/cubicArray/setRepeatNumberZ        5  \n/gate/crystal/cubicArray/setRepeatVector         0.0 3.2 4.0 mm \n')
+
+    def test_render_cartesianrepeater_from_shape(self):
+        from dxl.shape.data import Box as Box_from_shape
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterCubic(cartesian_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 5], steps = [10.0, 13.5, 14.0]), unit = 'mm')
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX        1  \n/gate/crystal/cubicArray/setRepeatNumberY        5  \n/gate/crystal/cubicArray/setRepeatNumberZ        5  \n/gate/crystal/cubicArray/setRepeatVector         0.0 3.5 4.0 mm \n')
 
     def test_render_multiple(self):
         w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
@@ -81,6 +98,43 @@ class TestRepeatCubic(unittest.TestCase):
                       'BGO', mother=block, repeaters=[rc])
         ae(self, w.render(),
            '/gate/world/geometry/setXLength 400.0 cm\n/gate/world/geometry/setYLength 400.0 cm\n/gate/world/geometry/setZLength 400.0 cm\n/gate/world/daughters/name ecat\n/gate/world/daughters/insert cylinder\n/gate/ecat/geometry/setRmin 412.0 mm\n/gate/ecat/geometry/setRmax 442.0 mm\n/gate/ecat/geometry/setHeight 155.2 mm\n/gate/ecat/setMaterial Air\n/gate/ecat/daughters/name block\n/gate/ecat/daughters/insert box\n/gate/block/placement/setTranslation 427.0 0.0 0.0 mm\n/gate/block/geometry/setXLength 30.0 mm\n/gate/block/geometry/setYLength 35.8594 mm\n/gate/block/geometry/setZLength 38.7 mm\n/gate/block/setMaterial Air\n/gate/block/daughters/name crystal\n/gate/block/daughters/insert box\n/gate/crystal/geometry/setXLength 30.0 mm\n/gate/crystal/geometry/setYLength 4.4 mm\n/gate/crystal/geometry/setZLength 4.75 mm\n/gate/crystal/setMaterial BGO\n/gate/crystal/repeaters/insert cubicArray\n/gate/crystal/cubicArray/setRepeatNumberX 1\n/gate/crystal/cubicArray/setRepeatNumberY 8\n/gate/crystal/cubicArray/setRepeatNumberZ 8\n/gate/crystal/cubicArray/setRepeatVector 0.0 4.4942 4.85 mm\n/gate/block/repeaters/insert linear\n/gate/block/linear/setRepeatNumber 4\n/gate/block/linear/setRepeatVector 0.0 0.0 38.8 mm\n/gate/block/repeaters/insert ring\n/gate/block/ring/setRepeatNumber 72')
+
+class TestRepeaterLinear(unittest.TestCase):
+    def test_render(self):
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterLinear(5, Vec3(0.0, 3.2, 0.0, 'mm'))
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          linear\n/gate/crystal/linear/setRepeatNumber        5  \n/gate/crystal/linear/setRepeatVector         0.0 3.2 0.0 mm \n')
+
+    def test_render_cartesianrepeater_from_shape(self):
+        from dxl.shape.data import Box as Box_from_shape
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterLinear(linear_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 1], steps = [10.0, 13.5, 10.0]), unit = 'mm')
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          linear\n/gate/crystal/linear/setRepeatNumber        5  \n/gate/crystal/linear/setRepeatVector         0.0 3.5 0.0 mm \n')
+
+class TestRepeatRing(unittest.TestCase):
+    def test_render(self):
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterRing(4)
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          ring\n/gate/crystal/ring/setRepeatNumber        4  \n')
+
+    def test_render_cartesianrepeater_from_shape(self):
+        from dxl.shape.data import Box as Box_from_shape
+        from dxl.shape.data import Axis
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
+        r = RepeaterRing(ring_repeater = RingRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), steps = math.pi/2, num = 4, axis = Axis([0,0,1])))
+        c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
+                'Air', w, repeaters=[r])
+        ae(self, r.render(),
+           '/gate/crystal/repeaters/insert          ring\n/gate/crystal/ring/setRepeatNumber        4  \n')
 
 
 class TestSurface(unittest.TestCase):
@@ -176,3 +230,6 @@ class TestGeometry(unittest.TestCase):
 
         surfaces = (SurfacePerfectAPD('Detection1', block, crystal),)
         geometry = Geometry(world, camera, phantom, surfaces)
+
+if __name__ == '__main__':
+    unittest.main()
