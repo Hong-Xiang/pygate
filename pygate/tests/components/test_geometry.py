@@ -80,7 +80,7 @@ class TestRepeatCubic(unittest.TestCase):
     def test_render_cartesianrepeater_from_shape(self):
         from dxl.shape.data import Box as Box_from_shape
         w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
-        r = RepeaterCubic(cartesian_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 5], steps = [10.0, 13.5, 14.0]), unit = 'mm')
+        r = RepeaterCubic(cartesian_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 5], steps = [0.0, 3.5, 4.0]), unit = 'mm')
         c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
                 'Air', w, repeaters=[r])
         ae(self, r.render(),
@@ -111,7 +111,7 @@ class TestRepeaterLinear(unittest.TestCase):
     def test_render_cartesianrepeater_from_shape(self):
         from dxl.shape.data import Box as Box_from_shape
         w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
-        r = RepeaterLinear(linear_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 1], steps = [10.0, 13.5, 10.0]), unit = 'mm')
+        r = RepeaterLinear(linear_repeater = CartesianRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), grids = [1, 5, 1], steps = [0.0, 3.5, 0.0]), unit = 'mm')
         c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
                 'Air', w, repeaters=[r])
         ae(self, r.render(),
@@ -126,11 +126,12 @@ class TestRepeatRing(unittest.TestCase):
         ae(self, r.render(),
            '/gate/crystal/repeaters/insert          ring\n/gate/crystal/ring/setRepeatNumber        4  \n')
 
-    def test_render_cartesianrepeater_from_shape(self):
+    def test_render_ringrepeater_from_shape(self):
         from dxl.shape.data import Box as Box_from_shape
-        from dxl.shape.data import Axis
-        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))
-        r = RepeaterRing(ring_repeater = RingRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), steps = math.pi/2, num = 4, axis = Axis([0,0,1])))
+        from dxl.shape.data import AXIS3_Z
+        #from doufo.tensor import Vector
+        w = Box('world', Vec3(400.0, 400.0, 400.0, 'cm'))#Axis(Vector([0,0,1]))
+        r = RepeaterRing(ring_repeater = RingRepeater(prototype = Box_from_shape([10.0, 10.0, 10.0]), steps = math.pi/2, num = 4, axis = AXIS3_Z))
         c = Box('crystal', Vec3(10.0, 10.0, 10.0, 'mm'),
                 'Air', w, repeaters=[r])
         ae(self, r.render(),

@@ -41,7 +41,7 @@ class RepeaterLinear(Repeater):
         else:
             #steps_x, steps_y, steps_z = self.linear_repeater.steps
             self.number = max(self.linear_repeater.grids)
-            self.steps = Vec3(*(self.linear_repeater.steps - self.linear_repeater.prototype.shape), self.unit)
+            self.steps = Vec3(*self.linear_repeater.steps, self.unit)
 
 class RepeaterCubic(Repeater):
     template = 'geometry/volume/repeater/cubic'
@@ -58,7 +58,7 @@ class RepeaterCubic(Repeater):
             # grids_x, grids_y, grids_z = self.cartesian_repeater.grids
             # steps_x, steps_y, steps_z = self.cartesian_repeater.steps
             self.grids = Vec3(*self.cartesian_repeater.grids, None)
-            self.steps = Vec3(*(self.cartesian_repeater.steps - self.cartesian_repeater.prototype.shape), self.unit)
+            self.steps = Vec3(*self.cartesian_repeater.steps, self.unit)
 
         if self.steps.unit is None:
             self.steps.unit = self.unit
