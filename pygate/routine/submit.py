@@ -2,7 +2,7 @@ from .base import Operation, OperationOnFile, OperationOnSubdirectories
 from dxl.fs import Directory, File
 from typing import Callable, Iterable, Dict, Any
 from .base import RoutineOnDirectory
-from dxl.cluster import submit_slurm
+from dxl.cluster.cluster import submit_slurm
 
 # TODO: Rework dicts to object, use ToSubmit Object replacing those dicts
 
