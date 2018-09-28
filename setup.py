@@ -1,16 +1,16 @@
 from setuptools import setup, find_packages
 
 setup(name='dxl-pygate',
-      version='0.12.6',
+      version='0.13.0',
       description='A simplified python interface for Gate.',
-      url='https://github.com/Hong-Xiang/pygate',
+      url='https://github.com/tech-pi/pygate',
       author='Hong Xiang',
       author_email='hx.hongxiang@gmail.com',
       license='MIT',
       packages=find_packages(),
       install_requires=['fs', 'click',
-                        'rx', 'jinja2', 'dxl-dxpy>=0.5',
-                        'dxl-fs', 'dxl-cluster', 'dask'],
+                        'rx', 'jinja2',
+                        'jfs', 'dxl-cluster>=0.0.5', 'dask'],
       entry_points='''
             [console_scripts]
             pygate=pygate.cli:cli
