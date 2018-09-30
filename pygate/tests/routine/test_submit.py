@@ -45,7 +45,7 @@ class TestSubmitBroadcast(unittest.TestCase):
 
 
 class TestSubmitSingleFile(unittest.TestCase):
-    @patch('pygate.routine.submit.submit_slurm', side_effect=[111, 112])
+    @patch('pygate.routine.submit.submit_task', side_effect=[111, 112])
     def test_parse_depens(self, m):
         mfs = MemoryFS()
         mfs.touch('run.sh')
