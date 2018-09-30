@@ -15,7 +15,7 @@ class KEYS:
     SCRIPT_FILE = 'script_file'
     SID = 'sid'
     DEPENDENCIES = 'depens'
-    FATHER='father'
+    # FATHER='father'
 
 
 def depens_from_result_dict(r: Dict[str, Any]) -> Iterable[int]:
@@ -51,8 +51,7 @@ def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def submit_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
-    task = slurm.TaskSlurm([r[KEYS.SCRIPT_FILE].path.s],workdir=r[KEYS.WORK_DIR].path.s,dependency=r.get(KEYS.DEPENDENCIES),father=r.get(KEYS.FATHER),is_root=True,ttype=Type.Script)   
-    print(task)
+    task = slurm.TaskSlurm([r[KEYS.SCRIPT_FILE].path.s],workdir=r[KEYS.WORK_DIR].path.s,dependency=r.get(KEYS.DEPENDENCIES),is_root=True,ttype=Type.Script)   
     sid = submit_task(task).id
     # sid = submit_slurm(r[KEYS.WORK_DIR],
     #                    r[KEYS.SCRIPT_FILE],
@@ -67,16 +66,14 @@ class OpSubmitBroadcast(OperationOnSubdirectories, OperationOnFile):
     Submit all files with given filename in subdirectories.
     """
 
-    def __init__(self, filename, subdirectory_patterns: Iterable[str],father):
+    def __init__(self, filename, subdirectory_patterns: Iterable[str]):
         OperationOnSubdirectories.__init__(self, subdirectory_patterns)
         OperationOnFile.__init__(self, filename)
-        self.father=father
 
     def to_submit(self, r: RoutineOnDirectory) -> 'Observable[Dict[str, Any]]':
         return (self.subdirectories(r)
                 .map(lambda d: {KEYS.WORK_DIR: d,
-                                KEYS.SCRIPT_FILE: self.target(r),
-                                KEYS.FATHER:self.father}))
+                                KEYS.SCRIPT_FILE: self.target(r)}))
 
     def apply(self, r: RoutineOnDirectory) -> Dict[str, Iterable[Dict[str, str]]]:
         result = (self.to_submit(r)
@@ -93,14 +90,12 @@ class OpSubmitBroadcast(OperationOnSubdirectories, OperationOnFile):
 
 
 class OpSubmitSingleFile(OperationOnFile):
-    def __init__(self, filename: str,father):
+    def __init__(self, filename: str):
         super().__init__(filename)
-        self.father=father
 
     def to_submit(self, r: RoutineOnDirectory):
         submit_dict = {KEYS.WORK_DIR: r.directory,
-                       KEYS.SCRIPT_FILE: self.target(r),
-                       KEYS.FATHER:self.father}
+                       KEYS.SCRIPT_FILE: self.target(r)}
         submit_dict[KEYS.DEPENDENCIES] = depens_from_result_dict(
             r.last_result()) 
         return submit_dict

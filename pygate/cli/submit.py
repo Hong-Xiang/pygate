@@ -19,9 +19,9 @@ def submit_kernel(tasks: Iterable[Task], subdir_patterns: Iterable[str], dryrun)
     for t in tasks:
         if t.broadcast is not None:
             ops.append(submit.OpSubmitBroadcast(t.broadcast,
-                                                subdir_patterns,t.father))
+                                                subdir_patterns))
         if t.single is not None:
-            ops.append(submit.OpSubmitSingleFile(t.single,t.father))
+            ops.append(submit.OpSubmitSingleFile(t.single))
     r = submit.RoutineOnDirectory(d, ops, dryrun)
     r.work()
     return r.echo()
