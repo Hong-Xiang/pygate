@@ -104,10 +104,10 @@ class Box(Volume):
             self.size = size
             self.position = position
         else:
-            shape_x,shape_y,shape_z = self.box_from_shape.shape
-            origin_x,origin_y,origin_z = self.box_from_shape.origin
-            self.size = Vec3(shape_x, shape_y, shape_z, self.unit)
-            self.position = Vec3(origin_x, origin_y, origin_z, self.unit)
+            # shape_x,shape_y,shape_z = self.box_from_shape.shape
+            # origin_x,origin_y,origin_z = self.box_from_shape.origin
+            self.size = Vec3(*self.box_from_shape.shape, self.unit)
+            self.position = Vec3(*self.box_from_shape.origin, self.unit)
         if self.size.unit is None:
             self.size.unit = self.unit
 

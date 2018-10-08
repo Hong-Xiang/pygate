@@ -12,13 +12,16 @@ def mac():
 
 @mac.command()
 @click.option('--target', '-t', help="Filename of script to run to generate mac file.")
-@click.option('--config', '-c', help="config filename to generate macs.", default='main.mac')
-@click.option('--output', '-o', help="MAC filename, will passed to script or predefined method.")
+@click.option('--config', '-c', help="config filename to generate macs.")
+@click.option('--output', '-o', help="MAC filename, will passed to script or predefined method.", default='main.mac')
 def script(target, output, config):
     """
     Generate mac file by running a .py file.
     """
-    shell_call('python {} --output {} --config {}'.format(target, output, config))
+    if config is not None:
+        shell_call('python {} --output {} --config {}'.format(target, output, config))
+    else:
+        shell_call(f'python {target} --output {output}')
 
 
 @mac.command()
