@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 from fs.memoryfs import MemoryFS
 from dxl.fs import Directory, File
 from pygate.routine import submit
+from dxl.cluster import Task
 
 
 class TestSubmitBroadcast(unittest.TestCase):
@@ -45,7 +46,7 @@ class TestSubmitBroadcast(unittest.TestCase):
 
 
 class TestSubmitSingleFile(unittest.TestCase):
-    @patch('pygate.routine.submit.submit_task', side_effect=[111, 112])
+    @patch('pygate.routine.submit.submit_task', side_effect=[Task(tid=111), Task(tid=112)])
     def test_parse_depens(self, m):
         mfs = MemoryFS()
         mfs.touch('run.sh')
