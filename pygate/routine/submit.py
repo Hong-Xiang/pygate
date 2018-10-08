@@ -52,7 +52,7 @@ def parse_paths_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
 
 def submit_from_dict(r: Dict[str, Any]) -> Dict[str, Any]:
     task = slurm.TaskSlurm([r[KEYS.SCRIPT_FILE].path.s],workdir=r[KEYS.WORK_DIR].path.s,dependency=r.get(KEYS.DEPENDENCIES),is_root=True,ttype=Type.Script)   
-    sid = submit_task(task).id
+    sid = submit_task(task)
     # sid = submit_slurm(r[KEYS.WORK_DIR],
     #                    r[KEYS.SCRIPT_FILE],
     #                    r.get(KEYS.DEPENDENCIES, ()))  

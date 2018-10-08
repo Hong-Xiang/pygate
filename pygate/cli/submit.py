@@ -36,7 +36,7 @@ def submit(broadcast, single):
         from pygate.routine import submit
         d = submit.Directory('.')
         task_father = Task(desc='father',workdir=d.path.s,is_root=True)
-        tid = [submit_task(task_father).id]       
+        tid = [submit_task(task_father)]       
         broadcast = submit_conf.get(SUBMIT_KEYS.BROADCAST)
         single = submit_conf.get(SUBMIT_KEYS.SINGLE)
         tasks = [TaskSlurm(b, s, tid) for b, s in zip(broadcast, single)]
