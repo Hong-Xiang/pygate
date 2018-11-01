@@ -73,7 +73,7 @@ def submit_from_dict(r: Dict[str, Any], is_user_task=False) -> Dict[str, Any]:
 
     body = {
         'details': {
-            "workdir": os.getcwd()+r[KEYS.WORK_DIR].path.s,
+            "workdir": os.getcwd()+"/"+r[KEYS.WORK_DIR].path.s,
             "script": r[KEYS.SCRIPT_FILE].path.s,
             "is_user_task": is_user_task
         },
