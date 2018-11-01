@@ -8,3 +8,4 @@ pygate/template/ymls
 /.vs
 .cache/
 .vs/
+.idea/
