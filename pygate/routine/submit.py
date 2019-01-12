@@ -72,15 +72,22 @@ def submit_from_dict(r: Dict[str, Any], is_user_task=False) -> Dict[str, Any]:
     # print(task)
 
     body = {
+        'fn': 'monte-carlo-simulation@1.0.0',
         'details': {
             "workdir": os.getcwd()+"/"+r[KEYS.WORK_DIR].path.s,
             "script": r[KEYS.SCRIPT_FILE].path.s,
-            "is_user_task": is_user_task
+            "is_master_task": is_user_task
         },
-        "depends": r.get(KEYS.DEPENDENCIES, [])
+        "depends": r.get(KEYS.DEPENDENCIES, []),
+        "backend": "slurm"
     }
-    print(body)
-    sid = requests.post("http://localhost:23300/api/v1/tasks", json=body).json()['id']
+    # print(body)
+    try:
+        tmp=requests.post("http://localhost:23300/api/v1/tasks", json=body).json()
+        # print(tmp)
+        sid = tmp['id']
+    except:
+        raise ValueError
 
     # sid = submit_task(task).id
 

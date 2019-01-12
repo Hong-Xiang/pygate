@@ -9,11 +9,7 @@ setup(name='dxl-pygate',
       license='MIT',
       packages=find_packages(),
       install_requires=[
-          'dxl-cluster==0.0.6',
-          'dxl-shape==0.1.2'
-          'dxl-fs==0.1.5',
-          'typing',
-          'fs',
+          'dxl-shape',
           'click',
           'rx',
           'jinja2',
@@ -22,7 +18,8 @@ setup(name='dxl-pygate',
           'pandas',
           'pathlib',
           'numpy',
-          'scipy'
+          'scipy',
+          'requests'
       ],
       entry_points='''
             [console_scripts]
