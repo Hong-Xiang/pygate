@@ -10,7 +10,7 @@ setup(name='dxl-pygate',
       packages=find_packages(),
       install_requires=['fs', 'click',
                         'rx', 'jinja2',
-                        'jfs', 'dxl-cluster>=0.0.5', 'dask'],
+                        'jfs', 'dask'],
       entry_points='''
             [console_scripts]
             pygate=pygate.cli:cli

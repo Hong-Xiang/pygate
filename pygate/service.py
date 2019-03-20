@@ -21,19 +21,3 @@ def init(config, method):
             initer.make_sub()
 
 
-def submit(config):
-    from .submitter import Submitter
-    with OSFS('.') as fs:
-        Submitter(fs, config).submit()
-
-
-def merge(config):
-    from .merger import Merger
-    with OSFS('.') as fs:
-        Merger(fs, config).merge()
-
-
-def clean(config):
-    from .cleaner import Cleaner
-    with OSFS('.') as fs:
-        Cleaner(fs, config).clean()
